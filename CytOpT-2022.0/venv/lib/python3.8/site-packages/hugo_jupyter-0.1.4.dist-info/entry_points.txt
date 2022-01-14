@@ -1,0 +1,3 @@
+[console_scripts]
+hugo_jupyter = hugo_jupyter.cli:main
+

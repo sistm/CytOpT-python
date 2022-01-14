@@ -1,0 +1,3 @@
+[console_scripts]
+CytOpT-features = CytOpT.cytOpt:main
+
