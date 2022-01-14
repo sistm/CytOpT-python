@@ -8,6 +8,7 @@ except ImportError:
     On linux, the package is often called python-setuptools
     ''')
     from sys import exit
+
     exit(1)
 
 try:
@@ -15,7 +16,7 @@ try:
 except:
     long_description = open('README.md').read()
 
-copt={
+copt = {
     'msvc': ['/EHsc'],
     'intelw': ['/EHsc']
 }
@@ -31,6 +32,7 @@ class build_ext_subclass(build_ext):
 
 
 import os
+
 undef_macros = []
 define_macros = []
 if os.environ.get('DEBUG'):
@@ -40,10 +42,10 @@ if os.environ.get('DEBUG'):
 
 package_dir = {
     'CytOpT.tests': 'CytOpT/tests'
-    }
+}
 package_data = {
     'CytOpT.tests': ['data/*']
-    }
+}
 python_requires = '>=3.6',
 classifiers = [
     'Development Status :: 5 - Production/Stable',
@@ -85,11 +87,12 @@ setuptools.setup(
     install_requires=install_requires,
     tests_require=tests_require,
     project_urls={
-            'Article': 'https://arxiv.org/abs/2006.09003',
-        },
+        'Article': 'https://arxiv.org/abs/2006.09003',
+        'CytOpT pypi': 'https://github.com/sistm/CytOpt-python',
+    },
     entry_points={
-          'console_scripts': [
-              'CytOpT-features = CytOpT.cytOpt:main',
-          ],
-      },
+        'console_scripts': [
+            'CytOpT-features = CytOpT.cytOpt:main',
+        ],
+    },
 )
