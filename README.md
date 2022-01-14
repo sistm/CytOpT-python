@@ -1,15 +1,23 @@
-# CyOpT
-
+# CyOpt
 
 ## Description
+The CytOpt is new package includes a new algorithm using regularized optimal transport to directly estimate the different cell population proportions from a biological sample characterized with flow cytometry measurements. Algorithm is based on the regularized Wasserstein metric to compare cytometry measurements from different samples, thus accounting for possible mis-alignment of a given cell population across sample (due to technical variability from the technology of measurements).
+## Overview
+The methods implemented in this package are detailed in the following
+article:
 
+> Paul Freulon, Jérémie Bigot, Boris P. Hejblum.
+> CytOpT: Optimal Transport with Domain Adaptation for Interpreting Flow Cytometry data
+> https://arxiv.org/abs/2006.09003
 
-## Install CytOpt
+## Getting started
 
+### Install CytOpT
+Install the **CytOpT** package from pypi as follows:
 
 ```
 pip install -r requirements.txt
-pip install CytOpt # pip3 install CytOpt
+pip install CytOpT # pip3 install CytOpT
 ```
 
 ## Example
@@ -17,7 +25,7 @@ pip install CytOpt # pip3 install CytOpt
 ### Packages
 
 ```
-from CytOpt.Cytopt import CytOpt
+from CytOpT.CytOpT import CytOpt
 ```
 
 
@@ -70,7 +78,7 @@ CytOpt(X_source, X_target, Lab_source, Lab_target=None, cell_type=None,
 
 ### CytOpT Minmax or Desasc 
 ```
-from CytOpt import cytopt_minmax, cytopt_desasc
+from CytOpT import cytopt_minmax, cytopt_desasc
 
 cytopt_desasc(X_source, X_target, Lab_source, eps=0.0001, n_out=4000, n_stoc=10, step_grad=50, const=0.1, theta_true=0)
 
@@ -80,7 +88,5 @@ cytopt_minmax(X_source, X_target, Lab_source,eps=0.0001, lbd=0.0001, n_iter=4000
 /// Or use CytOpt function with specified method parameter
 ```
 
-## Documents
-
 ## Urls
-https://arxiv.org/abs/2006.09003
+###### https://arxiv.org/abs/2006.09003
