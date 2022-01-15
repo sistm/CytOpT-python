@@ -4,6 +4,16 @@ CytOpT package
 Submodules
 ----------
 
+
+CytOpT.Cytopt module
+--------------------
+
+.. automodule:: CytOpT.Cytopt
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
 CytOpT.CytOpt\_Descent\_Ascent module
 -------------------------------------
 
@@ -20,13 +30,6 @@ CytOpT.CytOpt\_MinMax\_Swapping module
    :undoc-members:
    :show-inheritance:
 
-CytOpT.Cytopt module
---------------------
-
-.. automodule:: CytOpT.Cytopt
-   :members:
-   :undoc-members:
-   :show-inheritance:
 
 CytOpT.Label\_Prop\_sto module
 ------------------------------
