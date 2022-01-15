@@ -1,4 +1,4 @@
-# Copyright (C) 2021, Paul Freulon <paul.freulon@math.u-bordeaux.fr>=
+# Copyright (C) 2021, Kalidou BA, Paul Freulon <paul.freulon@math.u-bordeaux.fr>
 #
 # License: MIT (see COPYING file)
 
@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 
-__all__ = ['CytOpt']
+# __all__ = ['CytOpt']
 
 from CytOpT import cytopt_minmax, cytopt_desasc
 from CytOpT.cytopt_plot import plot_py_1, plot_py_prop1, Bland_Altman, plot_py_Comp, plot_py_prop2, Bland_Altman_Comp
@@ -26,10 +26,45 @@ def get_length_unique_numbers(values):
     return {'list_of_unique_value': list_of_unique_value, 'length': len(list_of_unique_value)}
 
 
+# CytOpt
 def CytOpt(X_s, X_t, Lab_source, Lab_target=None, cell_type=None, names_pop=None,
            method=None, theta_true=None, eps=1e-04, n_iter=4000, power=0.99,
            step_grad=50, step=5, lbd=1e-04, n_out=1000, n_stoc=10, n_0=10,
            n_stop=1000, monitoring=True, minMaxScaler=True, thresholding=True):
+    """
+    - Comparison of methods
+    -- Steps
+    --- Classification using optimal transport with reweighted proportions.
+    --- The target measure  𝛽  is reweighted in order to match the weight vector  ℎ̂   estimated with  𝙲𝚢𝚝𝙾𝚙𝚝.
+    --- Approximation of the optimal dual vector u. In order to compute an approximation of the optimal transportation plan, we need to approximate  𝑃𝜀 .
+    --- Class proportions estimation with  𝙲𝚢𝚝𝙾𝚙𝚝 Descent-Ascent procedure Setting of the parameters
+    --- Minmax swapping procedure. Setting of the parameters
+    --- Plot all Bland-Altman
+
+    :param X_s:
+    :param X_t:
+    :param Lab_source:
+    :param Lab_target:
+    :param cell_type:
+    :param names_pop:
+    :param method:
+    :param theta_true:
+    :param eps:
+    :param n_iter:
+    :param power:
+    :param step_grad:
+    :param step:
+    :param lbd:
+    :param n_out:
+    :param n_stoc:
+    :param n_0:
+    :param n_stop:
+    :param monitoring:
+    :param minMaxScaler:
+    :param thresholding:
+    :return:
+    """
+
     if theta_true is None:
         theta_true = []
     if method is None:

@@ -1,4 +1,4 @@
-# Copyright (C) 2021, Paul Freulon <paul.freulon@math.u-bordeaux.fr>=
+# Copyright (C) 2022, Kalidou BA, Paul Freulon <paul.freulon@math.u-bordeaux.fr>=
 #
 # License: MIT (see COPYING file)
 
@@ -7,13 +7,18 @@ import numpy as np
 import pandas as pd
 from scipy.stats import entropy
 
-__all__ = ['cytopt_desasc', 'Label_Prop_sto']
+# __all__ = ['cytopt_desasc', 'Label_Prop_sto']
 
 
 def cost(X_s, y):
     """
     Squared euclidean distance between y and the I points of X_s.
+
+    :param X_s:
+    :param y:
+    :return:
     """
+
     diff = X_s - y
     return np.linalg.norm(diff, axis=1) ** 2
 
@@ -21,7 +26,11 @@ def cost(X_s, y):
 def diff_simplex(h):
     """
     Computation of the Jacobian matrix of the softmax function.
+
+    :param h:
+    :return:
     """
+
     try:
         h = np.array(h, np.float)
     except Exception as e:
@@ -38,11 +47,18 @@ def diff_simplex(h):
 
 
 def grad_h(f, X_s, y, alpha, eps=0):
-    """
-    This function calculates the gradient of the function that we aim to maximize.
+    """    This function calculates the gradient of the function that we aim to maximize.
     The expectation of this function computed at a maximizer equals the wasserstein disctance,
     or its regularized counterpart.
+
+    :param f:
+    :param X_s:
+    :param y:
+    :param alpha:
+    :param eps:
+    :return:
     """
+
     if eps == 0:
         cost_y = cost(X_s, y)
         i_star = np.argmin(cost_y - f)
@@ -59,9 +75,13 @@ def grad_h(f, X_s, y, alpha, eps=0):
 
 
 def gammatrix(X_s, Lab_source):
+    """    Computation of the operator D that maps the class proportions with the weights.
+
+    :param X_s:
+    :param Lab_source:
+    :return:
     """
-    Computation of the operator D that maps the class proportions with the weights.
-    """
+
     I = X_s.shape[0]
     if min(Lab_source) == 0:
         K = int(max(Lab_source))
@@ -82,10 +102,18 @@ def gammatrix(X_s, Lab_source):
 
 
 def Robbins_Wass(X_s, X_t, alpha, beta, eps=0, const=0.1, n_iter=10000):
-    """
-    Function that calculates the approximation of the Wasserstein distance between mu and nu
+    """    Function that calculates the approximation of the Wasserstein distance between mu and nu
     thanks to the Robbins-Monro Algorithm. X and Y are the supports of the source and target
     distribution. Alpha and beta are the weights of the distributions.
+
+    :param X_s:
+    :param X_t:
+    :param alpha:
+    :param beta:
+    :param eps:
+    :param const:
+    :param n_iter:
+    :return:
     """
     n_iter = int(n_iter)
     I = X_s.shape[0]
@@ -126,13 +154,23 @@ def Robbins_Wass(X_s, X_t, alpha, beta, eps=0, const=0.1, n_iter=10000):
     return f
 
 
-# cytopt
+# cytopt_desasc
 def cytopt_desasc(X_s, X_t, Lab_source, eps=0.0001, n_out=4000, n_stoc=10, step_grad=50, const=0.1, theta_true=0):
-    """
-    Function that estimates the class proportions in the target data set.
+    """    Function that estimates the class proportions in the target data set.
     It solves the minimization problem with a gradient descent method.
     At each iteration, a (sub)gradient of W^{eps}(alpha, beta) is approximated with stochastic optimization
     Techniques.
+
+    :param X_s:
+    :param X_t:
+    :param Lab_source:
+    :param eps:
+    :param n_out:
+    :param n_stoc:
+    :param step_grad:
+    :param const:
+    :param theta_true:
+    :return:
     """
 
     print('\n Epsilon: ', eps)

@@ -12,7 +12,7 @@ except ImportError:
     stderr.write('''\
     Try installing and importing CytOpT. Error is :''' % e)
 
-__all__ = ["cytopt_desasc",
+__all__ = ("cytopt_desasc",
            "cytopt_minmax",
            "Label_Prop_sto",
-           "CytOpt"]
+           "CytOpt")

@@ -1,3 +1,7 @@
+# Copyright (C) 2022, Kalidou BA, Paul Freulon <paul.freulon@math.u-bordeaux.fr>=
+#
+# License: MIT (see COPYING file)
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pylab as p
@@ -6,6 +10,14 @@ import seaborn as sns
 
 # plot two Bland Altman
 def Bland_Altman_Comp(Dico_resDesac, Dico_resMinmax, sd_diff, n_pal):
+    """
+
+    :param Dico_resDesac:
+    :param Dico_resMinmax:
+    :param sd_diff:
+    :param n_pal:
+    :return:
+    """
     try:
         n_pal = n_pal
     except TypeError as e:
@@ -39,6 +51,14 @@ def Bland_Altman_Comp(Dico_resDesac, Dico_resMinmax, sd_diff, n_pal):
 
 # Bland Altman one model
 def Bland_Altman(df_res_Cytopt, sd_diff, n_pal, title):
+    """
+
+    :param df_res_Cytopt:
+    :param sd_diff:
+    :param n_pal:
+    :param title:
+    :return:
+    """
     try:
         n_pal = n_pal
     except TypeError as e:
@@ -66,6 +86,15 @@ def Bland_Altman(df_res_Cytopt, sd_diff, n_pal, title):
 
 
 def plot_py_1(X_source, X_target, Lab_source, h_source, names_pop):
+    """
+
+    :param X_source:
+    :param X_target:
+    :param Lab_source:
+    :param h_source:
+    :param names_pop:
+    :return:
+    """
     plt.figure(figsize=(20, 15))
     plt.subplot(2, 2, 1)
     for it in [0, 1]:
@@ -97,6 +126,14 @@ def plot_py_1(X_source, X_target, Lab_source, h_source, names_pop):
 
 
 def plot_py_2(X_tar_display, Lab_target_hat_one, Lab_target, names_pop):
+    """
+
+    :param X_tar_display:
+    :param Lab_target_hat_one:
+    :param Lab_target:
+    :param names_pop:
+    :return:
+    """
     plt.figure(figsize=(15, 6))
     plt.subplot(1, 2, 1)
     for it in [1, 2]:
@@ -129,6 +166,11 @@ def plot_py_2(X_tar_display, Lab_target_hat_one, Lab_target, names_pop):
 
 
 def plot_py_prop1(Res_df):
+    """
+
+    :param Res_df:
+    :return:
+    """
     plt.figure(figsize=(10, 7))
     sns.barplot(x='Method', y='Percentage', hue='Cell_Type', data=Res_df)
     plt.legend(fontsize=22)
@@ -140,6 +182,11 @@ def plot_py_prop1(Res_df):
 
 
 def plot_py_prop2(df_res1):
+    """
+
+    :param df_res1:
+    :return:
+    """
     plt.figure(figsize=(8, 5))
     sns.barplot(x='Classes', y='Proportions', hue='Methode', data=df_res1,
                 palette=['darkgreen', 'lime', 'lightcoral'])
@@ -154,6 +201,15 @@ def plot_py_prop2(df_res1):
 
 
 def plot_py_3(X_tar_display, Lab_target_hat_one, names_pop, Lab_target_hat_two, Lab_target):
+    """
+
+    :param X_tar_display:
+    :param Lab_target_hat_one:
+    :param names_pop:
+    :param Lab_target_hat_two:
+    :param Lab_target:
+    :return:
+    """
     # Display of the label transfer results without or with reweighting.
     plt.figure(figsize=(23, 7))
     plt.subplot(1, 3, 1)
@@ -194,6 +250,17 @@ def plot_py_3(X_tar_display, Lab_target_hat_one, names_pop, Lab_target_hat_two, 
 
 
 def plot_py_4(X_sou_display, Lab_source, names_pop, X_target_lag, n_sub, indices, indices_two):
+    """
+
+    :param X_sou_display:
+    :param Lab_source:
+    :param names_pop:
+    :param X_target_lag:
+    :param n_sub:
+    :param indices:
+    :param indices_two:
+    :return:
+    """
     n_sub = int(n_sub)
     plt.figure(figsize=(16, 6))
     plt.subplot(1, 2, 1)
@@ -235,6 +302,14 @@ def plot_py_4(X_sou_display, Lab_source, names_pop, X_target_lag, n_sub, indices
 
 
 def plot_py_Comp(n_0, n_stop, Minmax_monitoring, Desasc_monitoring):
+    """
+
+    :param n_0:
+    :param n_stop:
+    :param Minmax_monitoring:
+    :param Desasc_monitoring:
+    :return:
+    """
     n_0 = int(n_0)
     n_stop = int(n_stop)
     plt.figure(figsize=(12, 7))

@@ -1,4 +1,4 @@
-# Copyright (C) 2021, Paul Freulon <paul.freulon@math.u-bordeaux.fr>=
+# Copyright (C) 2022, Kalidou BA <kalidou.ia.mlds@gmail.com>=
 #
 # License: MIT (see COPYING file)
 # !/usr/bin/env python

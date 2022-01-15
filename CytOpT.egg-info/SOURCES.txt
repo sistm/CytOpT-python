@@ -21,13 +21,6 @@ CytOpT.egg-info/dependency_links.txt
 CytOpT.egg-info/entry_points.txt
 CytOpT.egg-info/requires.txt
 CytOpT.egg-info/top_level.txt
-docs/conf.py
-docs/_build/html/_sources/CytOpT.rst.txt
-docs/_build/html/_sources/index.rst.txt
-docs/_build/html/_sources/modules.rst.txt
-docs/_build/html/_sources/setup.rst.txt
-docs/_build/html/_sources/tests.data.rst.txt
-docs/_build/html/_sources/tests.rst.txt
 tests/Bland_Altman_Target_Full_HIPC.py
 tests/Comparison_Optimization_Ten_Classes.py
 tests/CytOpt_HIPC_Data.py

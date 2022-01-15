@@ -1,26 +1,26 @@
-# Copyright (C) 2021, Paul Freulon <paul.freulon@math.u-bordeaux.fr>=
+# Copyright (C) 2022, Kalidou BA, Paul Freulon <paul.freulon@math.u-bordeaux.fr>=
 #
 # License: MIT (see COPYING file)
 
 import numpy as np
 import pandas as pd
 from scipy.stats import entropy
-from CytOpT.CytOpt_Descent_Ascent import gammatrix
-
-__all__ = ['cytopt_minmax']
+from CytOpT.CytOpt_Descent_Ascent import gammatrix, cost
 
 
-def cost(X_s, y):
-    """
-    Squared euclidean distance between y and the I points of X_s.
-    """
-    diff = X_s - y
-    return np.linalg.norm(diff, axis=1) ** 2
-
+# __all__ = ['cytopt_minmax']
 
 def grad_f(lbd, eps, X_s, X_t, j, u, D):
-    """
-    Compute the gradient with respect to u of the function f inside the expectation
+    """    Compute the gradient with respect to u of the function f inside the expectation
+
+    :param lbd:
+    :param eps:
+    :param X_s:
+    :param X_t:
+    :param j:
+    :param u:
+    :param D:
+    :return:
     """
     arg1 = (u - cost(X_s, X_t[j])) / eps
     cor1 = np.max(arg1)
@@ -38,9 +38,20 @@ def grad_f(lbd, eps, X_s, X_t, j, u, D):
 # cytopt
 def cytopt_minmax(X_s, X_t, Lab_source, eps=0.0001, lbd=0.0001, n_iter=4000,
                   step=5, power=0.99, theta_true=0, monitoring=False):
-    """
-    Robbins-Monro algorithm to compute an approximate of the vector u^* solution of the maximization problem
+    """ Robbins-Monro algorithm to compute an approximate of the vector u^* solution of the maximization problem
     At each step, it is possible to evaluate the vector h_hat to study the convergence of this algorithm.
+
+    :param X_s:
+    :param X_t:
+    :param Lab_source:
+    :param eps:
+    :param lbd:
+    :param n_iter:
+    :param step:
+    :param power:
+    :param theta_true:
+    :param monitoring:
+    :return:
     """
 
     I = X_s.shape[0]
