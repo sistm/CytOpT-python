@@ -26,6 +26,9 @@
         <div class="wy-side-nav-search" >
             <a href="../../index.html" class="icon icon-home"> CytOpT
           </a>
+              <div class="version">
+                1.1.1
+              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -64,48 +67,60 @@
            <div itemprop="articleBody">
              
   <h1>Source code for CytOpT.CytOpt_MinMax_Swapping</h1><div class="highlight"><pre>
-<span></span><span class="c1"># Copyright (C) 2021, Paul Freulon &lt;paul.freulon@math.u-bordeaux.fr&gt;=</span>
+<span></span><span class="c1"># Copyright (C) 2022, Kalidou BA, Paul Freulon &lt;paul.freulon@math.u-bordeaux.fr&gt;=</span>
 <span class="c1">#</span>
 <span class="c1"># License: MIT (see COPYING file)</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">entropy</span>
-<span class="kn">from</span> <span class="nn">CytOpT.CytOpt_Descent_Ascent</span> <span class="kn">import</span> <span class="n">gammatrix</span>
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;cytopt_minmax&#39;</span><span class="p">]</span>
+<span class="kn">from</span> <span class="nn">CytOpT.CytOpt_Descent_Ascent</span> <span class="kn">import</span> <span class="n">gammatrix</span><span class="p">,</span> <span class="n">cost</span>
 
 
-<span class="k">def</span> <span class="nf">cost</span><span class="p">(</span><span class="n">X_s</span><span class="p">,</span><span class="n">y</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Squared euclidean distance between y and the I points of X_s.</span>
+<span class="c1"># __all__ = [&#39;cytopt_minmax&#39;]</span>
+
+<div class="viewcode-block" id="grad_f"><a class="viewcode-back" href="../../CytOpT.html#CytOpT.CytOpt_MinMax_Swapping.grad_f">[docs]</a><span class="k">def</span> <span class="nf">grad_f</span><span class="p">(</span><span class="n">lbd</span><span class="p">,</span> <span class="n">eps</span><span class="p">,</span> <span class="n">X_s</span><span class="p">,</span> <span class="n">X_t</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">D</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;    Compute the gradient with respect to u of the function f inside the expectation</span>
+
+<span class="sd">    :param lbd:</span>
+<span class="sd">    :param eps:</span>
+<span class="sd">    :param X_s:</span>
+<span class="sd">    :param X_t:</span>
+<span class="sd">    :param j:</span>
+<span class="sd">    :param u:</span>
+<span class="sd">    :param D:</span>
+<span class="sd">    :return:</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">diff</span> <span class="o">=</span> <span class="n">X_s</span><span class="o">-</span><span class="n">y</span>
-    <span class="k">return</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">diff</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-
-
-<span class="k">def</span> <span class="nf">grad_f</span><span class="p">(</span><span class="n">lbd</span><span class="p">,</span> <span class="n">eps</span><span class="p">,</span> <span class="n">X_s</span><span class="p">,</span> <span class="n">X_t</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">D</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Compute the gradient with respect to u of the function f inside the expectation</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">arg1</span> <span class="o">=</span> <span class="p">(</span><span class="n">u</span> <span class="o">-</span> <span class="n">cost</span><span class="p">(</span><span class="n">X_s</span><span class="p">,</span> <span class="n">X_t</span><span class="p">[</span><span class="n">j</span><span class="p">]))</span><span class="o">/</span><span class="n">eps</span>
+    <span class="n">arg1</span> <span class="o">=</span> <span class="p">(</span><span class="n">u</span> <span class="o">-</span> <span class="n">cost</span><span class="p">(</span><span class="n">X_s</span><span class="p">,</span> <span class="n">X_t</span><span class="p">[</span><span class="n">j</span><span class="p">]))</span> <span class="o">/</span> <span class="n">eps</span>
     <span class="n">cor1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">arg1</span><span class="p">)</span>
-    <span class="n">vec1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">arg1</span><span class="o">-</span><span class="n">cor1</span><span class="p">)</span>
-    <span class="n">t1</span> <span class="o">=</span> <span class="o">-</span> <span class="n">vec1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">vec1</span><span class="p">)</span>
+    <span class="n">vec1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">arg1</span> <span class="o">-</span> <span class="n">cor1</span><span class="p">)</span>
+    <span class="n">t1</span> <span class="o">=</span> <span class="o">-</span> <span class="n">vec1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">vec1</span><span class="p">)</span>
 
-    <span class="n">arg2</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">D</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="o">/</span><span class="n">lbd</span>
+    <span class="n">arg2</span> <span class="o">=</span> <span class="o">-</span><span class="n">D</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="o">/</span> <span class="n">lbd</span>
     <span class="n">cor2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">arg2</span><span class="p">)</span>
-    <span class="n">vec2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">arg2</span><span class="o">-</span><span class="n">cor2</span><span class="p">)</span>
-    <span class="n">t2</span> <span class="o">=</span> <span class="n">D</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">vec2</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">vec2</span><span class="p">)</span>
+    <span class="n">vec2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">arg2</span> <span class="o">-</span> <span class="n">cor2</span><span class="p">)</span>
+    <span class="n">t2</span> <span class="o">=</span> <span class="n">D</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">vec2</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">vec2</span><span class="p">)</span>
 
-    <span class="k">return</span><span class="p">(</span><span class="n">t1</span><span class="o">+</span><span class="n">t2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">t1</span> <span class="o">+</span> <span class="n">t2</span></div>
 
 
 <span class="c1"># cytopt</span>
 <div class="viewcode-block" id="cytopt_minmax"><a class="viewcode-back" href="../../CytOpT.html#CytOpT.CytOpt_MinMax_Swapping.cytopt_minmax">[docs]</a><span class="k">def</span> <span class="nf">cytopt_minmax</span><span class="p">(</span><span class="n">X_s</span><span class="p">,</span> <span class="n">X_t</span><span class="p">,</span> <span class="n">Lab_source</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">lbd</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">4000</span><span class="p">,</span>
                   <span class="n">step</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">power</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span> <span class="n">theta_true</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">monitoring</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Robbins-Monro algorithm to compute an approximate of the vector u^* solution of the maximization problem</span>
+    <span class="sd">&quot;&quot;&quot; Robbins-Monro algorithm to compute an approximate of the vector u^* solution of the maximization problem</span>
 <span class="sd">    At each step, it is possible to evaluate the vector h_hat to study the convergence of this algorithm.</span>
+
+<span class="sd">    :param X_s:</span>
+<span class="sd">    :param X_t:</span>
+<span class="sd">    :param Lab_source:</span>
+<span class="sd">    :param eps:</span>
+<span class="sd">    :param lbd:</span>
+<span class="sd">    :param n_iter:</span>
+<span class="sd">    :param step:</span>
+<span class="sd">    :param power:</span>
+<span class="sd">    :param theta_true:</span>
+<span class="sd">    :param monitoring:</span>
+<span class="sd">    :return:</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">I</span> <span class="o">=</span> <span class="n">X_s</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -134,25 +149,24 @@
         <span class="n">grd</span> <span class="o">=</span> <span class="n">grad_f</span><span class="p">(</span><span class="n">lbd</span><span class="p">,</span> <span class="n">eps</span><span class="p">,</span> <span class="n">X_s</span><span class="p">,</span> <span class="n">X_t</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">D</span><span class="p">)</span>
         <span class="n">U</span> <span class="o">=</span> <span class="n">U</span> <span class="o">+</span> <span class="n">gamma</span> <span class="o">/</span> <span class="p">(</span><span class="n">it</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="n">c</span> <span class="o">*</span> <span class="n">grd</span>
 
-        <span class="k">if</span> <span class="n">monitoring</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
-
+        <span class="k">if</span> <span class="n">monitoring</span><span class="p">:</span>
             <span class="c1"># Computation of the estimate h_hat</span>
-            <span class="n">arg</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">D</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">U</span><span class="p">)</span> <span class="o">/</span> <span class="n">lbd</span>
+            <span class="n">arg</span> <span class="o">=</span> <span class="o">-</span><span class="n">D</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">U</span><span class="p">)</span> <span class="o">/</span> <span class="n">lbd</span>
             <span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
 
             <span class="n">theta_hat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">arg</span> <span class="o">-</span> <span class="n">M</span><span class="p">)</span>
             <span class="n">theta_hat</span> <span class="o">=</span> <span class="n">theta_hat</span> <span class="o">/</span> <span class="n">theta_hat</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">it</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Iteration &#39;</span><span class="p">,</span> <span class="n">it</span><span class="p">,</span> <span class="s1">&#39; - Curent theta_hat: </span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">theta_hat</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Iteration &#39;</span><span class="p">,</span> <span class="n">it</span><span class="p">,</span> <span class="s1">&#39; - Current theta_hat: </span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">theta_hat</span><span class="p">)</span>
             <span class="n">KL_storage</span><span class="p">[</span><span class="n">it</span><span class="p">]</span> <span class="o">=</span> <span class="n">entropy</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">theta_hat</span><span class="p">,</span> <span class="n">qk</span><span class="o">=</span><span class="n">theta_true</span><span class="p">)</span>
 
-        <span class="n">arg</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">D</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">U</span><span class="p">)</span> <span class="o">/</span> <span class="n">lbd</span>
+        <span class="n">arg</span> <span class="o">=</span> <span class="o">-</span><span class="n">D</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">U</span><span class="p">)</span> <span class="o">/</span> <span class="n">lbd</span>
         <span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
 
         <span class="n">theta_hat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">arg</span> <span class="o">-</span> <span class="n">M</span><span class="p">)</span>
         <span class="n">theta_hat</span> <span class="o">=</span> <span class="n">theta_hat</span> <span class="o">/</span> <span class="n">theta_hat</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
 
-    <span class="k">return</span> <span class="p">(</span><span class="n">theta_hat</span><span class="p">,</span> <span class="n">KL_storage</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="p">[</span><span class="n">theta_hat</span><span class="p">,</span> <span class="n">KL_storage</span><span class="p">]</span></div>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
@@ -173,8 +187,7 @@
     <span class="n">Lab_source</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Stanford1A_clust</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">])</span>
     <span class="n">Lab_target</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Stanford3A_clust</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">])</span>
 
-    <span class="n">cytopt_minmax</span><span class="p">(</span><span class="n">X_source</span><span class="p">,</span> <span class="n">X_target</span><span class="p">,</span> <span class="n">Lab_source</span><span class="p">,</span><span class="n">eps</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">lbd</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">4000</span><span class="p">,</span>
-                  <span class="n">step</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">power</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span> <span class="n">theta_true</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">monitoring</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">cytopt_minmax</span><span class="p">(</span><span class="n">X_source</span><span class="p">,</span> <span class="n">X_target</span><span class="p">,</span> <span class="n">Lab_source</span><span class="p">,</span> <span class="n">monitoring</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 
            </div>

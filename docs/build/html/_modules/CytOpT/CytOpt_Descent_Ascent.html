@@ -26,6 +26,9 @@
         <div class="wy-side-nav-search" >
             <a href="../../index.html" class="icon icon-home"> CytOpT
           </a>
+              <div class="version">
+                1.1.1
+              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -64,7 +67,7 @@
            <div itemprop="articleBody">
              
   <h1>Source code for CytOpT.CytOpt_Descent_Ascent</h1><div class="highlight"><pre>
-<span></span><span class="c1"># Copyright (C) 2021, Paul Freulon &lt;paul.freulon@math.u-bordeaux.fr&gt;=</span>
+<span></span><span class="c1"># Copyright (C) 2022, Kalidou BA, Paul Freulon &lt;paul.freulon@math.u-bordeaux.fr&gt;=</span>
 <span class="c1">#</span>
 <span class="c1"># License: MIT (see COPYING file)</span>
 
@@ -73,21 +76,30 @@
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">entropy</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;cytopt_desasc&#39;</span><span class="p">,</span> <span class="s1">&#39;Label_Prop_sto&#39;</span><span class="p">]</span>
+<span class="c1"># __all__ = [&#39;cytopt_desasc&#39;, &#39;Label_Prop_sto&#39;]</span>
 
 
-<span class="k">def</span> <span class="nf">cost</span><span class="p">(</span><span class="n">X_s</span><span class="p">,</span><span class="n">y</span><span class="p">):</span>
+<div class="viewcode-block" id="cost"><a class="viewcode-back" href="../../CytOpT.html#CytOpT.CytOpt_Descent_Ascent.cost">[docs]</a><span class="k">def</span> <span class="nf">cost</span><span class="p">(</span><span class="n">X_s</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Squared euclidean distance between y and the I points of X_s.</span>
+
+<span class="sd">    :param X_s:</span>
+<span class="sd">    :param y:</span>
+<span class="sd">    :return:</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">diff</span> <span class="o">=</span> <span class="n">X_s</span><span class="o">-</span><span class="n">y</span>
-    <span class="k">return</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">diff</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="n">diff</span> <span class="o">=</span> <span class="n">X_s</span> <span class="o">-</span> <span class="n">y</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">diff</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span></div>
 
 
-<span class="k">def</span> <span class="nf">diff_simplex</span><span class="p">(</span><span class="n">h</span><span class="p">):</span>
+<div class="viewcode-block" id="diff_simplex"><a class="viewcode-back" href="../../CytOpT.html#CytOpT.CytOpt_Descent_Ascent.diff_simplex">[docs]</a><span class="k">def</span> <span class="nf">diff_simplex</span><span class="p">(</span><span class="n">h</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computation of the Jacobian matrix of the softmax function.</span>
+
+<span class="sd">    :param h:</span>
+<span class="sd">    :return:</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">try</span><span class="p">:</span>
         <span class="n">h</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
@@ -100,15 +112,22 @@
                 <span class="n">Diff</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">h</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">h</span><span class="p">))</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">h</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">h</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">Diff</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">h</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">h</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">h</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">Diff</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">Diff</span><span class="p">)</span></div>
 
 
-<span class="k">def</span> <span class="nf">grad_h</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">X_s</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    This function calculates the gradient of the function that we aim to maximize.</span>
+<div class="viewcode-block" id="grad_h"><a class="viewcode-back" href="../../CytOpT.html#CytOpT.CytOpt_Descent_Ascent.grad_h">[docs]</a><span class="k">def</span> <span class="nf">grad_h</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">X_s</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;    This function calculates the gradient of the function that we aim to maximize.</span>
 <span class="sd">    The expectation of this function computed at a maximizer equals the wasserstein disctance,</span>
 <span class="sd">    or its regularized counterpart.</span>
+
+<span class="sd">    :param f:</span>
+<span class="sd">    :param X_s:</span>
+<span class="sd">    :param y:</span>
+<span class="sd">    :param alpha:</span>
+<span class="sd">    :param eps:</span>
+<span class="sd">    :return:</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">if</span> <span class="n">eps</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">cost_y</span> <span class="o">=</span> <span class="n">cost</span><span class="p">(</span><span class="n">X_s</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
         <span class="n">i_star</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">cost_y</span> <span class="o">-</span> <span class="n">f</span><span class="p">)</span>
@@ -121,13 +140,17 @@
         <span class="n">Mx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
         <span class="n">pi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">arg</span> <span class="o">-</span> <span class="n">Mx</span><span class="p">)</span>
         <span class="n">pi</span> <span class="o">=</span> <span class="n">pi</span> <span class="o">/</span> <span class="n">pi</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">alpha</span> <span class="o">-</span> <span class="n">pi</span>
+        <span class="k">return</span> <span class="n">alpha</span> <span class="o">-</span> <span class="n">pi</span></div>
 
 
-<span class="k">def</span> <span class="nf">gammatrix</span><span class="p">(</span><span class="n">X_s</span><span class="p">,</span> <span class="n">Lab_source</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Computation of the operator D that maps the class proportions with the weights.</span>
+<div class="viewcode-block" id="gammatrix"><a class="viewcode-back" href="../../CytOpT.html#CytOpT.CytOpt_Descent_Ascent.gammatrix">[docs]</a><span class="k">def</span> <span class="nf">gammatrix</span><span class="p">(</span><span class="n">X_s</span><span class="p">,</span> <span class="n">Lab_source</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;    Computation of the operator D that maps the class proportions with the weights.</span>
+
+<span class="sd">    :param X_s:</span>
+<span class="sd">    :param Lab_source:</span>
+<span class="sd">    :return:</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">I</span> <span class="o">=</span> <span class="n">X_s</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">if</span> <span class="nb">min</span><span class="p">(</span><span class="n">Lab_source</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">K</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">Lab_source</span><span class="p">))</span>
@@ -144,14 +167,22 @@
             <span class="n">D</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">Lab_source</span> <span class="o">==</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Lab_source</span> <span class="o">==</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
 
         <span class="n">h</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">K</span><span class="p">)</span>
-    <span class="k">return</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">h</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">h</span><span class="p">)</span></div>
 
 
-<span class="k">def</span> <span class="nf">Robbins_Wass</span><span class="p">(</span><span class="n">X_s</span><span class="p">,</span> <span class="n">X_t</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">const</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">10000</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Function that calculates the approximation of the Wasserstein distance between mu and nu</span>
+<div class="viewcode-block" id="Robbins_Wass"><a class="viewcode-back" href="../../CytOpT.html#CytOpT.CytOpt_Descent_Ascent.Robbins_Wass">[docs]</a><span class="k">def</span> <span class="nf">Robbins_Wass</span><span class="p">(</span><span class="n">X_s</span><span class="p">,</span> <span class="n">X_t</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">const</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">10000</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;    Function that calculates the approximation of the Wasserstein distance between mu and nu</span>
 <span class="sd">    thanks to the Robbins-Monro Algorithm. X and Y are the supports of the source and target</span>
 <span class="sd">    distribution. Alpha and beta are the weights of the distributions.</span>
+
+<span class="sd">    :param X_s:</span>
+<span class="sd">    :param X_t:</span>
+<span class="sd">    :param alpha:</span>
+<span class="sd">    :param beta:</span>
+<span class="sd">    :param eps:</span>
+<span class="sd">    :param const:</span>
+<span class="sd">    :param n_iter:</span>
+<span class="sd">    :return:</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">n_iter</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">n_iter</span><span class="p">)</span>
     <span class="n">I</span> <span class="o">=</span> <span class="n">X_s</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -189,16 +220,26 @@
         <span class="c1"># Update of the dual variable</span>
         <span class="n">f</span> <span class="o">=</span> <span class="n">f</span> <span class="o">+</span> <span class="n">gamma</span> <span class="o">/</span> <span class="p">((</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="n">c</span><span class="p">)</span> <span class="o">*</span> <span class="n">grad</span>
 
-    <span class="k">return</span> <span class="n">f</span>
+    <span class="k">return</span> <span class="n">f</span></div>
 
 
-<span class="c1"># cytopt</span>
+<span class="c1"># cytopt_desasc</span>
 <div class="viewcode-block" id="cytopt_desasc"><a class="viewcode-back" href="../../CytOpT.html#CytOpT.CytOpt_Descent_Ascent.cytopt_desasc">[docs]</a><span class="k">def</span> <span class="nf">cytopt_desasc</span><span class="p">(</span><span class="n">X_s</span><span class="p">,</span> <span class="n">X_t</span><span class="p">,</span> <span class="n">Lab_source</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">n_out</span><span class="o">=</span><span class="mi">4000</span><span class="p">,</span> <span class="n">n_stoc</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">step_grad</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">const</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">theta_true</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Function that estimates the class proportions in the target data set.</span>
+    <span class="sd">&quot;&quot;&quot;    Function that estimates the class proportions in the target data set.</span>
 <span class="sd">    It solves the minimization problem with a gradient descent method.</span>
 <span class="sd">    At each iteration, a (sub)gradient of W^{eps}(alpha, beta) is approximated with stochastic optimization</span>
 <span class="sd">    Techniques.</span>
+
+<span class="sd">    :param X_s:</span>
+<span class="sd">    :param X_t:</span>
+<span class="sd">    :param Lab_source:</span>
+<span class="sd">    :param eps:</span>
+<span class="sd">    :param n_out:</span>
+<span class="sd">    :param n_stoc:</span>
+<span class="sd">    :param step_grad:</span>
+<span class="sd">    :param const:</span>
+<span class="sd">    :param theta_true:</span>
+<span class="sd">    :return:</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1"> Epsilon: &#39;</span><span class="p">,</span> <span class="n">eps</span><span class="p">)</span>
@@ -250,7 +291,8 @@
     <span class="n">Lab_source</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Stanford1A_clust</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">])</span>
     <span class="n">Lab_target</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Stanford3A_clust</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">])</span>
 
-    <span class="n">cytopt_desasc</span><span class="p">(</span><span class="n">X_source</span><span class="p">,</span> <span class="n">X_target</span><span class="p">,</span> <span class="n">Lab_source</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">n_out</span><span class="o">=</span><span class="mi">4000</span><span class="p">,</span> <span class="n">n_stoc</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">step_grad</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">const</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">theta_true</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">cytopt_desasc</span><span class="p">(</span><span class="n">X_source</span><span class="p">,</span> <span class="n">X_target</span><span class="p">,</span> <span class="n">Lab_source</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">n_out</span><span class="o">=</span><span class="mi">4000</span><span class="p">,</span> <span class="n">n_stoc</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">step_grad</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">const</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+                  <span class="n">theta_true</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 
            </div>

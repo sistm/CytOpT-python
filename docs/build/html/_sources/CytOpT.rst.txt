@@ -12,6 +12,7 @@ CytOpT.Cytopt module
    :members:
    :undoc-members:
    :show-inheritance:
+   :exclude-members: stop_running,get_length_unique_numbers
 
 
 CytOpT.CytOpt\_Descent\_Ascent module

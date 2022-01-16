@@ -12,7 +12,7 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../../CytOpT/'))
+sys.path.insert(0, os.path.abspath('../..'))
 
 
 # -- Project information -----------------------------------------------------
@@ -21,6 +21,8 @@ project = 'CytOpT'
 copyright = '2022, Boris Hejblum, Paul Freulon, Kalidou BA'
 author = 'Boris Hejblum, Paul Freulon, Kalidou BA'
 
+# The short X.Y version.
+version = "1.1.1"
 # The full version, including alpha/beta/rc tags
 release = '1.1.1'
 
@@ -35,13 +37,30 @@ extensions = ['sphinx.ext.autodoc', 'sphinx.ext.doctest', 'sphinx.ext.todo', 'sp
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
-
+# The suffix of source filenames.
+source_suffix = ".rst"
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = []
+exclude_patterns = ["_build"]
 
+# The reST default role (used for this markup: `text`) to use for all
+# documents.
+# default_role = None
 
+# If true, '()' will be appended to :func: etc. cross-reference text.
+# add_function_parentheses = True
+
+# If true, the current module name will be prepended to all description
+# unit titles (such as .. function::).
+# add_module_names = True
+
+# If true, sectionauthor and moduleauthor directives will be shown in the
+# output. They are ignored by default.
+# show_authors = False
+
+# The name of the Pygments (syntax highlighting) style to use.
+pygments_style = "sphinx"
 # -- Options for HTML output -------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for

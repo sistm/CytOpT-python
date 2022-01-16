@@ -26,6 +26,9 @@
         <div class="wy-side-nav-search" >
             <a href="../../index.html" class="icon icon-home"> CytOpT
           </a>
+              <div class="version">
+                1.1.1
+              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -64,62 +67,49 @@
            <div itemprop="articleBody">
              
   <h1>Source code for CytOpT.Label_Prop_sto</h1><div class="highlight"><pre>
-<span></span><span class="c1"># Copyright (C) 2021, Paul Freulon &lt;paul.freulon@math.u-bordeaux.fr&gt;=</span>
+<span></span><span class="c1"># Copyright (C) 2021, Kalidou BA, Paul Freulon &lt;paul.freulon@math.u-bordeaux.fr&gt;=</span>
 <span class="c1">#</span>
 <span class="c1"># License: MIT (see COPYING file)</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">logsumexp</span>
 <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">entropy</span>
-
-
-<div class="viewcode-block" id="cost"><a class="viewcode-back" href="../../CytOpT.html#CytOpT.Label_Prop_sto.cost">[docs]</a><span class="k">def</span> <span class="nf">cost</span><span class="p">(</span><span class="n">X_s</span><span class="p">,</span><span class="n">y</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Squared euclidean distance between y and the I points of X_s.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">diff</span> <span class="o">=</span> <span class="n">X_s</span><span class="o">-</span><span class="n">y</span>
-    <span class="k">return</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">diff</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span></div>
+<span class="kn">from</span> <span class="nn">CytOpT.CytOpt_Descent_Ascent</span> <span class="kn">import</span> <span class="n">cost</span><span class="p">,</span> <span class="n">grad_h</span>
 
 
 <div class="viewcode-block" id="c_transform"><a class="viewcode-back" href="../../CytOpT.html#CytOpT.Label_Prop_sto.c_transform">[docs]</a><span class="k">def</span> <span class="nf">c_transform</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">X_s</span><span class="p">,</span> <span class="n">X_t</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Calculate the c_transform of f in the non regularized case if eps=0.</span>
+    <span class="sd">&quot;&quot;&quot;     Calculate the c_transform of f in the non regularized case if eps=0.</span>
 <span class="sd">    Otherwise, it computes the smooth c_transform with respect to the usual entropy.</span>
+
+<span class="sd">    :param f:</span>
+<span class="sd">    :param X_s:</span>
+<span class="sd">    :param X_t:</span>
+<span class="sd">    :param j:</span>
+<span class="sd">    :param beta:</span>
+<span class="sd">    :param eps:</span>
+<span class="sd">    :return:</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">eps</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">cost_y</span> <span class="o">=</span> <span class="n">cost</span><span class="p">(</span><span class="n">X_s</span><span class="p">,</span> <span class="n">X_t</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
-        <span class="k">return</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">cost_y</span> <span class="o">-</span> <span class="n">f</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">cost_y</span> <span class="o">-</span> <span class="n">f</span><span class="p">)</span>
 
     <span class="k">else</span><span class="p">:</span>
         <span class="n">arg</span> <span class="o">=</span> <span class="p">(</span><span class="n">f</span> <span class="o">-</span> <span class="n">cost</span><span class="p">(</span><span class="n">X_s</span><span class="p">,</span> <span class="n">X_t</span><span class="p">[</span><span class="n">j</span><span class="p">]))</span> <span class="o">/</span> <span class="n">eps</span>
         <span class="k">return</span> <span class="n">eps</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">beta</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">-</span> <span class="n">logsumexp</span><span class="p">(</span><span class="n">arg</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="grad_h"><a class="viewcode-back" href="../../CytOpT.html#CytOpT.Label_Prop_sto.grad_h">[docs]</a><span class="k">def</span> <span class="nf">grad_h</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">X_s</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    This function calculates the gradient of the function that we aim to maximize.</span>
-<span class="sd">    The expectation of this function computed at a maximizer equals the wasserstein disctance,</span>
-<span class="sd">    or its regularized counterpart.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">eps</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">cost_y</span> <span class="o">=</span> <span class="n">cost</span><span class="p">(</span><span class="n">X_s</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-        <span class="n">i_star</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">cost_y</span> <span class="o">-</span> <span class="n">f</span><span class="p">)</span>
-        <span class="n">to_return</span> <span class="o">=</span> <span class="n">alpha</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="n">to_return</span><span class="p">[</span><span class="n">i_star</span><span class="p">]</span> <span class="o">=</span> <span class="n">alpha</span><span class="p">[</span><span class="n">i_star</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
-        <span class="k">return</span> <span class="p">(</span><span class="n">to_return</span><span class="p">)</span>
-
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">arg</span> <span class="o">=</span> <span class="p">(</span><span class="n">f</span> <span class="o">-</span> <span class="n">cost</span><span class="p">(</span><span class="n">X_s</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span> <span class="o">/</span> <span class="n">eps</span>
-        <span class="n">Mx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
-        <span class="n">pi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">arg</span> <span class="o">-</span> <span class="n">Mx</span><span class="p">)</span>
-        <span class="n">pi</span> <span class="o">=</span> <span class="n">pi</span> <span class="o">/</span> <span class="n">pi</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">alpha</span> <span class="o">-</span> <span class="n">pi</span></div>
-
-
 <div class="viewcode-block" id="h_function"><a class="viewcode-back" href="../../CytOpT.html#CytOpT.Label_Prop_sto.h_function">[docs]</a><span class="k">def</span> <span class="nf">h_function</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">X_s</span><span class="p">,</span> <span class="n">X_t</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Calculate the function h whose expectation equals the semi-dual loss.</span>
+    <span class="sd">&quot;&quot;&quot;     Calculate the function h whose expectation equals the semi-dual loss.</span>
 <span class="sd">    Maximizing the semi-dual loss allows us to compute the wasserstein distance.</span>
+
+<span class="sd">    :param f:</span>
+<span class="sd">    :param X_s:</span>
+<span class="sd">    :param X_t:</span>
+<span class="sd">    :param j:</span>
+<span class="sd">    :param beta:</span>
+<span class="sd">    :param eps:</span>
+<span class="sd">    :param alpha:</span>
+<span class="sd">    :return:</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">eps</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">f</span> <span class="o">*</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">+</span> <span class="n">c_transform</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">X_s</span><span class="p">,</span> <span class="n">X_t</span><span class="o">=</span><span class="n">X_t</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
@@ -129,10 +119,18 @@
 
 
 <div class="viewcode-block" id="Robbins_Wass"><a class="viewcode-back" href="../../CytOpT.html#CytOpT.Label_Prop_sto.Robbins_Wass">[docs]</a><span class="k">def</span> <span class="nf">Robbins_Wass</span><span class="p">(</span><span class="n">X_s</span><span class="p">,</span> <span class="n">X_t</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">const</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">10000</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Function that calculates the approximation of the Wasserstein distance between mu and nu</span>
+    <span class="sd">&quot;&quot;&quot;     Function that calculates the approximation of the Wasserstein distance between mu and nu</span>
 <span class="sd">    thanks to the Robbins-Monro Algorithm. X and Y are the supports of the source and target</span>
 <span class="sd">    distribution. Alpha and beta are the weights of the distributions.</span>
+
+<span class="sd">    :param X_s:</span>
+<span class="sd">    :param X_t:</span>
+<span class="sd">    :param alpha:</span>
+<span class="sd">    :param beta:</span>
+<span class="sd">    :param eps:</span>
+<span class="sd">    :param const:</span>
+<span class="sd">    :param n_iter:</span>
+<span class="sd">    :return:</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">n_iter</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">n_iter</span><span class="p">)</span>
     <span class="n">I</span> <span class="o">=</span> <span class="n">X_s</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -174,10 +172,18 @@
 
 
 <div class="viewcode-block" id="Label_Prop_sto"><a class="viewcode-back" href="../../CytOpT.html#CytOpT.Label_Prop_sto.Label_Prop_sto">[docs]</a><span class="k">def</span> <span class="nf">Label_Prop_sto</span><span class="p">(</span><span class="n">L_source</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">eps</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Function that calculates a classification on the target data</span>
+    <span class="sd">&quot;&quot;&quot;     Function that calculates a classification on the target data</span>
 <span class="sd">    thanks to the approximation of the transport plan and the classification of the source data.</span>
 <span class="sd">    We got the approximation of the transport plan with the stochastic algorithm.</span>
+
+<span class="sd">    :param L_source:</span>
+<span class="sd">    :param f:</span>
+<span class="sd">    :param X:</span>
+<span class="sd">    :param Y:</span>
+<span class="sd">    :param alpha:</span>
+<span class="sd">    :param beta:</span>
+<span class="sd">    :param eps:</span>
+<span class="sd">    :return:</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
     <span class="n">J</span> <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -200,7 +206,6 @@
 
     <span class="n">clustarget</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">L_target</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
     <span class="k">return</span> <span class="p">[</span><span class="n">L_target</span><span class="p">,</span> <span class="n">clustarget</span><span class="p">]</span></div>
-
 </pre></div>
 
            </div>

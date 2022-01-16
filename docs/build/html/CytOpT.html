@@ -28,6 +28,9 @@
         <div class="wy-side-nav-search" >
             <a href="index.html" class="icon icon-home"> CytOpT
           </a>
+              <div class="version">
+                1.1.1
+              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -41,7 +44,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">CytOpT</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">CytOpT package</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#cytopt-cytopt-module">CytOpT.Cytopt module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-CytOpT.Cytopt">CytOpT.Cytopt module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-CytOpT.CytOpt_Descent_Ascent">CytOpT.CytOpt_Descent_Ascent module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-CytOpT.CytOpt_MinMax_Swapping">CytOpT.CytOpt_MinMax_Swapping module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-CytOpT.Label_Prop_sto">CytOpT.Label_Prop_sto module</a></li>
@@ -81,11 +84,97 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline"></a></h2>
 </section>
-<section id="cytopt-cytopt-module">
-<h2>CytOpT.Cytopt module<a class="headerlink" href="#cytopt-cytopt-module" title="Permalink to this headline"></a></h2>
+<section id="module-CytOpT.Cytopt">
+<span id="cytopt-cytopt-module"></span><h2>CytOpT.Cytopt module<a class="headerlink" href="#module-CytOpT.Cytopt" title="Permalink to this headline"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="CytOpT.Cytopt.CytOpt">
+<span class="sig-prename descclassname"><span class="pre">CytOpT.Cytopt.</span></span><span class="sig-name descname"><span class="pre">CytOpt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Lab_source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Lab_target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names_pop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta_true</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">power</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_grad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lbd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_stoc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_stop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">monitoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minMaxScaler</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thresholding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CytOpT/Cytopt.html#CytOpt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CytOpT.Cytopt.CytOpt" title="Permalink to this definition"></a></dt>
+<dd><ul class="simple">
+<li><p>Comparison of methods</p></li>
+</ul>
+<p>– Steps
+— Classification using optimal transport with reweighted proportions.
+— The target measure  𝛽  is reweighted in order to match the weight vector  ℎ̂   estimated with  𝙲𝚢𝚝𝙾𝚙𝚝.
+— Approximation of the optimal dual vector u. In order to compute an approximation of the optimal transportation plan, we need to approximate  𝑃𝜀 .
+— Class proportions estimation with  𝙲𝚢𝚝𝙾𝚙𝚝 Descent-Ascent procedure Setting of the parameters
+— Minmax swapping procedure. Setting of the parameters
+— Plot all Bland-Altman</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X_s</strong> – </p></li>
+<li><p><strong>X_t</strong> – </p></li>
+<li><p><strong>Lab_source</strong> – </p></li>
+<li><p><strong>Lab_target</strong> – </p></li>
+<li><p><strong>cell_type</strong> – </p></li>
+<li><p><strong>names_pop</strong> – </p></li>
+<li><p><strong>method</strong> – </p></li>
+<li><p><strong>theta_true</strong> – </p></li>
+<li><p><strong>eps</strong> – </p></li>
+<li><p><strong>n_iter</strong> – </p></li>
+<li><p><strong>power</strong> – </p></li>
+<li><p><strong>step_grad</strong> – </p></li>
+<li><p><strong>step</strong> – </p></li>
+<li><p><strong>lbd</strong> – </p></li>
+<li><p><strong>n_out</strong> – </p></li>
+<li><p><strong>n_stoc</strong> – </p></li>
+<li><p><strong>n_0</strong> – </p></li>
+<li><p><strong>n_stop</strong> – </p></li>
+<li><p><strong>monitoring</strong> – </p></li>
+<li><p><strong>minMaxScaler</strong> – </p></li>
+<li><p><strong>thresholding</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 <section id="module-CytOpT.CytOpt_Descent_Ascent">
 <span id="cytopt-cytopt-descent-ascent-module"></span><h2>CytOpT.CytOpt_Descent_Ascent module<a class="headerlink" href="#module-CytOpT.CytOpt_Descent_Ascent" title="Permalink to this headline"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="CytOpT.CytOpt_Descent_Ascent.Robbins_Wass">
+<span class="sig-prename descclassname"><span class="pre">CytOpT.CytOpt_Descent_Ascent.</span></span><span class="sig-name descname"><span class="pre">Robbins_Wass</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CytOpT/CytOpt_Descent_Ascent.html#Robbins_Wass"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CytOpT.CytOpt_Descent_Ascent.Robbins_Wass" title="Permalink to this definition"></a></dt>
+<dd><p>Function that calculates the approximation of the Wasserstein distance between mu and nu
+thanks to the Robbins-Monro Algorithm. X and Y are the supports of the source and target
+distribution. Alpha and beta are the weights of the distributions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X_s</strong> – </p></li>
+<li><p><strong>X_t</strong> – </p></li>
+<li><p><strong>alpha</strong> – </p></li>
+<li><p><strong>beta</strong> – </p></li>
+<li><p><strong>eps</strong> – </p></li>
+<li><p><strong>const</strong> – </p></li>
+<li><p><strong>n_iter</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CytOpT.CytOpt_Descent_Ascent.cost">
+<span class="sig-prename descclassname"><span class="pre">CytOpT.CytOpt_Descent_Ascent.</span></span><span class="sig-name descname"><span class="pre">cost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CytOpT/CytOpt_Descent_Ascent.html#cost"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CytOpT.CytOpt_Descent_Ascent.cost" title="Permalink to this definition"></a></dt>
+<dd><p>Squared euclidean distance between y and the I points of X_s.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X_s</strong> – </p></li>
+<li><p><strong>y</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="CytOpT.CytOpt_Descent_Ascent.cytopt_desasc">
 <span class="sig-prename descclassname"><span class="pre">CytOpT.CytOpt_Descent_Ascent.</span></span><span class="sig-name descname"><span class="pre">cytopt_desasc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Lab_source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_stoc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_grad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta_true</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CytOpT/CytOpt_Descent_Ascent.html#cytopt_desasc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CytOpT.CytOpt_Descent_Ascent.cytopt_desasc" title="Permalink to this definition"></a></dt>
@@ -93,6 +182,77 @@
 It solves the minimization problem with a gradient descent method.
 At each iteration, a (sub)gradient of W^{eps}(alpha, beta) is approximated with stochastic optimization
 Techniques.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X_s</strong> – </p></li>
+<li><p><strong>X_t</strong> – </p></li>
+<li><p><strong>Lab_source</strong> – </p></li>
+<li><p><strong>eps</strong> – </p></li>
+<li><p><strong>n_out</strong> – </p></li>
+<li><p><strong>n_stoc</strong> – </p></li>
+<li><p><strong>step_grad</strong> – </p></li>
+<li><p><strong>const</strong> – </p></li>
+<li><p><strong>theta_true</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CytOpT.CytOpt_Descent_Ascent.diff_simplex">
+<span class="sig-prename descclassname"><span class="pre">CytOpT.CytOpt_Descent_Ascent.</span></span><span class="sig-name descname"><span class="pre">diff_simplex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CytOpT/CytOpt_Descent_Ascent.html#diff_simplex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CytOpT.CytOpt_Descent_Ascent.diff_simplex" title="Permalink to this definition"></a></dt>
+<dd><p>Computation of the Jacobian matrix of the softmax function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>h</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CytOpT.CytOpt_Descent_Ascent.gammatrix">
+<span class="sig-prename descclassname"><span class="pre">CytOpT.CytOpt_Descent_Ascent.</span></span><span class="sig-name descname"><span class="pre">gammatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Lab_source</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CytOpT/CytOpt_Descent_Ascent.html#gammatrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CytOpT.CytOpt_Descent_Ascent.gammatrix" title="Permalink to this definition"></a></dt>
+<dd><p>Computation of the operator D that maps the class proportions with the weights.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X_s</strong> – </p></li>
+<li><p><strong>Lab_source</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CytOpT.CytOpt_Descent_Ascent.grad_h">
+<span class="sig-prename descclassname"><span class="pre">CytOpT.CytOpt_Descent_Ascent.</span></span><span class="sig-name descname"><span class="pre">grad_h</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CytOpT/CytOpt_Descent_Ascent.html#grad_h"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CytOpT.CytOpt_Descent_Ascent.grad_h" title="Permalink to this definition"></a></dt>
+<dd><p>This function calculates the gradient of the function that we aim to maximize.
+The expectation of this function computed at a maximizer equals the wasserstein disctance,
+or its regularized counterpart.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> – </p></li>
+<li><p><strong>X_s</strong> – </p></li>
+<li><p><strong>y</strong> – </p></li>
+<li><p><strong>alpha</strong> – </p></li>
+<li><p><strong>eps</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
@@ -103,6 +263,47 @@ Techniques.</p>
 <span class="sig-prename descclassname"><span class="pre">CytOpT.CytOpt_MinMax_Swapping.</span></span><span class="sig-name descname"><span class="pre">cytopt_minmax</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Lab_source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lbd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">power</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta_true</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">monitoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CytOpT/CytOpt_MinMax_Swapping.html#cytopt_minmax"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CytOpT.CytOpt_MinMax_Swapping.cytopt_minmax" title="Permalink to this definition"></a></dt>
 <dd><p>Robbins-Monro algorithm to compute an approximate of the vector u^* solution of the maximization problem
 At each step, it is possible to evaluate the vector h_hat to study the convergence of this algorithm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X_s</strong> – </p></li>
+<li><p><strong>X_t</strong> – </p></li>
+<li><p><strong>Lab_source</strong> – </p></li>
+<li><p><strong>eps</strong> – </p></li>
+<li><p><strong>lbd</strong> – </p></li>
+<li><p><strong>n_iter</strong> – </p></li>
+<li><p><strong>step</strong> – </p></li>
+<li><p><strong>power</strong> – </p></li>
+<li><p><strong>theta_true</strong> – </p></li>
+<li><p><strong>monitoring</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CytOpT.CytOpt_MinMax_Swapping.grad_f">
+<span class="sig-prename descclassname"><span class="pre">CytOpT.CytOpt_MinMax_Swapping.</span></span><span class="sig-name descname"><span class="pre">grad_f</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lbd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">D</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CytOpT/CytOpt_MinMax_Swapping.html#grad_f"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CytOpT.CytOpt_MinMax_Swapping.grad_f" title="Permalink to this definition"></a></dt>
+<dd><p>Compute the gradient with respect to u of the function f inside the expectation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lbd</strong> – </p></li>
+<li><p><strong>eps</strong> – </p></li>
+<li><p><strong>X_s</strong> – </p></li>
+<li><p><strong>X_t</strong> – </p></li>
+<li><p><strong>j</strong> – </p></li>
+<li><p><strong>u</strong> – </p></li>
+<li><p><strong>D</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
@@ -114,6 +315,22 @@ At each step, it is possible to evaluate the vector h_hat to study the convergen
 <dd><p>Function that calculates a classification on the target data
 thanks to the approximation of the transport plan and the classification of the source data.
 We got the approximation of the transport plan with the stochastic algorithm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>L_source</strong> – </p></li>
+<li><p><strong>f</strong> – </p></li>
+<li><p><strong>X</strong> – </p></li>
+<li><p><strong>Y</strong> – </p></li>
+<li><p><strong>alpha</strong> – </p></li>
+<li><p><strong>beta</strong> – </p></li>
+<li><p><strong>eps</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -122,6 +339,22 @@ We got the approximation of the transport plan with the stochastic algorithm.</p
 <dd><p>Function that calculates the approximation of the Wasserstein distance between mu and nu
 thanks to the Robbins-Monro Algorithm. X and Y are the supports of the source and target
 distribution. Alpha and beta are the weights of the distributions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X_s</strong> – </p></li>
+<li><p><strong>X_t</strong> – </p></li>
+<li><p><strong>alpha</strong> – </p></li>
+<li><p><strong>beta</strong> – </p></li>
+<li><p><strong>eps</strong> – </p></li>
+<li><p><strong>const</strong> – </p></li>
+<li><p><strong>n_iter</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -129,20 +362,21 @@ distribution. Alpha and beta are the weights of the distributions.</p>
 <span class="sig-prename descclassname"><span class="pre">CytOpT.Label_Prop_sto.</span></span><span class="sig-name descname"><span class="pre">c_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_t</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CytOpT/Label_Prop_sto.html#c_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CytOpT.Label_Prop_sto.c_transform" title="Permalink to this definition"></a></dt>
 <dd><p>Calculate the c_transform of f in the non regularized case if eps=0.
 Otherwise, it computes the smooth c_transform with respect to the usual entropy.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="CytOpT.Label_Prop_sto.cost">
-<span class="sig-prename descclassname"><span class="pre">CytOpT.Label_Prop_sto.</span></span><span class="sig-name descname"><span class="pre">cost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CytOpT/Label_Prop_sto.html#cost"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CytOpT.Label_Prop_sto.cost" title="Permalink to this definition"></a></dt>
-<dd><p>Squared euclidean distance between y and the I points of X_s.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="CytOpT.Label_Prop_sto.grad_h">
-<span class="sig-prename descclassname"><span class="pre">CytOpT.Label_Prop_sto.</span></span><span class="sig-name descname"><span class="pre">grad_h</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CytOpT/Label_Prop_sto.html#grad_h"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CytOpT.Label_Prop_sto.grad_h" title="Permalink to this definition"></a></dt>
-<dd><p>This function calculates the gradient of the function that we aim to maximize.
-The expectation of this function computed at a maximizer equals the wasserstein disctance,
-or its regularized counterpart.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> – </p></li>
+<li><p><strong>X_s</strong> – </p></li>
+<li><p><strong>X_t</strong> – </p></li>
+<li><p><strong>j</strong> – </p></li>
+<li><p><strong>beta</strong> – </p></li>
+<li><p><strong>eps</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -150,6 +384,22 @@ or its regularized counterpart.</p>
 <span class="sig-prename descclassname"><span class="pre">CytOpT.Label_Prop_sto.</span></span><span class="sig-name descname"><span class="pre">h_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_t</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CytOpT/Label_Prop_sto.html#h_function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CytOpT.Label_Prop_sto.h_function" title="Permalink to this definition"></a></dt>
 <dd><p>Calculate the function h whose expectation equals the semi-dual loss.
 Maximizing the semi-dual loss allows us to compute the wasserstein distance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> – </p></li>
+<li><p><strong>X_s</strong> – </p></li>
+<li><p><strong>X_t</strong> – </p></li>
+<li><p><strong>j</strong> – </p></li>
+<li><p><strong>beta</strong> – </p></li>
+<li><p><strong>eps</strong> – </p></li>
+<li><p><strong>alpha</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
