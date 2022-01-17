@@ -1,4 +1,4 @@
-# CyOpt
+# CytOpt
 
 ## Description
 The CytOpt is new package includes a new algorithm using regularized optimal transport to directly estimate the different cell population proportions from a biological sample characterized with flow cytometry measurements. Algorithm is based on the regularized Wasserstein metric to compare cytometry measurements from different samples, thus accounting for possible mis-alignment of a given cell population across sample (due to technical variability from the technology of measurements).
@@ -70,6 +70,8 @@ for k in range(10):
 
 
 ```
+from CytOpT import Cytopt
+
 CytOpt(X_source, X_target, Lab_source, Lab_target=None, cell_type=None,
                               method="comparison_opt", theta_true=theta_true, eps=1e-04, n_iter=4000, power=0.99,
                               step_grad=50, step=5, lbd=1e-04, n_out=1000, n_stoc=10, n_0=10,
