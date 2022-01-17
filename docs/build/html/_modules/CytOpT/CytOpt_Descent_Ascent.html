@@ -175,13 +175,17 @@
 <span class="sd">    thanks to the Robbins-Monro Algorithm. X and Y are the supports of the source and target</span>
 <span class="sd">    distribution. Alpha and beta are the weights of the distributions.</span>
 
-<span class="sd">    :param X_s:</span>
-<span class="sd">    :param X_t:</span>
+<span class="sd">    :param X_s: a cytometry dataframe. The columns correspond to the different biological markers tracked.</span>
+<span class="sd">                One line corresponds to the cytometry measurements performed on one cell. The classification</span>
+<span class="sd">                of this Cytometry data set must be provided with the Lab_source parameters.</span>
+<span class="sd">    :param X_t: a cytometry dataframe. The columns correspond to the different biological markers tracked.</span>
+<span class="sd">                One line corresponds to the cytometry measurements performed on one cell. The CytOpt algorithm</span>
+<span class="sd">                targets the cell type proportion in this Cytometry data set.</span>
 <span class="sd">    :param alpha:</span>
 <span class="sd">    :param beta:</span>
-<span class="sd">    :param eps:</span>
+<span class="sd">    :param eps: an float value of regularization parameter of the Wasserstein distance. Default is ``1e-04``.</span>
 <span class="sd">    :param const:</span>
-<span class="sd">    :param n_iter:</span>
+<span class="sd">    :param n_iter: an integer Constant that iterate method select. Default is ``4000``.</span>
 <span class="sd">    :return:</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">n_iter</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">n_iter</span><span class="p">)</span>
@@ -230,15 +234,25 @@
 <span class="sd">    At each iteration, a (sub)gradient of W^{eps}(alpha, beta) is approximated with stochastic optimization</span>
 <span class="sd">    Techniques.</span>
 
-<span class="sd">    :param X_s:</span>
-<span class="sd">    :param X_t:</span>
-<span class="sd">    :param Lab_source:</span>
-<span class="sd">    :param eps:</span>
-<span class="sd">    :param n_out:</span>
-<span class="sd">    :param n_stoc:</span>
-<span class="sd">    :param step_grad:</span>
+<span class="sd">    :param X_s: a cytometry dataframe. The columns correspond to the different biological markers tracked.</span>
+<span class="sd">                One line corresponds to the cytometry measurements performed on one cell. The classification</span>
+<span class="sd">                of this Cytometry data set must be provided with the Lab_source parameters.</span>
+<span class="sd">    :param X_t: a cytometry dataframe. The columns correspond to the different biological markers tracked.</span>
+<span class="sd">                One line corresponds to the cytometry measurements performed on one cell. The CytOpt algorithm</span>
+<span class="sd">                targets the cell type proportion in this Cytometry data set.</span>
+<span class="sd">    :param Lab_source: a vector of length ``n`` Classification of the ``X_s`` cytometry data set</span>
+<span class="sd">    :param eps: an float value of regularization parameter of the Wasserstein distance. Default is ``1e-04``.</span>
+<span class="sd">    :param n_out: an integer number of iterations in the outer loop. This loop corresponds to the gradient</span>
+<span class="sd">            descent algorithm to minimize the regularized Wasserstein distance between the source and</span>
+<span class="sd">            target data sets. Default is ``1000``.</span>
+<span class="sd">    :param n_stoc: an integer number of iterations in the inner loop. This loop corresponds to the stochastic</span>
+<span class="sd">            algorithm that approximates a maximizer of the semi dual problem. Default is ``10``.</span>
+<span class="sd">    :param step_grad: an integer number step size of the gradient descent algorithm of the outer loop.</span>
+<span class="sd">                      Default is ``50``.</span>
 <span class="sd">    :param const:</span>
-<span class="sd">    :param theta_true:</span>
+<span class="sd">    :param theta_true: If available, the true proportions in the target data set ``X_s``. It allows to assess</span>
+<span class="sd">                        the gap between the estimate of our method and the estimate of the cell type proportions derived from</span>
+<span class="sd">                        manual gating.</span>
 <span class="sd">    :return:</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 

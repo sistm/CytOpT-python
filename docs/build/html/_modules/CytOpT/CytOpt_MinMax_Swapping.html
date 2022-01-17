@@ -110,16 +110,23 @@
     <span class="sd">&quot;&quot;&quot; Robbins-Monro algorithm to compute an approximate of the vector u^* solution of the maximization problem</span>
 <span class="sd">    At each step, it is possible to evaluate the vector h_hat to study the convergence of this algorithm.</span>
 
-<span class="sd">    :param X_s:</span>
-<span class="sd">    :param X_t:</span>
-<span class="sd">    :param Lab_source:</span>
-<span class="sd">    :param eps:</span>
-<span class="sd">    :param lbd:</span>
-<span class="sd">    :param n_iter:</span>
-<span class="sd">    :param step:</span>
-<span class="sd">    :param power:</span>
-<span class="sd">    :param theta_true:</span>
-<span class="sd">    :param monitoring:</span>
+<span class="sd">    :param X_s: a cytometry dataframe. The columns correspond to the different biological markers tracked.</span>
+<span class="sd">                One line corresponds to the cytometry measurements performed on one cell. The classification</span>
+<span class="sd">                of this Cytometry data set must be provided with the Lab_source parameters.</span>
+<span class="sd">    :param X_t: a cytometry dataframe. The columns correspond to the different biological markers tracked.</span>
+<span class="sd">                One line corresponds to the cytometry measurements performed on one cell. The CytOpt algorithm</span>
+<span class="sd">                targets the cell type proportion in this Cytometry data set.</span>
+<span class="sd">    :param Lab_source: a vector of length ``n`` Classification of the ``X_s`` cytometry data set</span>
+<span class="sd">    :param eps: an float value of regularization parameter of the Wasserstein distance. Default is ``1e-04``.</span>
+<span class="sd">    :param lbd:  an float constant that multiply the step-size policy. Default is ``1e-04``.</span>
+<span class="sd">    :param n_iter:  an integer Constant that iterate method select. Default is ``4000``.</span>
+<span class="sd">    :param step: an integer constant that multiply the step-size policy. Default is ``5``.</span>
+<span class="sd">    :param power: an float constant the step size policy of the gradient ascent method is step/n^power. Default is ``0.99``.</span>
+<span class="sd">    :param theta_true: If available, the true proportions in the target data set ``X_s``. It allows to assess</span>
+<span class="sd">                        the gap between the estimate of our method and the estimate of the cell type proportions derived from</span>
+<span class="sd">                        manual gating.</span>
+<span class="sd">    :param monitoring: a logical flag indicating to possibly monitor the gap between the estimated proprotions and the manual</span>
+<span class="sd">                        gold-standard. Default is ``FALSE``.</span>
 <span class="sd">    :return:</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 

@@ -18,6 +18,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="CyOpt" href="readme_link.html" />
     <link rel="prev" title="CytOpT" href="modules.html" /> 
 </head>
 
@@ -50,6 +51,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#module-CytOpT.Label_Prop_sto">CytOpT.Label_Prop_sto module</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="readme_link.html">CyOpt</a></li>
 </ul>
 </li>
 </ul>
@@ -102,27 +104,40 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X_s</strong> – </p></li>
-<li><p><strong>X_t</strong> – </p></li>
-<li><p><strong>Lab_source</strong> – </p></li>
+<li><p><strong>X_s</strong> – a cytometry dataframe. The columns correspond to the different biological markers tracked.
+One line corresponds to the cytometry measurements performed on one cell. The classification
+of this Cytometry data set must be provided with the Lab_source parameters.</p></li>
+<li><p><strong>X_t</strong> – a cytometry dataframe. The columns correspond to the different biological markers tracked.
+One line corresponds to the cytometry measurements performed on one cell. The CytOpt algorithm
+targets the cell type proportion in this Cytometry data set</p></li>
+<li><p><strong>Lab_source</strong> – a vector of length <code class="docutils literal notranslate"><span class="pre">n</span></code> Classification of the <code class="docutils literal notranslate"><span class="pre">X_s</span></code> cytometry data set.</p></li>
 <li><p><strong>Lab_target</strong> – </p></li>
-<li><p><strong>cell_type</strong> – </p></li>
+<li><p><strong>cell_type</strong> – a vector indicate type of cell.</p></li>
 <li><p><strong>names_pop</strong> – </p></li>
-<li><p><strong>method</strong> – </p></li>
-<li><p><strong>theta_true</strong> – </p></li>
-<li><p><strong>eps</strong> – </p></li>
-<li><p><strong>n_iter</strong> – </p></li>
-<li><p><strong>power</strong> – </p></li>
-<li><p><strong>step_grad</strong> – </p></li>
-<li><p><strong>step</strong> – </p></li>
-<li><p><strong>lbd</strong> – </p></li>
-<li><p><strong>n_out</strong> – </p></li>
-<li><p><strong>n_stoc</strong> – </p></li>
-<li><p><strong>n_0</strong> – </p></li>
-<li><p><strong>n_stop</strong> – </p></li>
-<li><p><strong>monitoring</strong> – </p></li>
-<li><p><strong>minMaxScaler</strong> – </p></li>
-<li><p><strong>thresholding</strong> – </p></li>
+<li><p><strong>method</strong> – a character string indicating which method to use to compute the cytopt, either  <code class="docutils literal notranslate"><span class="pre">cytopt_minmax,</span> <span class="pre">cytopt_desasc</span>
+<span class="pre">or</span> <span class="pre">comparison_opt</span></code> for Comparison two methods  <code class="docutils literal notranslate"><span class="pre">Desasc</span> <span class="pre">or</span> <span class="pre">Minmax</span></code>.
+Default is  cytopt_minmax since it is the method used in the test.</p></li>
+<li><p><strong>theta_true</strong> – If available, the true proportions in the target data set <code class="docutils literal notranslate"><span class="pre">X_s</span></code>. It allows to assess
+the gap between the estimate of our method and the estimate of the cell type proportions derived from
+manual gating.</p></li>
+<li><p><strong>eps</strong> – an float value of regularization parameter of the Wasserstein distance. Default is <code class="docutils literal notranslate"><span class="pre">1e-04</span></code>.</p></li>
+<li><p><strong>n_iter</strong> – an integer Constant that iterate method select. Default is <code class="docutils literal notranslate"><span class="pre">4000</span></code>.</p></li>
+<li><p><strong>power</strong> – an float constant the step size policy of the gradient ascent method is step/n^power. Default is <code class="docutils literal notranslate"><span class="pre">0.99</span></code>.</p></li>
+<li><p><strong>step_grad</strong> – an integer number step size of the gradient descent algorithm of the outer loop.
+Default is <code class="docutils literal notranslate"><span class="pre">50</span></code>.</p></li>
+<li><p><strong>step</strong> – an integer constant that multiply the step-size policy. Default is <code class="docutils literal notranslate"><span class="pre">5</span></code>.</p></li>
+<li><p><strong>lbd</strong> – an float constant that multiply the step-size policy. Default is <code class="docutils literal notranslate"><span class="pre">1e-04</span></code>.</p></li>
+<li><p><strong>n_out</strong> – an integer number of iterations in the outer loop. This loop corresponds to the gradient
+descent algorithm to minimize the regularized Wasserstein distance between the source and
+target data sets. Default is <code class="docutils literal notranslate"><span class="pre">1000</span></code>.</p></li>
+<li><p><strong>n_stoc</strong> – an integer number of iterations in the inner loop. This loop corresponds to the stochastic
+algorithm that approximates a maximizer of the semi dual problem. Default is <code class="docutils literal notranslate"><span class="pre">10</span></code>.</p></li>
+<li><p><strong>n_0</strong> – an integer value. Default is <code class="docutils literal notranslate"><span class="pre">10</span></code>.</p></li>
+<li><p><strong>n_stop</strong> – an integer value. Default is <code class="docutils literal notranslate"><span class="pre">1000</span></code>.</p></li>
+<li><p><strong>monitoring</strong> – a logical flag indicating to possibly monitor the gap between the estimated proprotions and the manual
+gold-standard. Default is <code class="docutils literal notranslate"><span class="pre">FALSE</span></code>.</p></li>
+<li><p><strong>minMaxScaler</strong> – a logical flag indicating to possibly Scaler.</p></li>
+<li><p><strong>thresholding</strong> – a logical flag.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -143,30 +158,17 @@ distribution. Alpha and beta are the weights of the distributions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X_s</strong> – </p></li>
-<li><p><strong>X_t</strong> – </p></li>
+<li><p><strong>X_s</strong> – a cytometry dataframe. The columns correspond to the different biological markers tracked.
+One line corresponds to the cytometry measurements performed on one cell. The classification
+of this Cytometry data set must be provided with the Lab_source parameters.</p></li>
+<li><p><strong>X_t</strong> – a cytometry dataframe. The columns correspond to the different biological markers tracked.
+One line corresponds to the cytometry measurements performed on one cell. The CytOpt algorithm
+targets the cell type proportion in this Cytometry data set.</p></li>
 <li><p><strong>alpha</strong> – </p></li>
 <li><p><strong>beta</strong> – </p></li>
-<li><p><strong>eps</strong> – </p></li>
+<li><p><strong>eps</strong> – an float value of regularization parameter of the Wasserstein distance. Default is <code class="docutils literal notranslate"><span class="pre">1e-04</span></code>.</p></li>
 <li><p><strong>const</strong> – </p></li>
-<li><p><strong>n_iter</strong> – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="CytOpT.CytOpt_Descent_Ascent.cost">
-<span class="sig-prename descclassname"><span class="pre">CytOpT.CytOpt_Descent_Ascent.</span></span><span class="sig-name descname"><span class="pre">cost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CytOpT/CytOpt_Descent_Ascent.html#cost"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CytOpT.CytOpt_Descent_Ascent.cost" title="Permalink to this definition"></a></dt>
-<dd><p>Squared euclidean distance between y and the I points of X_s.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>X_s</strong> – </p></li>
-<li><p><strong>y</strong> – </p></li>
+<li><p><strong>n_iter</strong> – an integer Constant that iterate method select. Default is <code class="docutils literal notranslate"><span class="pre">4000</span></code>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -185,68 +187,25 @@ Techniques.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X_s</strong> – </p></li>
-<li><p><strong>X_t</strong> – </p></li>
-<li><p><strong>Lab_source</strong> – </p></li>
-<li><p><strong>eps</strong> – </p></li>
-<li><p><strong>n_out</strong> – </p></li>
-<li><p><strong>n_stoc</strong> – </p></li>
-<li><p><strong>step_grad</strong> – </p></li>
+<li><p><strong>X_s</strong> – a cytometry dataframe. The columns correspond to the different biological markers tracked.
+One line corresponds to the cytometry measurements performed on one cell. The classification
+of this Cytometry data set must be provided with the Lab_source parameters.</p></li>
+<li><p><strong>X_t</strong> – a cytometry dataframe. The columns correspond to the different biological markers tracked.
+One line corresponds to the cytometry measurements performed on one cell. The CytOpt algorithm
+targets the cell type proportion in this Cytometry data set.</p></li>
+<li><p><strong>Lab_source</strong> – a vector of length <code class="docutils literal notranslate"><span class="pre">n</span></code> Classification of the <code class="docutils literal notranslate"><span class="pre">X_s</span></code> cytometry data set</p></li>
+<li><p><strong>eps</strong> – an float value of regularization parameter of the Wasserstein distance. Default is <code class="docutils literal notranslate"><span class="pre">1e-04</span></code>.</p></li>
+<li><p><strong>n_out</strong> – an integer number of iterations in the outer loop. This loop corresponds to the gradient
+descent algorithm to minimize the regularized Wasserstein distance between the source and
+target data sets. Default is <code class="docutils literal notranslate"><span class="pre">1000</span></code>.</p></li>
+<li><p><strong>n_stoc</strong> – an integer number of iterations in the inner loop. This loop corresponds to the stochastic
+algorithm that approximates a maximizer of the semi dual problem. Default is <code class="docutils literal notranslate"><span class="pre">10</span></code>.</p></li>
+<li><p><strong>step_grad</strong> – an integer number step size of the gradient descent algorithm of the outer loop.
+Default is <code class="docutils literal notranslate"><span class="pre">50</span></code>.</p></li>
 <li><p><strong>const</strong> – </p></li>
-<li><p><strong>theta_true</strong> – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="CytOpT.CytOpt_Descent_Ascent.diff_simplex">
-<span class="sig-prename descclassname"><span class="pre">CytOpT.CytOpt_Descent_Ascent.</span></span><span class="sig-name descname"><span class="pre">diff_simplex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CytOpT/CytOpt_Descent_Ascent.html#diff_simplex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CytOpT.CytOpt_Descent_Ascent.diff_simplex" title="Permalink to this definition"></a></dt>
-<dd><p>Computation of the Jacobian matrix of the softmax function.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>h</strong> – </p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="CytOpT.CytOpt_Descent_Ascent.gammatrix">
-<span class="sig-prename descclassname"><span class="pre">CytOpT.CytOpt_Descent_Ascent.</span></span><span class="sig-name descname"><span class="pre">gammatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Lab_source</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CytOpT/CytOpt_Descent_Ascent.html#gammatrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CytOpT.CytOpt_Descent_Ascent.gammatrix" title="Permalink to this definition"></a></dt>
-<dd><p>Computation of the operator D that maps the class proportions with the weights.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>X_s</strong> – </p></li>
-<li><p><strong>Lab_source</strong> – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="CytOpT.CytOpt_Descent_Ascent.grad_h">
-<span class="sig-prename descclassname"><span class="pre">CytOpT.CytOpt_Descent_Ascent.</span></span><span class="sig-name descname"><span class="pre">grad_h</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CytOpT/CytOpt_Descent_Ascent.html#grad_h"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CytOpT.CytOpt_Descent_Ascent.grad_h" title="Permalink to this definition"></a></dt>
-<dd><p>This function calculates the gradient of the function that we aim to maximize.
-The expectation of this function computed at a maximizer equals the wasserstein disctance,
-or its regularized counterpart.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>f</strong> – </p></li>
-<li><p><strong>X_s</strong> – </p></li>
-<li><p><strong>y</strong> – </p></li>
-<li><p><strong>alpha</strong> – </p></li>
-<li><p><strong>eps</strong> – </p></li>
+<li><p><strong>theta_true</strong> – If available, the true proportions in the target data set <code class="docutils literal notranslate"><span class="pre">X_s</span></code>. It allows to assess
+the gap between the estimate of our method and the estimate of the cell type proportions derived from
+manual gating.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -266,38 +225,23 @@ At each step, it is possible to evaluate the vector h_hat to study the convergen
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X_s</strong> – </p></li>
-<li><p><strong>X_t</strong> – </p></li>
-<li><p><strong>Lab_source</strong> – </p></li>
-<li><p><strong>eps</strong> – </p></li>
-<li><p><strong>lbd</strong> – </p></li>
-<li><p><strong>n_iter</strong> – </p></li>
-<li><p><strong>step</strong> – </p></li>
-<li><p><strong>power</strong> – </p></li>
-<li><p><strong>theta_true</strong> – </p></li>
-<li><p><strong>monitoring</strong> – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="CytOpT.CytOpt_MinMax_Swapping.grad_f">
-<span class="sig-prename descclassname"><span class="pre">CytOpT.CytOpt_MinMax_Swapping.</span></span><span class="sig-name descname"><span class="pre">grad_f</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lbd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">D</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CytOpT/CytOpt_MinMax_Swapping.html#grad_f"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CytOpT.CytOpt_MinMax_Swapping.grad_f" title="Permalink to this definition"></a></dt>
-<dd><p>Compute the gradient with respect to u of the function f inside the expectation</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>lbd</strong> – </p></li>
-<li><p><strong>eps</strong> – </p></li>
-<li><p><strong>X_s</strong> – </p></li>
-<li><p><strong>X_t</strong> – </p></li>
-<li><p><strong>j</strong> – </p></li>
-<li><p><strong>u</strong> – </p></li>
-<li><p><strong>D</strong> – </p></li>
+<li><p><strong>X_s</strong> – a cytometry dataframe. The columns correspond to the different biological markers tracked.
+One line corresponds to the cytometry measurements performed on one cell. The classification
+of this Cytometry data set must be provided with the Lab_source parameters.</p></li>
+<li><p><strong>X_t</strong> – a cytometry dataframe. The columns correspond to the different biological markers tracked.
+One line corresponds to the cytometry measurements performed on one cell. The CytOpt algorithm
+targets the cell type proportion in this Cytometry data set.</p></li>
+<li><p><strong>Lab_source</strong> – a vector of length <code class="docutils literal notranslate"><span class="pre">n</span></code> Classification of the <code class="docutils literal notranslate"><span class="pre">X_s</span></code> cytometry data set</p></li>
+<li><p><strong>eps</strong> – an float value of regularization parameter of the Wasserstein distance. Default is <code class="docutils literal notranslate"><span class="pre">1e-04</span></code>.</p></li>
+<li><p><strong>lbd</strong> – an float constant that multiply the step-size policy. Default is <code class="docutils literal notranslate"><span class="pre">1e-04</span></code>.</p></li>
+<li><p><strong>n_iter</strong> – an integer Constant that iterate method select. Default is <code class="docutils literal notranslate"><span class="pre">4000</span></code>.</p></li>
+<li><p><strong>step</strong> – an integer constant that multiply the step-size policy. Default is <code class="docutils literal notranslate"><span class="pre">5</span></code>.</p></li>
+<li><p><strong>power</strong> – an float constant the step size policy of the gradient ascent method is step/n^power. Default is <code class="docutils literal notranslate"><span class="pre">0.99</span></code>.</p></li>
+<li><p><strong>theta_true</strong> – If available, the true proportions in the target data set <code class="docutils literal notranslate"><span class="pre">X_s</span></code>. It allows to assess
+the gap between the estimate of our method and the estimate of the cell type proportions derived from
+manual gating.</p></li>
+<li><p><strong>monitoring</strong> – a logical flag indicating to possibly monitor the gap between the estimated proprotions and the manual
+gold-standard. Default is <code class="docutils literal notranslate"><span class="pre">FALSE</span></code>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -357,51 +301,6 @@ distribution. Alpha and beta are the weights of the distributions.</p>
 </dl>
 </dd></dl>
 
-<dl class="py function">
-<dt class="sig sig-object py" id="CytOpT.Label_Prop_sto.c_transform">
-<span class="sig-prename descclassname"><span class="pre">CytOpT.Label_Prop_sto.</span></span><span class="sig-name descname"><span class="pre">c_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_t</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CytOpT/Label_Prop_sto.html#c_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CytOpT.Label_Prop_sto.c_transform" title="Permalink to this definition"></a></dt>
-<dd><p>Calculate the c_transform of f in the non regularized case if eps=0.
-Otherwise, it computes the smooth c_transform with respect to the usual entropy.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>f</strong> – </p></li>
-<li><p><strong>X_s</strong> – </p></li>
-<li><p><strong>X_t</strong> – </p></li>
-<li><p><strong>j</strong> – </p></li>
-<li><p><strong>beta</strong> – </p></li>
-<li><p><strong>eps</strong> – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="CytOpT.Label_Prop_sto.h_function">
-<span class="sig-prename descclassname"><span class="pre">CytOpT.Label_Prop_sto.</span></span><span class="sig-name descname"><span class="pre">h_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_t</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CytOpT/Label_Prop_sto.html#h_function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CytOpT.Label_Prop_sto.h_function" title="Permalink to this definition"></a></dt>
-<dd><p>Calculate the function h whose expectation equals the semi-dual loss.
-Maximizing the semi-dual loss allows us to compute the wasserstein distance.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>f</strong> – </p></li>
-<li><p><strong>X_s</strong> – </p></li>
-<li><p><strong>X_t</strong> – </p></li>
-<li><p><strong>j</strong> – </p></li>
-<li><p><strong>beta</strong> – </p></li>
-<li><p><strong>eps</strong> – </p></li>
-<li><p><strong>alpha</strong> – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
-</dd>
-</dl>
-</dd></dl>
-
 </section>
 </section>
 
@@ -410,6 +309,7 @@ Maximizing the semi-dual loss allows us to compute the wasserstein distance.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="modules.html" class="btn btn-neutral float-left" title="CytOpT" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="readme_link.html" class="btn btn-neutral float-right" title="CyOpt" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

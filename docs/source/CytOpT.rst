@@ -22,6 +22,7 @@ CytOpT.CytOpt\_Descent\_Ascent module
    :members:
    :undoc-members:
    :show-inheritance:
+   :exclude-members: cost,diff_simplex,gammatrix,grad_h
 
 CytOpT.CytOpt\_MinMax\_Swapping module
 --------------------------------------
@@ -30,6 +31,7 @@ CytOpT.CytOpt\_MinMax\_Swapping module
    :members:
    :undoc-members:
    :show-inheritance:
+   :exclude-members: grad_f
 
 
 CytOpT.Label\_Prop\_sto module
@@ -39,6 +41,5 @@ CytOpT.Label\_Prop\_sto module
    :members:
    :undoc-members:
    :show-inheritance:
-
-
+   :exclude-members: c_transform,h_function
 

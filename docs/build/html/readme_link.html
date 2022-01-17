@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CytOpT documentation &mdash; CytOpT 1.1.1 documentation</title>
+  <title>CyOpt &mdash; CytOpT 1.1.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -18,7 +18,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="CytOpT" href="modules.html" /> 
+    <link rel="prev" title="CytOpT package" href="CytOpT.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -26,7 +26,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="#" class="icon icon-home"> CytOpT
+            <a href="index.html" class="icon icon-home"> CytOpT
           </a>
               <div class="version">
                 1.1.1
@@ -40,8 +40,22 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="modules.html">CytOpT</a></li>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">CytOpT</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="CytOpT.html">CytOpT package</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">CyOpt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#getting-started">Getting started</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#install-cytopt">Install CytOpT</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#example">Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#comparison-of-methods">Comparison of methods</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cytopt-minmax-or-desasc">CytOpT Minmax or Desasc</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -50,17 +64,18 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="#">CytOpT</a>
+          <a href="index.html">CytOpT</a>
       </nav>
 
       <div class="wy-nav-content">
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
-      <li>CytOpT documentation</li>
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="modules.html">CytOpT</a> &raquo;</li>
+      <li>CyOpt</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/readme_link.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -68,35 +83,10 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="cytopt-documentation">
-<h1>CytOpT documentation<a class="headerlink" href="#cytopt-documentation" title="Permalink to this headline"></a></h1>
-<p>The CytOpT is new package includes a new algorithm using regularized optimal transport to directly estimate the different cell population proportions from a biological sample characterized with flow cytometry measurements. Algorithm is based on the regularized Wasserstein metric to compare cytometry measurements from different samples, thus accounting for possible mis-alignment of a given cell population across sample (due to technical variability from the technology of measurements).</p>
-<dl class="simple">
-<dt>Approach</dt><dd><p>Supervised learning technique based on the Wasserstein metric that
-is used to estimate an optimal re-weighting of class proportions in
-a mixture model from a source distribution (with known segmentation
-into cell sub-populations) to fit a target distribution with unknown segmentation.</p>
-</dd>
-<dt>Description</dt><dd><p>A new algorithm, referred to as CytOpT, using regularized
-optimal transport to directly estimate the different cell
-population proportions from a biological sample characterized
-with flow cytometry measurements. It is based on the regularized
-Wasserstein metric to compare cytometry measurements from
-different samples, thus accounting for possible mis-alignment
-of a given cell population across sample (due to technical variability from the technology of measurements).</p>
-</dd>
-<dt>Overview</dt><dd><p>The methods implemented in this package are detailed in the following article:
-Paul Freulon, Jérémie Bigot, Boris P. Hejblum. CytOpT: Optimal Transport with Domain Adaptation for Interpreting Flow Cytometry data <a class="reference external" href="https://arxiv.org/abs/2006.09003">https://arxiv.org/abs/2006.09003</a></p>
-</dd>
-</dl>
-<p>The project homepage is <a class="reference external" href="https://github.com/sistm/CytOpt-python">https://github.com/sistm/CytOpt-python</a>.</p>
-<p>See <code class="docutils literal notranslate"><span class="pre">README</span></code> for the installation instructions.</p>
-<section id="cyopt">
-<h2>CyOpt<a class="headerlink" href="#cyopt" title="Permalink to this headline"></a></h2>
-</section>
-</section>
+  <section id="cyopt">
+<h1>CyOpt<a class="headerlink" href="#cyopt" title="Permalink to this headline"></a></h1>
 <section id="overview">
-<h1>Overview<a class="headerlink" href="#overview" title="Permalink to this headline"></a></h1>
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline"></a></h2>
 <p>The CytOpt is new package includes a new algorithm using regularized optimal transport
 to directly estimate the different cell population proportions from a biological sample
 characterized with flow cytometry measurements. Algorithm is based on the regularized
@@ -106,12 +96,17 @@ accounting for possible mis-alignment of a given cell population across sample
 The methods implemented in this package are detailed in the following <a class="reference external" href="https://arxiv.org/abs/2006.09003">article</a>. The <code class="docutils literal notranslate"><span class="pre">source</span> <span class="pre">code</span></code> of the package is available on  <a class="reference external" href="https://github.com/sistm/CytOpt-python">github</a>.</p>
 </section>
 <section id="getting-started">
-<h1>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline"></a></h1>
+<h2>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline"></a></h2>
+<section id="install-cytopt">
+<h3>Install CytOpT<a class="headerlink" href="#install-cytopt" title="Permalink to this headline"></a></h3>
 <p>Install the CytOpT package from pypi as follows:</p>
 <blockquote>
 <div><p>pip install -r requirements.txt</p>
 <p>pip install CytOpT # pip3 install CytOpT</p>
 </div></blockquote>
+</section>
+<section id="example">
+<h3>Example<a class="headerlink" href="#example" title="Permalink to this headline"></a></h3>
 <blockquote>
 <div><p>Packages:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">CytOpT</span> <span class="kn">import</span> <span class="n">Cytopt</span><span class="p">,</span> <span class="n">cytopt_minmax</span><span class="p">,</span> <span class="n">cytopt_desasc</span>
@@ -146,6 +141,11 @@ The methods implemented in this package are detailed in the following <a class="
 <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span> <span class="n">theta_true</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">Lab_target</span> <span class="o">==</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">Lab_target</span><span class="p">)</span>
 </pre></div>
 </div>
+</section>
+<section id="comparison-of-methods">
+<h3>Comparison of methods<a class="headerlink" href="#comparison-of-methods" title="Permalink to this headline"></a></h3>
+<section id="steps">
+<h4>Steps<a class="headerlink" href="#steps" title="Permalink to this headline"></a></h4>
 <p>Classification using optimal transport with reweighted proportions.
 The target measure 𝛽 is reweighted in order to match the weight vector ℎ̂ estimated with 𝙲𝚢𝚝𝙾𝚙𝚝.
 Approximation of the optimal dual vector u. In order to compute an approximation of the optimal transportation plan, we need to approximate 𝑃𝜀 .
@@ -155,6 +155,10 @@ Plot all Bland-Altman:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CytOpt</span><span class="p">(</span><span class="n">X_source</span><span class="p">,</span> <span class="n">X_target</span><span class="p">,</span> <span class="n">Lab_source</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;comparison_opt&quot;</span><span class="p">,</span> <span class="n">theta_true</span><span class="o">=</span><span class="n">theta_true</span><span class="p">)</span>
 </pre></div>
 </div>
+</section>
+</section>
+<section id="cytopt-minmax-or-desasc">
+<h3>CytOpT Minmax or Desasc<a class="headerlink" href="#cytopt-minmax-or-desasc" title="Permalink to this headline"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cytopt_desasc</span><span class="p">(</span><span class="n">X_source</span><span class="p">,</span> <span class="n">X_target</span><span class="p">,</span> <span class="n">Lab_source</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">n_out</span><span class="o">=</span><span class="mi">4000</span><span class="p">,</span> <span class="n">n_stoc</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">step_grad</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">const</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">theta_true</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
 <span class="n">cytopt_minmax</span><span class="p">(</span><span class="n">X_source</span><span class="p">,</span> <span class="n">X_target</span><span class="p">,</span> <span class="n">Lab_source</span><span class="p">,</span><span class="n">eps</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">lbd</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">4000</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">power</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span> <span class="n">theta_true</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">monitoring</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -162,31 +166,15 @@ Plot all Bland-Altman:</p>
 <span class="o">///</span> <span class="n">Or</span> <span class="n">use</span> <span class="n">CytOpt</span> <span class="n">function</span> <span class="k">with</span> <span class="n">specified</span> <span class="n">method</span> <span class="n">parameter</span>
 </pre></div>
 </div>
-<div class="toctree-wrapper compound">
-<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="modules.html">CytOpT</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="CytOpT.html">CytOpT package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="readme_link.html">CyOpt</a></li>
-</ul>
-</li>
-</ul>
-</div>
 </section>
-<section id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline"></a></h1>
-<ul class="simple">
-<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
-<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
-<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
-</ul>
+</section>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="modules.html" class="btn btn-neutral float-right" title="CytOpT" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="CytOpT.html" class="btn btn-neutral float-left" title="CytOpT package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

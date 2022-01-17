@@ -31,6 +31,8 @@ The project homepage is https://github.com/sistm/CytOpt-python.
 
 See ``README`` for the installation instructions.
 
+
+.. include:: readme_link.rst
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
