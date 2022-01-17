@@ -106,13 +106,17 @@ def Robbins_Wass(X_s, X_t, alpha, beta, eps=0, const=0.1, n_iter=10000):
     thanks to the Robbins-Monro Algorithm. X and Y are the supports of the source and target
     distribution. Alpha and beta are the weights of the distributions.
 
-    :param X_s:
-    :param X_t:
+    :param X_s: a cytometry dataframe. The columns correspond to the different biological markers tracked.
+                One line corresponds to the cytometry measurements performed on one cell. The classification
+                of this Cytometry data set must be provided with the Lab_source parameters.
+    :param X_t: a cytometry dataframe. The columns correspond to the different biological markers tracked.
+                One line corresponds to the cytometry measurements performed on one cell. The CytOpt algorithm
+                targets the cell type proportion in this Cytometry data set.
     :param alpha:
     :param beta:
-    :param eps:
+    :param eps: an float value of regularization parameter of the Wasserstein distance. Default is ``1e-04``.
     :param const:
-    :param n_iter:
+    :param n_iter: an integer Constant that iterate method select. Default is ``4000``.
     :return:
     """
     n_iter = int(n_iter)
@@ -161,15 +165,25 @@ def cytopt_desasc(X_s, X_t, Lab_source, eps=0.0001, n_out=4000, n_stoc=10, step_
     At each iteration, a (sub)gradient of W^{eps}(alpha, beta) is approximated with stochastic optimization
     Techniques.
 
-    :param X_s:
-    :param X_t:
-    :param Lab_source:
-    :param eps:
-    :param n_out:
-    :param n_stoc:
-    :param step_grad:
+    :param X_s: a cytometry dataframe. The columns correspond to the different biological markers tracked.
+                One line corresponds to the cytometry measurements performed on one cell. The classification
+                of this Cytometry data set must be provided with the Lab_source parameters.
+    :param X_t: a cytometry dataframe. The columns correspond to the different biological markers tracked.
+                One line corresponds to the cytometry measurements performed on one cell. The CytOpt algorithm
+                targets the cell type proportion in this Cytometry data set.
+    :param Lab_source: a vector of length ``n`` Classification of the ``X_s`` cytometry data set
+    :param eps: an float value of regularization parameter of the Wasserstein distance. Default is ``1e-04``.
+    :param n_out: an integer number of iterations in the outer loop. This loop corresponds to the gradient
+            descent algorithm to minimize the regularized Wasserstein distance between the source and
+            target data sets. Default is ``1000``.
+    :param n_stoc: an integer number of iterations in the inner loop. This loop corresponds to the stochastic
+            algorithm that approximates a maximizer of the semi dual problem. Default is ``10``.
+    :param step_grad: an integer number step size of the gradient descent algorithm of the outer loop.
+                      Default is ``50``.
     :param const:
-    :param theta_true:
+    :param theta_true: If available, the true proportions in the target data set ``X_s``. It allows to assess
+                        the gap between the estimate of our method and the estimate of the cell type proportions derived from
+                        manual gating.
     :return:
     """
 

@@ -41,27 +41,40 @@ def CytOpt(X_s, X_t, Lab_source, Lab_target=None, cell_type=None, names_pop=None
     --- Minmax swapping procedure. Setting of the parameters
     --- Plot all Bland-Altman
 
-    :param X_s:
-    :param X_t:
-    :param Lab_source:
+    :param X_s: a cytometry dataframe. The columns correspond to the different biological markers tracked.
+                One line corresponds to the cytometry measurements performed on one cell. The classification
+                of this Cytometry data set must be provided with the Lab_source parameters.
+    :param X_t: a cytometry dataframe. The columns correspond to the different biological markers tracked.
+                One line corresponds to the cytometry measurements performed on one cell. The CytOpt algorithm
+                targets the cell type proportion in this Cytometry data set
+    :param Lab_source: a vector of length ``n`` Classification of the ``X_s`` cytometry data set.
     :param Lab_target:
-    :param cell_type:
+    :param cell_type: a vector indicate type of cell.
     :param names_pop:
-    :param method:
-    :param theta_true:
-    :param eps:
-    :param n_iter:
-    :param power:
-    :param step_grad:
-    :param step:
-    :param lbd:
-    :param n_out:
-    :param n_stoc:
-    :param n_0:
-    :param n_stop:
-    :param monitoring:
-    :param minMaxScaler:
-    :param thresholding:
+    :param method: a character string indicating which method to use to compute the cytopt, either  ``cytopt_minmax, cytopt_desasc
+                    or comparison_opt`` for Comparison two methods  ``Desasc or Minmax``.
+                    Default is  cytopt_minmax since it is the method used in the test.
+    :param theta_true: If available, the true proportions in the target data set ``X_s``. It allows to assess
+                        the gap between the estimate of our method and the estimate of the cell type proportions derived from
+                        manual gating.
+    :param eps: an float value of regularization parameter of the Wasserstein distance. Default is ``1e-04``.
+    :param n_iter: an integer Constant that iterate method select. Default is ``4000``.
+    :param power: an float constant the step size policy of the gradient ascent method is step/n^power. Default is ``0.99``.
+    :param step_grad: an integer number step size of the gradient descent algorithm of the outer loop.
+                      Default is ``50``.
+    :param step: an integer constant that multiply the step-size policy. Default is ``5``.
+    :param lbd: an float constant that multiply the step-size policy. Default is ``1e-04``.
+    :param n_out: an integer number of iterations in the outer loop. This loop corresponds to the gradient
+            descent algorithm to minimize the regularized Wasserstein distance between the source and
+            target data sets. Default is ``1000``.
+    :param n_stoc: an integer number of iterations in the inner loop. This loop corresponds to the stochastic
+            algorithm that approximates a maximizer of the semi dual problem. Default is ``10``.
+    :param n_0: an integer value. Default is ``10``.
+    :param n_stop: an integer value. Default is ``1000``.
+    :param monitoring: a logical flag indicating to possibly monitor the gap between the estimated proprotions and the manual
+                        gold-standard. Default is ``FALSE``.
+    :param minMaxScaler: a logical flag indicating to possibly Scaler.
+    :param thresholding: a logical flag.
     :return:
     """
 

@@ -41,16 +41,23 @@ def cytopt_minmax(X_s, X_t, Lab_source, eps=0.0001, lbd=0.0001, n_iter=4000,
     """ Robbins-Monro algorithm to compute an approximate of the vector u^* solution of the maximization problem
     At each step, it is possible to evaluate the vector h_hat to study the convergence of this algorithm.
 
-    :param X_s:
-    :param X_t:
-    :param Lab_source:
-    :param eps:
-    :param lbd:
-    :param n_iter:
-    :param step:
-    :param power:
-    :param theta_true:
-    :param monitoring:
+    :param X_s: a cytometry dataframe. The columns correspond to the different biological markers tracked.
+                One line corresponds to the cytometry measurements performed on one cell. The classification
+                of this Cytometry data set must be provided with the Lab_source parameters.
+    :param X_t: a cytometry dataframe. The columns correspond to the different biological markers tracked.
+                One line corresponds to the cytometry measurements performed on one cell. The CytOpt algorithm
+                targets the cell type proportion in this Cytometry data set.
+    :param Lab_source: a vector of length ``n`` Classification of the ``X_s`` cytometry data set
+    :param eps: an float value of regularization parameter of the Wasserstein distance. Default is ``1e-04``.
+    :param lbd:  an float constant that multiply the step-size policy. Default is ``1e-04``.
+    :param n_iter:  an integer Constant that iterate method select. Default is ``4000``.
+    :param step: an integer constant that multiply the step-size policy. Default is ``5``.
+    :param power: an float constant the step size policy of the gradient ascent method is step/n^power. Default is ``0.99``.
+    :param theta_true: If available, the true proportions in the target data set ``X_s``. It allows to assess
+                        the gap between the estimate of our method and the estimate of the cell type proportions derived from
+                        manual gating.
+    :param monitoring: a logical flag indicating to possibly monitor the gap between the estimated proprotions and the manual
+                        gold-standard. Default is ``FALSE``.
     :return:
     """
 
