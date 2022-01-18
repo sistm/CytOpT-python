@@ -28,41 +28,86 @@ def get_length_unique_numbers(values):
 
 # CytOpt
 def CytOpt(X_s, X_t, Lab_source, Lab_target=None, cell_type=None, names_pop=None,
-           method=None, theta_true=None, eps=1e-04, n_iter=4000, power=0.99,
-           step_grad=50, step=5, lbd=1e-04, n_out=1000, n_stoc=10, n_0=10,
-           n_stop=1000, monitoring=True, minMaxScaler=True, thresholding=True):
+           method=None, theta_true=None, eps=1e-04, n_iter=10000, power=0.99,
+           step_grad=10, step=5, lbd=1e-04, n_out=10000, n_stoc=10, n_0=10,
+           n_stop=10000, monitoring=False, minMaxScaler=True, thresholding=True):
     """
-    - Comparison of methods
-    -- Steps
-    --- Classification using optimal transport with reweighted proportions.
-    --- The target measure  𝛽  is reweighted in order to match the weight vector  ℎ̂   estimated with  𝙲𝚢𝚝𝙾𝚙𝚝.
-    --- Approximation of the optimal dual vector u. In order to compute an approximation of the optimal transportation plan, we need to approximate  𝑃𝜀 .
-    --- Class proportions estimation with  𝙲𝚢𝚝𝙾𝚙𝚝 Descent-Ascent procedure Setting of the parameters
-    --- Minmax swapping procedure. Setting of the parameters
-    --- Plot all Bland-Altman
+    CytOpT algorithm. This methods is designed to estimate the proportions of cells in an unclassified Cytometry
+    data set denoted X_t. CytOpT is a supervised method that levarge the classification denoted Lab_source associated
+    to the flow cytometry data set X_s. The estimation relies on the resolution of an optimization problem.
+    two procedures are provided "cytopt_minmax" and "cytopt_desasc". We recommend to use the default method that is
+    "cytopt_minmax".
 
-    :param X_s:
-    :param X_t:
-    :param Lab_source:
-    :param Lab_target:
-    :param cell_type:
+    :param X_s: np.array of shape (n_samples_source, n_biomarkers). The source cytometry data set.
+
+    :param X_t: np.array of shape (n_samples_target, n_biomarkers). The target cytometry data set.
+
+    :param Lab_source: np.array of shape (n_samples_source,). The classification of the source data set.
+
+    :param Lab_target: np.array of shape (n_samples_target,), default=None. The classification of the target data set.
+
+    :param cell_type: list, default=None. Contains the names of the different cell types estimated.
+
     :param names_pop:
-    :param method:
-    :param theta_true:
-    :param eps:
-    :param n_iter:
-    :param power:
-    :param step_grad:
-    :param step:
-    :param lbd:
-    :param n_out:
-    :param n_stoc:
-    :param n_0:
-    :param n_stop:
-    :param monitoring:
-    :param minMaxScaler:
-    :param thresholding:
+
+    :param method: {"cytopt_minmax", "cytopt_desasc", "comparison_opt"}, default="cytopt_minmax". Method chosen to
+    to solve the optimization problem involved in CytOpT. It is advised to rely on the default choice that is
+    "cytopt_minmax".
+
+    :param theta_true: np.array of shape (K,), default=None. This array stores the true proportions of the K type of
+     cells estimated in the target data set. This parameter is required if the user enables the monitoring option.
+
+    :param eps: float, default=0.0001. Regularization parameter of the Wasserstein distance. This parameter must be
+    positive.
+
+    :param n_iter: int, default=10000. Number of iterations of the stochastic gradient ascent for the Minmax swapping
+    optimization method.
+
+    :param power: float, default=0.99. Decreasing rate for the step-size policy of the stochastic gradient ascent
+    for the Minmax swapping optimization method. The step-size decreases at a rate of 1/n^power.
+
+    :param step_grad: float, default=10. Constant step_size policy for the gradient descent of the descent-ascent
+    optimization strategy.
+
+    :param step: float, default=5. Multiplication factor of the stochastic gradient ascent step-size policy for
+    the minmax optimization method.
+
+    :param lbd: float, default=0.0001. Additionnal regularization parameter of the Minmax swapping optimization method.
+    This parameter lbd should be greater or equal to eps.
+
+    :param n_out: int, default=10000. Number of iterations of the outer loop of the descent-ascent optimization method.
+    This loop corresponds to the descent part of descent-ascent strategy.
+
+    :param n_stoc: int, default = 10. Number of iterations of the inner loop of the descent-ascent optimization method.
+    This loop corresponds to the stochastic ascent part of this optimization procedure.
+
+    :param n_0: int, default = 1, First iteration to display the evolution of the Kullback-Leibler divergence along
+    the steps of the optimization strategy chosen. The monitoring variable should be equal to monitoring=True.
+
+    :param n_stop: int, default=1000. Last iteration to display the evolution of the Kullback-Leibler divergence along
+    the steps of the optimization strategy chosen. The monitoring variable should be equal to monitoring=True.
+
+    :param monitoring: bool, default=False. When set to true, the evolution of the Kullback-Leibler between the
+    estimated proportions and the benchmark proportions is tracked and stored.
+
+    :param minMaxScaler: bool, default = True. When set to True, the source and target data sets are scaled in [0,1]^d,
+    where d is the  number of biomarkers monitored.
+
+    :param thresholding: bool, default = True. When set to True, all the coefficients of the source and target data sets
+    are replaced by their positive part. This preprocessing is relevant for Cytometry Data as the signal acquisition of
+    the cytometer can induce convtrived negative values.
+
     :return:
+    hat_theta : np.array of shape (K,), where K is the number of different type of cell populations in the source
+    data set.
+    KL_monitoring: np.array of shape (n_out, ) or (n_iter,) depending on the choice of the optimization method. This
+    array stores the evolution of the Kullback-Leibler divergence between the estimate and benchmark proportions, if
+    monitoring==True.
+
+
+    Reference:
+     Paul Freulon, Jérémie Bigot,and Boris P. Hejblum CytOpT: Optimal Transport with Domain Adaptation for Interpreting Flow Cytometry data,
+     arXiv:2006.09003 [stat.AP].
     """
 
     if theta_true is None:
