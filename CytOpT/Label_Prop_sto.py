@@ -50,18 +50,23 @@ def h_function(f, X_s, X_t=None, j=None, beta=None, eps=0, alpha=0):
 
 
 def Robbins_Wass(X_s, X_t, alpha, beta, eps=0, const=0.1, n_iter=10000):
-    """     Function that calculates the approximation of the Wasserstein distance between mu and nu
-    thanks to the Robbins-Monro Algorithm. X and Y are the supports of the source and target
-    distribution. Alpha and beta are the weights of the distributions.
+    """ Function that calculates the approximation of the optimal dual vector associated
+    to the source distribution. The regularized optimal-transport problem is computed between a distribution with
+    support X_s and weights alpha, and a distribution with support X_t and weights beta. This function solves the
+    semi-dual formulation of the regularized OT problem with the stochastic algorithm of Robbins-Monro.
 
-    :param X_s:
-    :param X_t:
-    :param alpha:
-    :param beta:
-    :param eps:
-    :param const:
-    :param n_iter:
+    :param X_s: np.array of shape (n_obs_source, dimension). Support of the source distribution.
+    :param X_t: np.array of shape (n_obs_target, dimension). Support of the target distribution
+    :param alpha: np.array of shape (n_obs_source,). Weights of the source distribution.
+    :param beta: np.array of shape (n_obs_target,). Weights of the target  distribution.
+    :param eps: float, ``default=0.0001``. Regularization parameter of the Wasserstein distance. This parameter
+        should be greater than 0.
+    :param const: float, ``default=0.1``. Constant involved in the Robbins-Monro algorithm when the regularization parameter
+        eps=0.
+    :param n_iter: int, ``default=10000``. Number of iterations of the Robbins-Monro algorithm.
+
     :return:
+        - f - np.array of shape (n_obs_source,). Optimal kantorovich potential associated to the source distribution.
     """
     n_iter = int(n_iter)
     I = X_s.shape[0]
@@ -103,18 +108,23 @@ def Robbins_Wass(X_s, X_t, alpha, beta, eps=0, const=0.1, n_iter=10000):
 
 
 def Label_Prop_sto(L_source, f, X, Y, alpha, beta, eps):
-    """     Function that calculates a classification on the target data
-    thanks to the approximation of the transport plan and the classification of the source data.
-    We got the approximation of the transport plan with the stochastic algorithm.
-
-    :param L_source:
-    :param f:
-    :param X:
-    :param Y:
-    :param alpha:
-    :param beta:
-    :param eps:
+    """     Function that calculates a classification of the target data with an optimal-transport based soft assignment.
+    For optimal result, the source distribution must be re-weighted thanks to the estimation of the class proportions
+    in the target data set.  This estimation can be produced with the Cytopt function. To compute an optimal dual
+    vector f associated to the source distribution, we advocate the use of the Robbins_Wass function with a CytOpT
+    re-weighting of the source distribution.
+    :param L_source: np.array of shape (X.shape[0],). The labels associated to the source data set X_s
+    :param f: np.array of shape (X.shape[0],). The optimal dual vector associated to the source distribution.
+        Here, the Wasserstein distance is computed between the distribution with weights alpha and support X and the
+        distribution with weights beta and support Y.
+    :param X: np.array of shape (n_obs_source, dimension). The support of the source distribution.
+    :param Y: np.array of shape (n_obs_target, dimension). The support of the target distribution.
+    :param alpha: np.array of shape (n_obs_source,). The weights of the source distribution.
+    :param beta: np.array of shape (n_obs_target,). The weights of the target distribution.
+    :param eps: float, ``default=0.0001``. The regularization parameter of the Wasserstein distance.
     :return:
+        - L_target - np.array of shape (K,n_obs_target), where K is the number of different type of cell populations in the source data set. The coefficient L_target[k,j] corresponds to the probability that the observation X_t[j] belongs to the class k.
+        - clustarget - np.array of shape (n_obs_target,). This array stores the optimal transport based classification of the target data set.
     """
     print(alpha)
     J = Y.shape[0]
