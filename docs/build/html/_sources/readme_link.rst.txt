@@ -19,7 +19,7 @@ Getting started
 Install CytOpT
 ______________
 
-Install the CytOpT package from pypi as follows:
+Install the CytOpT package from pypi as follows::
 
     pip install -r requirements.txt
 
@@ -29,7 +29,7 @@ Example
 _______
  Packages::
 
-    from CytOpT import Cytopt, cytopt_minmax, cytopt_desasc
+        from CytOpT import Cytopt, cytopt_minmax, cytopt_desasc
 
 Preparing data::
 

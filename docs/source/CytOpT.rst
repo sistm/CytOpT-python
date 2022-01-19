@@ -22,7 +22,7 @@ CytOpT.CytOpt\_Descent\_Ascent module
    :members:
    :undoc-members:
    :show-inheritance:
-   :exclude-members: cost,diff_simplex,gammatrix,grad_h
+   :exclude-members: cost,diff_simplex,gammatrix,grad_h,Robbins_Wass
 
 CytOpT.CytOpt\_MinMax\_Swapping module
 --------------------------------------

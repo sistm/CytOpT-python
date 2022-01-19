@@ -91,57 +91,71 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="CytOpT.Cytopt.CytOpt">
 <span class="sig-prename descclassname"><span class="pre">CytOpT.Cytopt.</span></span><span class="sig-name descname"><span class="pre">CytOpt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Lab_source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Lab_target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names_pop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta_true</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">power</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_grad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lbd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_stoc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_stop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">monitoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minMaxScaler</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thresholding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CytOpT/Cytopt.html#CytOpt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CytOpT.Cytopt.CytOpt" title="Permalink to this definition"></a></dt>
-<dd><ul class="simple">
-<li><p>Comparison of methods</p></li>
-</ul>
-<p>– Steps
-— Classification using optimal transport with reweighted proportions.
-— The target measure  𝛽  is reweighted in order to match the weight vector  ℎ̂   estimated with  𝙲𝚢𝚝𝙾𝚙𝚝.
-— Approximation of the optimal dual vector u. In order to compute an approximation of the optimal transportation plan, we need to approximate  𝑃𝜀 .
-— Class proportions estimation with  𝙲𝚢𝚝𝙾𝚙𝚝 Descent-Ascent procedure Setting of the parameters
-— Minmax swapping procedure. Setting of the parameters
-— Plot all Bland-Altman</p>
+<dd><p>CytOpT algorithm. This methods is designed to estimate the proportions of cells in an unclassified Cytometry
+data set denoted X_t. CytOpT is a supervised method that levarge the classification denoted Lab_source associated
+to the flow cytometry data set X_s. The estimation relies on the resolution of an optimization problem.
+two procedures are provided “cytopt_minmax” and “cytopt_desasc”. We recommend to use the default method that is
+<code class="docutils literal notranslate"><span class="pre">cytopt_minmax</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X_s</strong> – a cytometry dataframe. The columns correspond to the different biological markers tracked.
+<li><p><strong>X_s</strong> – np.array of shape (n_samples_source, n_biomarkers). The source cytometry data set.
+A cytometry dataframe. The columns correspond to the different biological markers tracked.
 One line corresponds to the cytometry measurements performed on one cell. The classification
 of this Cytometry data set must be provided with the Lab_source parameters.</p></li>
-<li><p><strong>X_t</strong> – a cytometry dataframe. The columns correspond to the different biological markers tracked.
+<li><p><strong>X_t</strong> – np.array of shape (n_samples_target, n_biomarkers). The target cytometry data set.
+A cytometry dataframe. The columns correspond to the different biological markers tracked.
 One line corresponds to the cytometry measurements performed on one cell. The CytOpt algorithm
 targets the cell type proportion in this Cytometry data set</p></li>
-<li><p><strong>Lab_source</strong> – a vector of length <code class="docutils literal notranslate"><span class="pre">n</span></code> Classification of the <code class="docutils literal notranslate"><span class="pre">X_s</span></code> cytometry data set.</p></li>
-<li><p><strong>Lab_target</strong> – </p></li>
-<li><p><strong>cell_type</strong> – a vector indicate type of cell.</p></li>
+<li><p><strong>Lab_source</strong> – np.array of shape (n_samples_source,). The classification of the source data set.</p></li>
+<li><p><strong>Lab_target</strong> – np.array of shape (n_samples_target,), <code class="docutils literal notranslate"><span class="pre">default=None</span></code>. The classification of the target data set.</p></li>
+<li><p><strong>cell_type</strong> – list, <code class="docutils literal notranslate"><span class="pre">default=None</span></code>. Contains the names of the different cell types estimated.</p></li>
 <li><p><strong>names_pop</strong> – </p></li>
-<li><p><strong>method</strong> – a character string indicating which method to use to compute the cytopt, either  <code class="docutils literal notranslate"><span class="pre">cytopt_minmax,</span> <span class="pre">cytopt_desasc</span>
-<span class="pre">or</span> <span class="pre">comparison_opt</span></code> for Comparison two methods  <code class="docutils literal notranslate"><span class="pre">Desasc</span> <span class="pre">or</span> <span class="pre">Minmax</span></code>.
-Default is  cytopt_minmax since it is the method used in the test.</p></li>
-<li><p><strong>theta_true</strong> – If available, the true proportions in the target data set <code class="docutils literal notranslate"><span class="pre">X_s</span></code>. It allows to assess
-the gap between the estimate of our method and the estimate of the cell type proportions derived from
-manual gating.</p></li>
-<li><p><strong>eps</strong> – an float value of regularization parameter of the Wasserstein distance. Default is <code class="docutils literal notranslate"><span class="pre">1e-04</span></code>.</p></li>
-<li><p><strong>n_iter</strong> – an integer Constant that iterate method select. Default is <code class="docutils literal notranslate"><span class="pre">4000</span></code>.</p></li>
-<li><p><strong>power</strong> – an float constant the step size policy of the gradient ascent method is step/n^power. Default is <code class="docutils literal notranslate"><span class="pre">0.99</span></code>.</p></li>
-<li><p><strong>step_grad</strong> – an integer number step size of the gradient descent algorithm of the outer loop.
-Default is <code class="docutils literal notranslate"><span class="pre">50</span></code>.</p></li>
-<li><p><strong>step</strong> – an integer constant that multiply the step-size policy. Default is <code class="docutils literal notranslate"><span class="pre">5</span></code>.</p></li>
-<li><p><strong>lbd</strong> – an float constant that multiply the step-size policy. Default is <code class="docutils literal notranslate"><span class="pre">1e-04</span></code>.</p></li>
-<li><p><strong>n_out</strong> – an integer number of iterations in the outer loop. This loop corresponds to the gradient
-descent algorithm to minimize the regularized Wasserstein distance between the source and
-target data sets. Default is <code class="docutils literal notranslate"><span class="pre">1000</span></code>.</p></li>
-<li><p><strong>n_stoc</strong> – an integer number of iterations in the inner loop. This loop corresponds to the stochastic
-algorithm that approximates a maximizer of the semi dual problem. Default is <code class="docutils literal notranslate"><span class="pre">10</span></code>.</p></li>
-<li><p><strong>n_0</strong> – an integer value. Default is <code class="docutils literal notranslate"><span class="pre">10</span></code>.</p></li>
-<li><p><strong>n_stop</strong> – an integer value. Default is <code class="docutils literal notranslate"><span class="pre">1000</span></code>.</p></li>
-<li><p><strong>monitoring</strong> – a logical flag indicating to possibly monitor the gap between the estimated proprotions and the manual
-gold-standard. Default is <code class="docutils literal notranslate"><span class="pre">FALSE</span></code>.</p></li>
-<li><p><strong>minMaxScaler</strong> – a logical flag indicating to possibly Scaler.</p></li>
-<li><p><strong>thresholding</strong> – a logical flag.</p></li>
+<li><p><strong>method</strong> – {“cytopt_minmax”, “cytopt_desasc”, “comparison_opt”}, <code class="docutils literal notranslate"><span class="pre">default=&quot;cytopt_minmax&quot;</span></code>. Method chosen to
+to solve the optimization problem involved in CytOpT. It is advised to rely on the default choice that is
+“cytopt_minmax”.</p></li>
+<li><p><strong>theta_true</strong> – np.array of shape (K,), <code class="docutils literal notranslate"><span class="pre">default=None</span></code>. This array stores the true proportions of the K type of
+cells estimated in the target data set. This parameter is required if the user enables the monitoring option.</p></li>
+<li><p><strong>eps</strong> – float, <code class="docutils literal notranslate"><span class="pre">default=0.0001</span></code>. Regularization parameter of the Wasserstein distance. This parameter must be
+positive.</p></li>
+<li><p><strong>n_iter</strong> – int, <code class="docutils literal notranslate"><span class="pre">default=10000</span></code>. Number of iterations of the stochastic gradient ascent for the Minmax swapping
+optimization method.</p></li>
+<li><p><strong>power</strong> – float, <code class="docutils literal notranslate"><span class="pre">default=0.99</span></code>. Decreasing rate for the step-size policy of the stochastic gradient ascent
+for the Minmax swapping optimization method. The step-size decreases at a rate of 1/n^power.</p></li>
+<li><p><strong>step_grad</strong> – float, <code class="docutils literal notranslate"><span class="pre">default=10</span></code>. Constant step_size policy for the gradient descent of the descent-ascent
+optimization strategy.</p></li>
+<li><p><strong>step</strong> – float, <code class="docutils literal notranslate"><span class="pre">default=5</span></code>. Multiplication factor of the stochastic gradient ascent step-size policy for
+the minmax optimization method.</p></li>
+<li><p><strong>lbd</strong> – float, <code class="docutils literal notranslate"><span class="pre">default=0.0001</span></code>. Additionnal regularization parameter of the Minmax swapping optimization method.
+This parameter lbd should be greater or equal to eps.</p></li>
+<li><p><strong>n_out</strong> – int, <code class="docutils literal notranslate"><span class="pre">default=10000</span></code>. Number of iterations of the outer loop of the descent-ascent optimization method.
+This loop corresponds to the descent part of descent-ascent strategy.</p></li>
+<li><p><strong>n_stoc</strong> – int, <code class="docutils literal notranslate"><span class="pre">default</span> <span class="pre">=</span> <span class="pre">10</span></code>. Number of iterations of the inner loop of the descent-ascent optimization method.
+This loop corresponds to the stochastic ascent part of this optimization procedure.</p></li>
+<li><p><strong>n_0</strong> – int, <code class="docutils literal notranslate"><span class="pre">default</span> <span class="pre">=</span> <span class="pre">1</span></code>, First iteration to display the evolution of the Kullback-Leibler divergence along
+the steps of the optimization strategy chosen. The monitoring variable should be equal to monitoring=True.</p></li>
+<li><p><strong>n_stop</strong> – int, <code class="docutils literal notranslate"><span class="pre">default=1000</span></code>. Last iteration to display the evolution of the Kullback-Leibler divergence along
+the steps of the optimization strategy chosen. The monitoring variable should be equal to monitoring=True.</p></li>
+<li><p><strong>monitoring</strong> – bool, <code class="docutils literal notranslate"><span class="pre">default=False</span></code>. When set to true, the evolution of the Kullback-Leibler between the
+estimated proportions and the benchmark proportions is tracked and stored.</p></li>
+<li><p><strong>minMaxScaler</strong> – bool, <code class="docutils literal notranslate"><span class="pre">default</span> <span class="pre">=</span> <span class="pre">True</span></code>. When set to True, the source and target data sets are scaled in [0,1]^d,
+where d is the  number of biomarkers monitored.</p></li>
+<li><p><strong>thresholding</strong> – bool, <code class="docutils literal notranslate"><span class="pre">default</span> <span class="pre">=</span> <span class="pre">True</span></code>. When set to True, all the coefficients of the source and target data sets
+are replaced by their positive part. This preprocessing is relevant for Cytometry Data as the signal acquisition of
+the cytometer can induce convtrived negative values.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
+<dd class="field-even"><p><ul class="simple">
+<li><p>hat_theta - np.array of shape (K,), where K is the number of different type of cell populations in the source data set.</p></li>
+<li><p>KL_monitoring - np.array of shape (n_out, ) or (n_iter,) depending on the choice of the optimization method, this array stores the evolution of the Kullback-Leibler divergence between the estimate and benchmark proportions, if monitoring==True.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Reference:</dt><dd><p>Paul Freulon, Jérémie Bigot,and Boris P. Hejblum CytOpT: Optimal Transport with Domain Adaptation for Interpreting Flow Cytometry data,
+arXiv:2006.09003 [stat.AP].</p>
 </dd>
 </dl>
 </dd></dl>
@@ -150,66 +164,38 @@ gold-standard. Default is <code class="docutils literal notranslate"><span class
 <section id="module-CytOpT.CytOpt_Descent_Ascent">
 <span id="cytopt-cytopt-descent-ascent-module"></span><h2>CytOpT.CytOpt_Descent_Ascent module<a class="headerlink" href="#module-CytOpT.CytOpt_Descent_Ascent" title="Permalink to this headline"></a></h2>
 <dl class="py function">
-<dt class="sig sig-object py" id="CytOpT.CytOpt_Descent_Ascent.Robbins_Wass">
-<span class="sig-prename descclassname"><span class="pre">CytOpT.CytOpt_Descent_Ascent.</span></span><span class="sig-name descname"><span class="pre">Robbins_Wass</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CytOpT/CytOpt_Descent_Ascent.html#Robbins_Wass"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CytOpT.CytOpt_Descent_Ascent.Robbins_Wass" title="Permalink to this definition"></a></dt>
-<dd><p>Function that calculates the approximation of the Wasserstein distance between mu and nu
-thanks to the Robbins-Monro Algorithm. X and Y are the supports of the source and target
-distribution. Alpha and beta are the weights of the distributions.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>X_s</strong> – a cytometry dataframe. The columns correspond to the different biological markers tracked.
-One line corresponds to the cytometry measurements performed on one cell. The classification
-of this Cytometry data set must be provided with the Lab_source parameters.</p></li>
-<li><p><strong>X_t</strong> – a cytometry dataframe. The columns correspond to the different biological markers tracked.
-One line corresponds to the cytometry measurements performed on one cell. The CytOpt algorithm
-targets the cell type proportion in this Cytometry data set.</p></li>
-<li><p><strong>alpha</strong> – </p></li>
-<li><p><strong>beta</strong> – </p></li>
-<li><p><strong>eps</strong> – an float value of regularization parameter of the Wasserstein distance. Default is <code class="docutils literal notranslate"><span class="pre">1e-04</span></code>.</p></li>
-<li><p><strong>const</strong> – </p></li>
-<li><p><strong>n_iter</strong> – an integer Constant that iterate method select. Default is <code class="docutils literal notranslate"><span class="pre">4000</span></code>.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="CytOpT.CytOpt_Descent_Ascent.cytopt_desasc">
 <span class="sig-prename descclassname"><span class="pre">CytOpT.CytOpt_Descent_Ascent.</span></span><span class="sig-name descname"><span class="pre">cytopt_desasc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Lab_source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_stoc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_grad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta_true</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CytOpT/CytOpt_Descent_Ascent.html#cytopt_desasc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CytOpT.CytOpt_Descent_Ascent.cytopt_desasc" title="Permalink to this definition"></a></dt>
-<dd><p>Function that estimates the class proportions in the target data set.
-It solves the minimization problem with a gradient descent method.
-At each iteration, a (sub)gradient of W^{eps}(alpha, beta) is approximated with stochastic optimization
-Techniques.</p>
+<dd><p>CytOpT algorithm. This methods is designed to estimate the proportions of cells in an unclassified Cytometry
+data set denoted X_t. CytOpT is a supervised method that leverage the classification denoted Lab_source associated
+to the flow cytometry data set X_s. The estimation relies on the resolution of an optimization problem.
+The optimization problem of this function is solved with a descent-ascent optimization procedure.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X_s</strong> – a cytometry dataframe. The columns correspond to the different biological markers tracked.
-One line corresponds to the cytometry measurements performed on one cell. The classification
-of this Cytometry data set must be provided with the Lab_source parameters.</p></li>
-<li><p><strong>X_t</strong> – a cytometry dataframe. The columns correspond to the different biological markers tracked.
-One line corresponds to the cytometry measurements performed on one cell. The CytOpt algorithm
-targets the cell type proportion in this Cytometry data set.</p></li>
-<li><p><strong>Lab_source</strong> – a vector of length <code class="docutils literal notranslate"><span class="pre">n</span></code> Classification of the <code class="docutils literal notranslate"><span class="pre">X_s</span></code> cytometry data set</p></li>
-<li><p><strong>eps</strong> – an float value of regularization parameter of the Wasserstein distance. Default is <code class="docutils literal notranslate"><span class="pre">1e-04</span></code>.</p></li>
-<li><p><strong>n_out</strong> – an integer number of iterations in the outer loop. This loop corresponds to the gradient
-descent algorithm to minimize the regularized Wasserstein distance between the source and
-target data sets. Default is <code class="docutils literal notranslate"><span class="pre">1000</span></code>.</p></li>
-<li><p><strong>n_stoc</strong> – an integer number of iterations in the inner loop. This loop corresponds to the stochastic
-algorithm that approximates a maximizer of the semi dual problem. Default is <code class="docutils literal notranslate"><span class="pre">10</span></code>.</p></li>
-<li><p><strong>step_grad</strong> – an integer number step size of the gradient descent algorithm of the outer loop.
-Default is <code class="docutils literal notranslate"><span class="pre">50</span></code>.</p></li>
-<li><p><strong>const</strong> – </p></li>
-<li><p><strong>theta_true</strong> – If available, the true proportions in the target data set <code class="docutils literal notranslate"><span class="pre">X_s</span></code>. It allows to assess
-the gap between the estimate of our method and the estimate of the cell type proportions derived from
-manual gating.</p></li>
+<li><p><strong>X_s</strong> – np.array of shape (n_samples_source, n_biomarkers). The source cytometry data set.</p></li>
+<li><p><strong>X_t</strong> – np.array of shape (n_samples_target, n_biomarkers). The target cytometry data set.</p></li>
+<li><p><strong>Lab_source</strong> – np.array of shape (n_samples_source,). The classification of the source data set.</p></li>
+<li><p><strong>eps</strong> – float, <code class="docutils literal notranslate"><span class="pre">default=0.0001</span></code>. Regularization parameter of the Wasserstein distance.
+This parameter must be positive.</p></li>
+<li><p><strong>n_out</strong> – int, <code class="docutils literal notranslate"><span class="pre">default=10000</span></code>. Number of iterations of the outer loop of the descent-ascent optimization method.
+This loop corresponds to the descent part of descent-ascent strategy.</p></li>
+<li><p><strong>n_stoc</strong> – int, <code class="docutils literal notranslate"><span class="pre">default</span> <span class="pre">=</span> <span class="pre">10</span></code>. Number of iterations of the inner loop of the descent-ascent optimization method.
+This loop corresponds to the stochastic ascent part of this optimization procedure.</p></li>
+<li><p><strong>step_grad</strong> – float, <code class="docutils literal notranslate"><span class="pre">default=10</span></code>. Constant step_size policy for the gradient descent of the descent-ascent
+optimization strategy.</p></li>
+<li><p><strong>const</strong> – float, <code class="docutils literal notranslate"><span class="pre">default=0.1</span></code>. Constant involved in the stochastic algorithm when the regularization parameter
+is set to eps=0.</p></li>
+<li><p><strong>theta_true</strong> – np.array of shape (K,), <code class="docutils literal notranslate"><span class="pre">default=None</span></code>. This array stores the true proportions of the K type of
+cells estimated in the target data set. This parameter is required if the user enables the monitoring option.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
+<dd class="field-even"><p><ul class="simple">
+<li><p>hat_theta - np.array of shape (K,), where K is the number of different type of cell populations in the source data set.</p></li>
+<li><p>KL_storage - np.array of shape (n_out, ). This array stores the evolution of the Kullback-Leibler divergence between the estimate and benchmark proportions, if monitoring==True.</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
@@ -220,32 +206,43 @@ manual gating.</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="CytOpT.CytOpt_MinMax_Swapping.cytopt_minmax">
 <span class="sig-prename descclassname"><span class="pre">CytOpT.CytOpt_MinMax_Swapping.</span></span><span class="sig-name descname"><span class="pre">cytopt_minmax</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Lab_source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lbd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">power</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta_true</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">monitoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CytOpT/CytOpt_MinMax_Swapping.html#cytopt_minmax"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CytOpT.CytOpt_MinMax_Swapping.cytopt_minmax" title="Permalink to this definition"></a></dt>
-<dd><p>Robbins-Monro algorithm to compute an approximate of the vector u^* solution of the maximization problem
-At each step, it is possible to evaluate the vector h_hat to study the convergence of this algorithm.</p>
+<dd><p>CytOpT algorithm. This methods is designed to estimate the proportions of cells in an unclassified Cytometry
+data set denoted X_t. CytOpT is a supervised method that leverage the classification denoted Lab_source associated
+to the flow cytometry data set X_s. The estimation relies on the resolution of an optimization problem.
+The optimization problem of this function involves an additional regularization term lambda. This regularization
+allows the application of a simple stochastic gradient-ascent to solve the optimization problem. We advocate the
+use of this method as it is faster than ‘cytopt_desasc’.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X_s</strong> – a cytometry dataframe. The columns correspond to the different biological markers tracked.
-One line corresponds to the cytometry measurements performed on one cell. The classification
-of this Cytometry data set must be provided with the Lab_source parameters.</p></li>
-<li><p><strong>X_t</strong> – a cytometry dataframe. The columns correspond to the different biological markers tracked.
-One line corresponds to the cytometry measurements performed on one cell. The CytOpt algorithm
-targets the cell type proportion in this Cytometry data set.</p></li>
-<li><p><strong>Lab_source</strong> – a vector of length <code class="docutils literal notranslate"><span class="pre">n</span></code> Classification of the <code class="docutils literal notranslate"><span class="pre">X_s</span></code> cytometry data set</p></li>
-<li><p><strong>eps</strong> – an float value of regularization parameter of the Wasserstein distance. Default is <code class="docutils literal notranslate"><span class="pre">1e-04</span></code>.</p></li>
-<li><p><strong>lbd</strong> – an float constant that multiply the step-size policy. Default is <code class="docutils literal notranslate"><span class="pre">1e-04</span></code>.</p></li>
-<li><p><strong>n_iter</strong> – an integer Constant that iterate method select. Default is <code class="docutils literal notranslate"><span class="pre">4000</span></code>.</p></li>
-<li><p><strong>step</strong> – an integer constant that multiply the step-size policy. Default is <code class="docutils literal notranslate"><span class="pre">5</span></code>.</p></li>
-<li><p><strong>power</strong> – an float constant the step size policy of the gradient ascent method is step/n^power. Default is <code class="docutils literal notranslate"><span class="pre">0.99</span></code>.</p></li>
-<li><p><strong>theta_true</strong> – If available, the true proportions in the target data set <code class="docutils literal notranslate"><span class="pre">X_s</span></code>. It allows to assess
-the gap between the estimate of our method and the estimate of the cell type proportions derived from
-manual gating.</p></li>
-<li><p><strong>monitoring</strong> – a logical flag indicating to possibly monitor the gap between the estimated proprotions and the manual
-gold-standard. Default is <code class="docutils literal notranslate"><span class="pre">FALSE</span></code>.</p></li>
+<li><p><strong>X_s</strong> – np.array of shape (n_samples_source, n_biomarkers). The source cytometry data set.</p></li>
+<li><p><strong>X_t</strong> – np.array of shape (n_samples_target, n_biomarkers). The target cytometry data set.</p></li>
+<li><p><strong>Lab_source</strong> – np.array of shape (n_samples_source,). The classification of the source data set.</p></li>
+<li><p><strong>eps</strong> – float, <code class="docutils literal notranslate"><span class="pre">default=0.0001</span></code>. Regularization parameter of the Wasserstein distance. This parameter must be positive.</p></li>
+<li><p><strong>lbd</strong> – float, <code class="docutils literal notranslate"><span class="pre">default=0.0001</span></code>. Additionnal regularization parameter of the Minmax swapping optimization method.
+This parameter lbd should be greater or equal to eps.</p></li>
+<li><p><strong>n_iter</strong> – int, <code class="docutils literal notranslate"><span class="pre">default=10000</span></code>. Number of iterations of the stochastic gradient ascent.</p></li>
+<li><p><strong>step</strong> – float, <code class="docutils literal notranslate"><span class="pre">default=5</span></code>. Multiplication factor of the stochastic gradient ascent step-size policy for
+the minmax optimization method.</p></li>
+<li><p><strong>power</strong> – float, <code class="docutils literal notranslate"><span class="pre">default=0.99</span></code>. Decreasing rate for the step-size policy of the stochastic gradient ascent for
+the Minmax swapping optimization method. The step-size decreases at a rate of 1/n^power.</p></li>
+<li><p><strong>theta_true</strong> – np.array of shape (K,), <code class="docutils literal notranslate"><span class="pre">default=None</span></code>. This array stores the true proportions of the K type of
+cells estimated in the target data set. This parameter is required if the user enables the monitoring option.</p></li>
+<li><p><strong>monitoring</strong> – bool, <code class="docutils literal notranslate"><span class="pre">default=False</span></code>. When set to true, the evolution of the Kullback-Leibler between the
+estimated proportions and the benchmark proportions is tracked and stored.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
+<dd class="field-even"><p><ul class="simple">
+<li><p>hat_theta - np.array of shape (K,), where K is the number of different type of cell populations in the source data set.</p></li>
+<li><p>KL_storage - np.array of shape (n_iter,) This array stores the evolution of the Kullback-Leibler divergence between the estimate and benchmark proportions, if monitoring==True and the theta_true variable is completed.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Reference:</dt><dd><p>Paul Freulon, Jérémie Bigot,and Boris P. Hejblum CytOpT: Optimal Transport with Domain Adaptation for Interpreting Flow Cytometry data,
+arXiv:2006.09003 [stat.AP].</p>
 </dd>
 </dl>
 </dd></dl>
@@ -256,23 +253,33 @@ gold-standard. Default is <code class="docutils literal notranslate"><span class
 <dl class="py function">
 <dt class="sig sig-object py" id="CytOpT.Label_Prop_sto.Label_Prop_sto">
 <span class="sig-prename descclassname"><span class="pre">CytOpT.Label_Prop_sto.</span></span><span class="sig-name descname"><span class="pre">Label_Prop_sto</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L_source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CytOpT/Label_Prop_sto.html#Label_Prop_sto"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CytOpT.Label_Prop_sto.Label_Prop_sto" title="Permalink to this definition"></a></dt>
-<dd><p>Function that calculates a classification on the target data
-thanks to the approximation of the transport plan and the classification of the source data.
-We got the approximation of the transport plan with the stochastic algorithm.</p>
+<dd><p>Function that calculates a classification of the target data with an optimal-transport based soft assignment.
+For optimal result, the source distribution must be re-weighted thanks to the estimation of the class proportions
+in the target data set.  This estimation can be produced with the Cytopt function. To compute an optimal dual
+vector f associated to the source distribution, we advocate the use of the Robbins_Wass function with a CytOpT
+re-weighting of the source distribution.
+:param L_source: np.array of shape (X.shape[0],). The labels associated to the source data set X_s
+:param f: np.array of shape (X.shape[0],). The optimal dual vector associated to the source distribution.</p>
+<blockquote>
+<div><p>Here, the Wasserstein distance is computed between the distribution with weights alpha and support X and the
+distribution with weights beta and support Y.</p>
+</div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>L_source</strong> – </p></li>
-<li><p><strong>f</strong> – </p></li>
-<li><p><strong>X</strong> – </p></li>
-<li><p><strong>Y</strong> – </p></li>
-<li><p><strong>alpha</strong> – </p></li>
-<li><p><strong>beta</strong> – </p></li>
-<li><p><strong>eps</strong> – </p></li>
+<li><p><strong>X</strong> – np.array of shape (n_obs_source, dimension). The support of the source distribution.</p></li>
+<li><p><strong>Y</strong> – np.array of shape (n_obs_target, dimension). The support of the target distribution.</p></li>
+<li><p><strong>alpha</strong> – np.array of shape (n_obs_source,). The weights of the source distribution.</p></li>
+<li><p><strong>beta</strong> – np.array of shape (n_obs_target,). The weights of the target distribution.</p></li>
+<li><p><strong>eps</strong> – float, <code class="docutils literal notranslate"><span class="pre">default=0.0001</span></code>. The regularization parameter of the Wasserstein distance.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
+<dd class="field-even"><p><ul class="simple">
+<li><p>L_target - np.array of shape (K,n_obs_target), where K is the number of different type of cell populations in the source data set. The coefficient L_target[k,j] corresponds to the probability that the observation X_t[j] belongs to the class k.</p></li>
+<li><p>clustarget - np.array of shape (n_obs_target,). This array stores the optimal transport based classification of the target data set.</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
@@ -280,23 +287,29 @@ We got the approximation of the transport plan with the stochastic algorithm.</p
 <dl class="py function">
 <dt class="sig sig-object py" id="CytOpT.Label_Prop_sto.Robbins_Wass">
 <span class="sig-prename descclassname"><span class="pre">CytOpT.Label_Prop_sto.</span></span><span class="sig-name descname"><span class="pre">Robbins_Wass</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CytOpT/Label_Prop_sto.html#Robbins_Wass"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CytOpT.Label_Prop_sto.Robbins_Wass" title="Permalink to this definition"></a></dt>
-<dd><p>Function that calculates the approximation of the Wasserstein distance between mu and nu
-thanks to the Robbins-Monro Algorithm. X and Y are the supports of the source and target
-distribution. Alpha and beta are the weights of the distributions.</p>
+<dd><p>Function that calculates the approximation of the optimal dual vector associated
+to the source distribution. The regularized optimal-transport problem is computed between a distribution with
+support X_s and weights alpha, and a distribution with support X_t and weights beta. This function solves the
+semi-dual formulation of the regularized OT problem with the stochastic algorithm of Robbins-Monro.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X_s</strong> – </p></li>
-<li><p><strong>X_t</strong> – </p></li>
-<li><p><strong>alpha</strong> – </p></li>
-<li><p><strong>beta</strong> – </p></li>
-<li><p><strong>eps</strong> – </p></li>
-<li><p><strong>const</strong> – </p></li>
-<li><p><strong>n_iter</strong> – </p></li>
+<li><p><strong>X_s</strong> – np.array of shape (n_obs_source, dimension). Support of the source distribution.</p></li>
+<li><p><strong>X_t</strong> – np.array of shape (n_obs_target, dimension). Support of the target distribution</p></li>
+<li><p><strong>alpha</strong> – np.array of shape (n_obs_source,). Weights of the source distribution.</p></li>
+<li><p><strong>beta</strong> – np.array of shape (n_obs_target,). Weights of the target  distribution.</p></li>
+<li><p><strong>eps</strong> – float, <code class="docutils literal notranslate"><span class="pre">default=0.0001</span></code>. Regularization parameter of the Wasserstein distance. This parameter
+should be greater than 0.</p></li>
+<li><p><strong>const</strong> – float, <code class="docutils literal notranslate"><span class="pre">default=0.1</span></code>. Constant involved in the Robbins-Monro algorithm when the regularization parameter
+eps=0.</p></li>
+<li><p><strong>n_iter</strong> – int, <code class="docutils literal notranslate"><span class="pre">default=10000</span></code>. Number of iterations of the Robbins-Monro algorithm.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
+<dd class="field-even"><p><ul class="simple">
+<li><p>f - np.array of shape (n_obs_source,). Optimal kantorovich potential associated to the source distribution.</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
