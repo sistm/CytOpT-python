@@ -156,21 +156,41 @@ def Robbins_Wass(X_s, X_t, alpha, beta, eps=0, const=0.1, n_iter=10000):
 
 # cytopt_desasc
 def cytopt_desasc(X_s, X_t, Lab_source, eps=0.0001, n_out=4000, n_stoc=10, step_grad=50, const=0.1, theta_true=0):
-    """    Function that estimates the class proportions in the target data set.
-    It solves the minimization problem with a gradient descent method.
-    At each iteration, a (sub)gradient of W^{eps}(alpha, beta) is approximated with stochastic optimization
-    Techniques.
+    """ CytOpT algorithm. This methods is designed to estimate the proportions of cells in an unclassified Cytometry
+    data set denoted X_t. CytOpT is a supervised method that leverage the classification denoted Lab_source associated
+    to the flow cytometry data set X_s. The estimation relies on the resolution of an optimization problem.
+    The optimization problem of this function is solved with a descent-ascent optimization procedure.
 
-    :param X_s:
-    :param X_t:
-    :param Lab_source:
-    :param eps:
-    :param n_out:
-    :param n_stoc:
-    :param step_grad:
-    :param const:
-    :param theta_true:
+    :param X_s: np.array of shape (n_samples_source, n_biomarkers). The source cytometry data set.
+
+    :param X_t: np.array of shape (n_samples_target, n_biomarkers). The target cytometry data set.
+
+    :param Lab_source: np.array of shape (n_samples_source,). The classification of the source data set.
+
+    :param eps: float, default=0.0001. Regularization parameter of the Wasserstein distance. This parameter must be
+    positive.
+
+    :param n_out: int, default=10000. Number of iterations of the outer loop of the descent-ascent optimization method.
+    This loop corresponds to the descent part of descent-ascent strategy.
+
+    :param n_stoc: int, default = 10. Number of iterations of the inner loop of the descent-ascent optimization method.
+    This loop corresponds to the stochastic ascent part of this optimization procedure.
+
+    :param step_grad: float, default=10. Constant step_size policy for the gradient descent of the descent-ascent
+    optimization strategy.
+
+    :param const: float, default=0.1. Constant involved in the stochastic algorithm when the regularization parameter
+    is set to eps=0.
+
+    :param theta_true: np.array of shape (K,), default=None. This array stores the true proportions of the K type of
+     cells estimated in the target data set. This parameter is required if the user enables the monitoring option.
+
     :return:
+    hat_theta : np.array of shape (K,), where K is the number of different type of cell populations in the source
+    data set.
+    KL_storage: np.array of shape (n_out, ). This array stores the evolution of the Kullback-Leibler divergence
+    between the estimate and benchmark proportions, if monitoring==True.
+
     """
 
     print('\n Epsilon: ', eps)
