@@ -36,7 +36,7 @@ def grad_f(lbd, eps, X_s, X_t, j, u, D):
 
 
 # cytopt
-def cytopt_minmax(X_s, X_t, Lab_source, eps=0.0001, lbd=0.0001, n_iter=4000,
+def cytopt_minmax(X_s, X_t, Lab_source, eps=0.0001, lbd=0.0001, n_iter=10000,
                   step=5, power=0.99, theta_true=0, monitoring=False):
     """ CytOpT algorithm. This methods is designed to estimate the proportions of cells in an unclassified Cytometry
     data set denoted X_t. CytOpT is a supervised method that leverage the classification denoted Lab_source associated

@@ -29,8 +29,8 @@ def get_length_unique_numbers(values):
 # CytOpt
 def CytOpt(X_s, X_t, Lab_source, Lab_target=None, cell_type=None, names_pop=None,
            method=None, theta_true=None, eps=1e-04, n_iter=10000, power=0.99,
-           step_grad=10, step=5, lbd=1e-04, n_out=10000, n_stoc=10, n_0=10,
-           n_stop=10000, monitoring=False, minMaxScaler=True, thresholding=True):
+           step_grad=10, step=5, lbd=1e-04, n_out=5000, n_stoc=10, n_0=10,
+           n_stop=5000, monitoring=False, minMaxScaler=True, thresholding=True):
     """
     CytOpT algorithm. This methods is designed to estimate the proportions of cells in an unclassified Cytometry
     data set denoted X_t. CytOpT is a supervised method that levarge the classification denoted Lab_source associated
@@ -75,16 +75,16 @@ def CytOpt(X_s, X_t, Lab_source, Lab_target=None, cell_type=None, names_pop=None
     :param lbd: float, default=0.0001. Additionnal regularization parameter of the Minmax swapping optimization method.
     This parameter lbd should be greater or equal to eps.
 
-    :param n_out: int, default=10000. Number of iterations of the outer loop of the descent-ascent optimization method.
+    :param n_out: int, default=5000. Number of iterations of the outer loop of the descent-ascent optimization method.
     This loop corresponds to the descent part of descent-ascent strategy.
 
     :param n_stoc: int, default = 10. Number of iterations of the inner loop of the descent-ascent optimization method.
     This loop corresponds to the stochastic ascent part of this optimization procedure.
 
-    :param n_0: int, default = 1, First iteration to display the evolution of the Kullback-Leibler divergence along
+    :param n_0: int, default = 10, First iteration to display the evolution of the Kullback-Leibler divergence along
     the steps of the optimization strategy chosen. The monitoring variable should be equal to monitoring=True.
 
-    :param n_stop: int, default=1000. Last iteration to display the evolution of the Kullback-Leibler divergence along
+    :param n_stop: int, default=5000. Last iteration to display the evolution of the Kullback-Leibler divergence along
     the steps of the optimization strategy chosen. The monitoring variable should be equal to monitoring=True.
 
     :param monitoring: bool, default=False. When set to true, the evolution of the Kullback-Leibler between the

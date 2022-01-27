@@ -155,7 +155,7 @@ def Robbins_Wass(X_s, X_t, alpha, beta, eps=0, const=0.1, n_iter=10000):
 
 
 # cytopt_desasc
-def cytopt_desasc(X_s, X_t, Lab_source, eps=0.0001, n_out=4000, n_stoc=10, step_grad=50, const=0.1, theta_true=0):
+def cytopt_desasc(X_s, X_t, Lab_source, eps=0.0001, n_out=5000, n_stoc=10, step_grad=10, const=0.1, theta_true=0):
     """ CytOpT algorithm. This methods is designed to estimate the proportions of cells in an unclassified Cytometry
     data set denoted X_t. CytOpT is a supervised method that leverage the classification denoted Lab_source associated
     to the flow cytometry data set X_s. The estimation relies on the resolution of an optimization problem.
@@ -170,7 +170,7 @@ def cytopt_desasc(X_s, X_t, Lab_source, eps=0.0001, n_out=4000, n_stoc=10, step_
     :param eps: float, default=0.0001. Regularization parameter of the Wasserstein distance. This parameter must be
     positive.
 
-    :param n_out: int, default=10000. Number of iterations of the outer loop of the descent-ascent optimization method.
+    :param n_out: int, default=5000. Number of iterations of the outer loop of the descent-ascent optimization method.
     This loop corresponds to the descent part of descent-ascent strategy.
 
     :param n_stoc: int, default = 10. Number of iterations of the inner loop of the descent-ascent optimization method.
