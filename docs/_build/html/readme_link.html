@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CyOpt &mdash; CytOpT 0.0.2 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> CytOpT
+          </a>
+              <div class="version">
+                0.0.2
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">CytOpT_Codes</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">CytOpT</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>CyOpt</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/readme_link.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="cyopt">
+<h1>CyOpt<a class="headerlink" href="#cyopt" title="Permalink to this headline"></a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline"></a></h2>
+<p>The CytOpt is new package includes a new algorithm using regularized optimal transport
+to directly estimate the different cell population proportions from a biological sample
+characterized with flow cytometry measurements. Algorithm is based on the regularized
+Wasserstein metric to compare cytometry measurements from different samples, thus
+accounting for possible mis-alignment of a given cell population across sample
+(due to technical variability from the technology of measurements).
+The methods implemented in this package are detailed in the following <a class="reference external" href="https://arxiv.org/abs/2006.09003">article</a>. The <code class="docutils literal notranslate"><span class="pre">source</span> <span class="pre">code</span></code> of the package is available on  <a class="reference external" href="https://github.com/sistm/CytOpt-python">github</a>.</p>
+</section>
+<section id="getting-started">
+<h2>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline"></a></h2>
+<section id="install-cytopt">
+<h3>Install CytOpT<a class="headerlink" href="#install-cytopt" title="Permalink to this headline"></a></h3>
+<p>Install the CytOpT package from pypi as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">.</span><span class="n">txt</span>
+
+<span class="n">pip</span> <span class="n">install</span> <span class="n">CytOpT</span> <span class="c1"># pip3 install CytOpT</span>
+</pre></div>
+</div>
+</section>
+<section id="example">
+<h3>Example<a class="headerlink" href="#example" title="Permalink to this headline"></a></h3>
+<blockquote>
+<div><p>Packages:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">CytOpT</span> <span class="kn">import</span> <span class="n">Cytopt</span><span class="p">,</span> <span class="n">cytopt_minmax</span><span class="p">,</span> <span class="n">cytopt_desasc</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Preparing data:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Source Data</span>
+
+<span class="n">Stanford1A_values</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../tests/data/W2_1_values.csv&#39;</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+
+<span class="n">Stanford1A_clust</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../tests/data/W2_1_clust.csv&#39;</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="c1"># Target Data</span>
+
+<span class="n">Stanford3A_values</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../tests/data/W2_7_values.csv&#39;</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+
+<span class="n">Stanford3A_clust</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../tests/data/W2_7_clust.csv&#39;</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="n">X_source</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Stanford1A_values</span><span class="p">)</span>
+
+<span class="n">X_target</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Stanford3A_values</span><span class="p">)</span>
+
+<span class="n">Lab_source</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Stanford1A_clust</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">])</span>
+
+<span class="n">Lab_target</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Stanford3A_clust</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">])</span>
+
+<span class="c1"># theta_true</span>
+
+<span class="n">theta_true</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span> <span class="n">theta_true</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">Lab_target</span> <span class="o">==</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">Lab_target</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="comparison-of-methods">
+<h3>Comparison of methods<a class="headerlink" href="#comparison-of-methods" title="Permalink to this headline"></a></h3>
+<section id="steps">
+<h4>Steps<a class="headerlink" href="#steps" title="Permalink to this headline"></a></h4>
+<p>Classification using optimal transport with reweighted proportions.
+The target measure 𝛽 is reweighted in order to match the weight vector ℎ̂ estimated with 𝙲𝚢𝚝𝙾𝚙𝚝.
+Approximation of the optimal dual vector u. In order to compute an approximation of the optimal transportation plan, we need to approximate 𝑃𝜀 .
+Class proportions estimation with 𝙲𝚢𝚝𝙾𝚙𝚝 Descent-Ascent procedure Setting of the parameters
+Minmax swapping procedure. Setting of the parameters
+Plot all Bland-Altman:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CytOpt</span><span class="p">(</span><span class="n">X_source</span><span class="p">,</span> <span class="n">X_target</span><span class="p">,</span> <span class="n">Lab_source</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;comparison_opt&quot;</span><span class="p">,</span> <span class="n">theta_true</span><span class="o">=</span><span class="n">theta_true</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="cytopt-minmax-or-desasc">
+<h3>CytOpT Minmax or Desasc<a class="headerlink" href="#cytopt-minmax-or-desasc" title="Permalink to this headline"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cytopt_desasc</span><span class="p">(</span><span class="n">X_source</span><span class="p">,</span> <span class="n">X_target</span><span class="p">,</span> <span class="n">Lab_source</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">n_out</span><span class="o">=</span><span class="mi">4000</span><span class="p">,</span> <span class="n">n_stoc</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">step_grad</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">const</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">theta_true</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">cytopt_minmax</span><span class="p">(</span><span class="n">X_source</span><span class="p">,</span> <span class="n">X_target</span><span class="p">,</span> <span class="n">Lab_source</span><span class="p">,</span><span class="n">eps</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">lbd</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">4000</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">power</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span> <span class="n">theta_true</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">monitoring</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="o">///</span> <span class="n">Or</span> <span class="n">use</span> <span class="n">CytOpt</span> <span class="n">function</span> <span class="k">with</span> <span class="n">specified</span> <span class="n">method</span> <span class="n">parameter</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Boris Hejblum, Kalidou BA, Paul Freulon.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
