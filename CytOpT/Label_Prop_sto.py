@@ -93,7 +93,7 @@ def h_function(f, X_s, X_t, j, alpha, beta, eps=0.1):
     :return:
     """
     if eps == 0:
-        return np.sum(f * alpha) + c_transform(f, X_s, X_t=X_t[j])
+        return np.sum(f * alpha) + c_transform(f, X_s, X_t[j])
 
     else:
         return np.sum(f * alpha) + c_transform(f, X_s, X_t, j, beta, eps) - eps
@@ -161,7 +161,7 @@ def Robbins_Wass(X_s, X_t, alpha, beta, eps=0.1, n_iter=10000):
     return [f, W_hat_storage, Sigma_hat_storage]
 
 
-def Label_Prop_sto(L_source, f, X, Y, alpha, beta, eps):
+def Label_Prop_sto(L_source, f, X, Y, alpha, beta, eps=0.0001):
     """     Function that calculates a classification of the target data with an optimal-transport based soft assignment.
     For optimal result, the source distribution must be re-weighted thanks to the estimation of the class proportions
     in the target data set.  This estimation can be produced with the Cytopt function. To compute an optimal dual

@@ -97,7 +97,7 @@ def bar_plot(proportions, Class=None, title='CytOpt estimation and Manual estima
     plt.show()
 
 
-def KL_plot(monitoring, n_0=10, n_stop=1000, title="Kullback-Liebler divergence trace"):
+def KL_plot(monitoring, n_0=10, n_stop=10000, title="Kullback-Liebler divergence trace"):
     """ Function to display a bland plot in order to visually assess the agreement between CytOpt estimation
     of the class proportions and the estimate of the class proportions provided through manual gating.
 

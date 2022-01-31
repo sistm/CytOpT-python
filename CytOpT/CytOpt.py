@@ -29,8 +29,9 @@ def get_length_unique_numbers(values):
 # CytOpT
 def CytOpT(X_s, X_t, Lab_source, Lab_target=None, theta_true=None,
            method=None, eps=1e-04, n_iter=4000, power=0.99,
-           step_grad=50, step=5, lbd=1e-04, n_it_grad=4000, n_it_sto=10,
-           cont=True, monitoring=True, minMaxScaler=True, thresholding=True):
+           step_grad=10, step=5, lbd=1e-04, n_it_grad=10000, n_it_sto=10,
+           cont=True, monitoring=False, minMaxScaler=True, thresholding=True):
+    
     """ CytOpT algorithm. This methods is designed to estimate the proportions of cells in an unclassified Cytometry
     data set denoted X_t. CytOpT is a supervised method that levarge the classification denoted Lab_source associated
     to the flow cytometry data set X_s. The estimation relies on the resolution of an optimization problem.
@@ -80,9 +81,11 @@ def CytOpT(X_s, X_t, Lab_source, Lab_target=None, theta_true=None,
         the cytometer can induce convtrived negative values.
 
     :return:
-        - proportions - a ``data.frame`` with the (optionally true and)  estimated proportions for each ``method``
-        - monitoring - a ``data.frame`` of estimates over the optimization iterations for each ``method`` (listed within).
-
+        - hat_theta : np.array of shape (K,), where K is the number of different type of cell populations in the source
+            data set.
+        - KL_monitoring: np.array of shape (n_out, ) or (n_iter,) depending on the choice of the optimization method. This
+            array stores the evolution of the Kullback-Leibler divergence between the estimate and benchmark proportions, if
+            monitoring==True.
     Reference:
      Paul Freulon, Jérémie Bigot,and Boris P. Hejblum CytOpT: Optimal Transport with Domain Adaptation for Interpreting Flow Cytometry data,
      arXiv:2006.09003 [stat.AP].
