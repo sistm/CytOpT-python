@@ -1,0 +1,13 @@
+numpy~=1.21.4
+scipy~=1.7.2
+setuptools==59.4.0
+pandas~=1.3.4
+scikit-learn~=1.0.1
+matplotlib~=3.5.0
+seaborn~=0.11.2
+pyqt5<5.13
+pyqtwebengine<5.13
+jedi==0.17.2
+parso==0.7.0
+sphinx
+sphinx-rtd-theme
