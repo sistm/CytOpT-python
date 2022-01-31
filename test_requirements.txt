@@ -1,7 +1,5 @@
 pandas
 matplotlib
 seaborn
-time
 sklearn
-sys
 twine
