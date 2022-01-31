@@ -6,8 +6,6 @@ die () {
 }
 
 pushd .
-# shellcheck disable=SC2164
-cd ./CytOpT
 
 python3 ./setup.py bdist_wheel || die 'python setup failed'
 # shellcheck disable=SC2164
