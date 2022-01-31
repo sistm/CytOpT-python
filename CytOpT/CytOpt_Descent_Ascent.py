@@ -164,5 +164,5 @@ if __name__ == '__main__':
         h_target[k] = np.sum(Lab_target == k + 1) / len(Lab_target)
 
     res = cytopt_desasc(X_source, X_target, Lab_source,
-                        eps=0.0001, n_it_grad=4000, n_it_sto=10,
+                        eps=0.0001, n_it_grad=1000, n_it_sto=10,
                         step_grad=50, theta_true=h_target, monitoring=False)

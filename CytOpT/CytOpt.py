@@ -9,6 +9,7 @@ import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 
 # __all__ = ['CytOpT']
+from CytOpT.CytOpt_plot import result_plot
 from CytOpT.CytOpt_Descent_Ascent import cytopt_desasc
 from CytOpT.CytOpt_MinMax_Swapping import cytopt_minmax
 
@@ -196,4 +197,4 @@ if __name__ == '__main__':
     h_hat1 = CytOpT(X_source, X_target, Lab_source,
                     method="desasc", n_it_grad=n_it_grad, n_it_sto=n_it_sto, step_grad=pas_grad, eps=eps,
                     monitoring=monitoring)
-    # result_plot(res, n_0=10, n_stop=1000)
+    result_plot(h_hat1, n_0=10, n_stop=1000)
