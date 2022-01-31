@@ -29,7 +29,10 @@ Example
 _______
  Packages::
 
-        from CytOpT import Cytopt, cytopt_minmax, cytopt_desasc
+        from CytOpT import CytOpt
+        from CytOpT import CytOpt_plot
+        from CytOpT import Label_Prop_sto
+        import pandas as pd
 
 Preparing data::
 
@@ -72,15 +75,16 @@ Class proportions estimation with 𝙲𝚢𝚝𝙾𝚙𝚝 Descent-Ascent proced
 Minmax swapping procedure. Setting of the parameters
 Plot all Bland-Altman::
 
-    CytOpt(X_source, X_target, Lab_source, method="comparison_opt", theta_true=theta_true)
+    CytOpt.CytOpT(X_source, X_target, Lab_source, method="both", theta_true=theta_true)
 
 CytOpT Minmax or Desasc
 _______________________
 
 ::
 
-    cytopt_desasc(X_source, X_target, Lab_source, eps=0.0001, n_out=4000, n_stoc=10, step_grad=50, const=0.1, theta_true=0)
+        CytOpt.CytOpT(X_source, X_target, Lab_source, eps=0.0001, n_out=4000, n_stoc=10, step_grad=50, const=0.1, method='desasc')
 
-    cytopt_minmax(X_source, X_target, Lab_source,eps=0.0001, lbd=0.0001, n_iter=4000, step=5, power=0.99, theta_true=0, monitoring=False)
+        CytOpt.CytOpT(X_source, X_target, Lab_source,
+                  method = 'minmax', eps=0.0001, lbd=0.0001, n_iter=4000,
+                  step=5, power=0.99, monitoring=False)
 
-    /// Or use CytOpt function with specified method parameter
