@@ -1,5 +1,5 @@
-# CytOpt
-
+# CytOpT
+###### Doc generated with sphinx: [![Inline docs](http://inch-ci.org/github/dwyl/hapi-auth-jwt2.svg?branch=master)](https://sistm.github.io/CytOpt-python/_build/html/index.html)
 ## Description
 The CytOpt is new package includes a new algorithm using regularized optimal transport to directly estimate the different cell population proportions from a biological sample characterized with flow cytometry measurements. Algorithm is based on the regularized Wasserstein metric to compare cytometry measurements from different samples, thus accounting for possible mis-alignment of a given cell population across sample (due to technical variability from the technology of measurements).
 ## Overview
