@@ -37,7 +37,7 @@ See ``README`` for the installation instructions: https://github.com/sistm/CytOp
    :maxdepth: 2
    :caption: Contents:
 
-   CytOpT
+   modules
 
 Indices and tables
 ==================
