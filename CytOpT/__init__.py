@@ -25,4 +25,5 @@ __all__ = ("cytopt_desasc",
            "CytOpT",
            "Bland_Altman",
            "bar_plot",
-           "KL_plot")
+           "KL_plot",
+           "result_plot")
