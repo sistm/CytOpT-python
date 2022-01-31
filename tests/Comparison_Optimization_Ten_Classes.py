@@ -8,7 +8,7 @@ import numpy as np
 
 from sklearn.preprocessing import MinMaxScaler
 
-from CytOpT import cytopt_minmax, cytopt_desasc
+from CytOpT import CytOpT
 
 
 class Bland_Altman_Full_HIPC:
@@ -40,34 +40,25 @@ class Bland_Altman_Full_HIPC:
 
         print(theta_true)
 
-        n_iter = 4000
+        n_iter = 1000
         step_grad = 5
         power = 0.99
 
-        t0 = time.time()
-        Results_Minmax = cytopt_minmax(X_source, X_target, Lab_source, eps=0.0001, lbd=0.0001, n_iter=n_iter,
-                                       theta_true=theta_true, step=step_grad, power=power, monitoring=True)
-        elapsed_time = time.time() - t0
-        print('Elapsed time : ', elapsed_time / 60, 'Mins')
+        Results_Minmax = CytOpT(X_source, X_target, Lab_source, eps=0.0001, lbd=0.0001, n_iter=n_iter,
+                                method="minmax", theta_true=theta_true, step=step_grad, power=power, monitoring=True)
 
-        h_hat = Results_Minmax[0]
-        Minmax_monitoring = Results_Minmax[1]
+        proportions = Results_Minmax['proportions']
+        Minmax_monitoring = Results_Minmax['monitoring']
 
-        n_it_grad = 1000
-        n_it_sto = 10
         pas_grad = 50
         eps = 0.0001
 
-        t0 = time.time()
-        res_two = cytopt_desasc(X_s=X_source, X_t=X_target, Lab_source=Lab_source, eps=eps, n_out=n_it_grad,
-                                n_stoc=n_it_sto, step_grad=pas_grad, theta_true=theta_true)
-
-        elapsed_time = time.time() - t0
-        print('Elapsed time : ', elapsed_time / 60, 'Mins')
-        h_hat_two = res_two[0]
-        Desasc_monitoring = res_two[1]
-        return {'h_hat': h_hat, 'Minmax_monitoring': Minmax_monitoring, 'h_hat_two': h_hat_two,
-                'Desasc_monitoring': Desasc_monitoring}
+        res_two = CytOpT(X_source, X_target, Lab_source,
+                         method="desasc", step_grad=pas_grad, eps=eps, theta_true=theta_true)
+        proportions_desasc = res_two['proportions']
+        Minmax_monitoring_desasc = res_two['monitoring']
+        return {'h_hat': proportions, 'Minmax_monitoring': Minmax_monitoring, 'h_hat_two': proportions_desasc,
+                'Desasc_monitoring': Minmax_monitoring_desasc}
 
 
 if __name__ == '__main__':

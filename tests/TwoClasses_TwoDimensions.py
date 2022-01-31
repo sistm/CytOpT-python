@@ -8,8 +8,8 @@ import pandas as pd
 import time
 from sklearn.preprocessing import MinMaxScaler
 
-from CytOpT import cytopt_desasc, cytopt_minmax
-from CytOpT.Label_Prop_sto import Robbins_Wass, Label_Prop_sto, c_transform, cost
+from CytOpT import CytOpT, Robbins_Wass
+from CytOpT.Label_Prop_sto import Label_Prop_sto, c_transform, cost
 
 sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
 
@@ -38,7 +38,6 @@ class TwoClassesTwoDimension():
         Illustration of the framework
         A segmented data set and an unlabelled target data set.
         """
-
 
         return {'h_source': h_source, 'h_true': h_true}
 
@@ -93,27 +92,11 @@ class TwoClassesTwoDimension():
         eps = 0.0001
         h_true = self.init_class_proportions()['h_true']
 
-        t0 = time.time()
-        h_hat = \
-        cytopt_desasc(X_s=self.data['X_source'], X_t=self.data['X_target'], Lab_source=self.data['Lab_source'], eps=eps,
-                      n_out=n_it_grad,
-                      n_stoc=n_it_sto, step_grad=pas_grad)[0]
+        h_hat = CytOpT(X_s=self.data['X_source'], X_t=self.data['X_target'], Lab_source=self.data['Lab_source'],
+                       method="both", eps=eps, n_iter=n_it_grad, n_it_sto=n_it_sto, step_grad=pas_grad,
+                       theta_true=h_true, monitoring=False)
 
-        elapsed_time = time.time() - t0
-        print('Elapsed time:', elapsed_time / 60, 'mins')
-
-        # 𝙲𝚢𝚝𝙾𝚙𝚝 estimation and benchmark estimation
-        print('Estimated proportions', h_hat)
-        print('Benchmark proportions', h_true)
-
-        # Display of the estimation Results
-
-        percentage = np.hstack((h_true, h_hat))
-        cell_type = np.tile(['CD8', 'CD4'], 2)
-        method = np.repeat(['Manual Benchmark', 'Transport Estimation'], 2)
-        Res_df = pd.DataFrame({'Percentage': percentage, 'Cell_Type': cell_type, 'Method': method})
-        print(Res_df)
-        return {'h_hat': h_hat, 'h_true': h_true}
+        return {'h_hat': h_hat['proportions']}
 
     def estimate_minmax(self):
         """
@@ -125,46 +108,11 @@ class TwoClassesTwoDimension():
         n_iter = 4000
         step_grad = 5
         power = 0.99
-        value_h = self.estimate_CytOpT()
 
-        t0 = time.time()
-        Results_Minmax = cytopt_minmax(self.data['X_source'], self.data['X_target'], self.data['Lab_source'], eps=eps,
+        Results_Minmax = CytOpT(self.data['X_source'], self.data['X_target'], self.data['Lab_source'], eps=eps,
                                        lbd=lbd, n_iter=n_iter,
                                        step=step_grad, power=power, monitoring=False)
-        elapsed_time = time.time() - t0
-
-        print('Elapsed time : ', elapsed_time / 60, 'Mins')
-
-        h_hat2 = Results_Minmax[0]
-        print(h_hat2)
-
-        # Comparison of the two minimization procedures
-
-        proportion = np.hstack((value_h['h_hat'], h_hat2, value_h['h_true']))
-        classes = np.tile(np.arange(1, 3), 3)
-        methode = np.repeat(['CytOpt_DesAsc', 'CytOpt_Minmax', 'Manual'], 2)
-        df_res1 = pd.DataFrame({'Proportions': proportion, 'Classes': classes, 'Methode': methode})
-
-        Diff_prop = value_h['h_true'].ravel() - h_hat2.ravel()
-        sd_diff = np.std(Diff_prop)
-        print('Standard deviation:', sd_diff)
-
-        Mean_prop = (value_h['h_true'].ravel() + h_hat2.ravel()) / 2
-
-        sd_diff = np.std(Diff_prop)
-        print('Standard deviation:', sd_diff)
-
-        print('Percentage of classes where the estimation error is below 10% with CytOpT Minmax')
-        print(np.sum(abs(Diff_prop) < 0.1) / len(Diff_prop) * 100)
-        print('Percentage of classes where the estimation error is below 5% with CytOpT Minmax')
-        print(np.sum(abs(Diff_prop) < 0.05) / len(Diff_prop) * 100)
-
-        Dico_res = pd.DataFrame({'h_hat': h_hat2.ravel(),
-                                 'True_Prop': value_h['h_true'].ravel(),
-                                 'Diff': Diff_prop,
-                                 'Mean': Mean_prop,
-                                 'Classe': [0,1]})
-        print(Dico_res)
+        return {'h_hat': Results_Minmax['proportions']}
 
     def optimal_reweighted(self):
         """
@@ -184,20 +132,12 @@ class TwoClassesTwoDimension():
         eps = 0.0001
         n_iter = 150000
 
-        t0 = time.time()
         u_last_two = Robbins_Wass(self.data['X_source'], self.data['X_target'], alpha_mod, beta, eps=eps, n_iter=n_iter)
-        elapsed_time = time.time() - t0
 
-        print('Elapsed time :', elapsed_time / 60, 'mins')
-
-        # Label propogation
-        t0 = time.time()
         Result_LP = Label_Prop_sto(self.data['Lab_source'], u_last_two, self.data['X_source'], self.data['X_target'],
                                    alpha_mod, beta, eps)
-        elapsed_time = time.time() - t0
-        Lab_target_hat_two = Result_LP[1]
 
-        print('Elapsed time', elapsed_time / 60, 'mins')
+        Lab_target_hat_two = Result_LP[1]
 
         return {'Lab_target_hat_two': Lab_target_hat_two, 'u_last_two': u_last_two}
 
@@ -267,6 +207,4 @@ if __name__ == '__main__':
 
             'names_pop': ['CD8', 'CD4']}
     test1 = TwoClassesTwoDimension(data)
-    # print(test1.__dict__)
-    # print(test1.init_class_proportions())
     print(test1.estimate_CytOpT())
