@@ -44,7 +44,6 @@ class cytOpt_HIPC_Data:
         t0 = time.time()
         Results_Desasc = cytopt_desasc(X_source, X_target, Lab_source, eps=eps, n_out=n_out, n_stoc=n_stoc,
                                        step_grad=step_grad, theta_true=theta_true)
-        elapsed_time = time.time() - t0
 
         h_hat1 = Results_Desasc[0]
 
@@ -64,7 +63,6 @@ class cytOpt_HIPC_Data:
         Classes = np.tile(np.arange(1, 11), 3)
         Methode = np.repeat(['CytOpt_DesAsc', 'CytOpt_Minmax', 'Manual'], 10)
         df_res1 = pd.DataFrame({'Proportions': Proportion, 'Classes': Classes, 'Methode': Methode})
-        plot_py_prop2(df_res1)
 
         X_target = np.asarray(self.data['Miami3A_values'])
         X_target = X_target * (X_target > 0)
@@ -94,7 +92,6 @@ class cytOpt_HIPC_Data:
         Classes = np.tile(np.arange(1, 11), 3)
         Methode = np.repeat(['CytOpt_DesAsc', 'CytOpt_Minmax', 'Manual'], 10)
         df_res1 = pd.DataFrame({'Proportions': Proportion, 'Classes': Classes, 'Methode': Methode})
-        plot_py_prop2(df_res1)
 
         X_target = np.asarray(self.data['Ucla2B_values'])
         X_target = X_target * (X_target > 0)
@@ -123,7 +120,6 @@ class cytOpt_HIPC_Data:
         Classes = np.tile(np.arange(1, 11), 3)
         Methode = np.repeat(['CytOpt_DesAsc', 'CytOpt_Minmax', 'Manual'], 10)
         df_res1 = pd.DataFrame({'Proportions': Proportion, 'Classes': Classes, 'Methode': Methode})
-        plot_py_prop2(df_res1)
 
 
 if __name__ == '__main__':
