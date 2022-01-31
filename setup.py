@@ -12,9 +12,9 @@ except ImportError:
     exit(1)
 
 try:
-    long_description = open('../README.md', encoding='utf-8').read()
+    long_description = open('./README.md', encoding='utf-8').read()
 except:
-    long_description = open('../README.md').read()
+    long_description = open('./README.md').read()
 
 copt = {
     'msvc': ['/EHsc'],
