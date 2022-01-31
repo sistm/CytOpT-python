@@ -40,14 +40,14 @@ jobs:
 
     - name: build CytOpT
       run: |
-        ./build-CytOpT.sh
+        ./build-test/build-CytOpT.sh
 
     - name: install CytOpT
       run: |
-        ./install-built-CytOpT.sh
+        ./build-test/install-built-CytOpT.sh
     - name: test consuming CytOpT
       run: |
-        ./test-consume-CytOpT.sh
+        ./build-test/test-consume-CytOpT.sh
     - name: uninstall CytOpT
       run: |
-        ./uninstall-CytOpT.sh
+        ./build-test/uninstall-CytOpT.sh
