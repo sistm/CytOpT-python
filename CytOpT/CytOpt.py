@@ -170,15 +170,15 @@ def CytOpT(X_s, X_t, Lab_source, Lab_target=None, theta_true=None,
 
 if __name__ == '__main__':
     # Source Data
-    Stanford1A_values = pd.read_csv('../tests/data/W2_1_values.csv',
+    Stanford1A_values = pd.read_csv('./tests/data/W2_1_values.csv',
                                     usecols=np.arange(1, 8))
-    Stanford1A_clust = pd.read_csv('../tests/data/W2_1_clust.csv',
+    Stanford1A_clust = pd.read_csv('./tests/data/W2_1_clust.csv',
                                    usecols=[1])
 
     # Target Data
-    Stanford3A_values = pd.read_csv('../tests/data/W2_7_values.csv',
+    Stanford3A_values = pd.read_csv('./tests/data/W2_7_values.csv',
                                     usecols=np.arange(1, 8))
-    Stanford3A_clust = pd.read_csv('../tests/data/W2_7_clust.csv',
+    Stanford3A_clust = pd.read_csv('./tests/data/W2_7_clust.csv',
                                    usecols=[1])
 
     X_source = np.asarray(Stanford1A_values)
