@@ -38,3 +38,16 @@ jobs:
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
+    - name: build CytOpT
+      run: |
+        ./build-CytOpT.sh
+
+    - name: install CytOpT
+      run: |
+        ./install-built-CytOpT.sh
+    - name: test consuming CytOpT
+      run: |
+        ./test-consume-CytOpT.sh
+    - name: uninstall CytOpT
+      run: |
+        ./uninstall-CytOpT.sh

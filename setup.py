@@ -12,9 +12,9 @@ except ImportError:
     exit(1)
 
 try:
-    long_description = open('README.md', encoding='utf-8').read()
+    long_description = open('../README.md', encoding='utf-8').read()
 except:
-    long_description = open('README.md').read()
+    long_description = open('../README.md').read()
 
 copt = {
     'msvc': ['/EHsc'],
@@ -65,8 +65,8 @@ here = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(here, 'CytOpT', 'cytopt_version.py')) as f:
     exec(f.read(), about)
 
-install_requires = open('requirements.txt').read().strip().split('\n')
-tests_require = open('test_requirements.txt').read().strip().split('\n')
+install_requires = open('../requirements.txt').read().strip().split('\n')
+tests_require = open('../test_requirements.txt').read().strip().split('\n')
 packages = setuptools.find_packages()
 setuptools.setup(
     name=about['__title__'],
