@@ -25,7 +25,9 @@ pip install CytOpT # pip3 install CytOpT
 ### Packages
 
 ```
-from CytOpT.CytOpT import CytOpt
+import numpy as np
+import pandas as pd
+from CytOpT import CytOpt
 ```
 
 
@@ -73,18 +75,19 @@ for k in range(10):
 from CytOpT import CytOpt
 
 CytOpt.CytOpT(X_source, X_target, Lab_source, Lab_target=None, cell_type=None,
-                              method="both", theta_true=theta_true, eps=1e-04, n_iter=4000, power=0.99,
-                              step_grad=50, step=5, lbd=1e-04, n_out=1000, n_stoc=10, n_0=10,
-                              n_stop=1000, monitoring=False, minMaxScaler=True)
+                              method="both", theta_true=theta_true, eps=1e-04, n_iter=10000, power=0.99,
+                              step_grad=10, step=5, lbd=1e-04, n_out=5000, n_stoc=10, n_0=100,
+                              n_stop=5000, monitoring=False, minMaxScaler=True)
 ```
 
 ### CytOpT Minmax or Desasc 
 ```
-CytOpt.CytOpT(X_source, X_target, Lab_source, eps=0.0001, n_out=4000, n_stoc=10, step_grad=50, const=0.1,
-method='desasc')
+CytOpt.CytOpT(X_source, X_target, Lab_source, 
+              eps=0.0001, n_out=5000, n_stoc=10, step_grad=10, const=0.1,
+             method='desasc')
 
 CytOpt.CytOpT(X_source, X_target, Lab_source,
-              method = 'minmax', eps=0.0001, lbd=0.0001, n_iter=4000,
+              method = 'minmax', eps=0.0001, lbd=0.0001, n_iter=1000,
               step=5, power=0.99, monitoring=False)
                   
 ```

@@ -30,8 +30,6 @@ _______
  Packages::
 
         from CytOpT import CytOpt
-        from CytOpT import CytOpt_plot
-        from CytOpT import Label_Prop_sto
         import pandas as pd
 
 Preparing data::
