@@ -11,3 +11,4 @@ pyqtwebengine<5.13
 jedi==0.17.2
 parso==0.7.0
 sphinx
+sphinx-rtd-theme
