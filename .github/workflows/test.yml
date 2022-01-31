@@ -45,7 +45,7 @@ jobs:
     - name: install CytOpT
       run: |
         ./build-test/install-built-CytOpT.sh
-    - name: test consuming CytOpT
+    - name: test CytOpT
       run: |
         ./build-test/test-CytOpT.sh
     - name: uninstall CytOpT
