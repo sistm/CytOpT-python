@@ -1,14 +1,16 @@
 # shellcheck disable=SC1113
 #/bin/bash
 die () {
-	echo >&2 "$@"
+	echo > "$@"
 	exit 1
 }
 
 pushd .
-cd ../CytOpT
+# shellcheck disable=SC2164
+cd ./CytOpT
 
-python3 ../setup.py bdist_wheel || die 'python setup failed'
+python3 ./setup.py bdist_wheel || die 'python setup failed'
+# shellcheck disable=SC2164
 popd
 
 echo; echo
