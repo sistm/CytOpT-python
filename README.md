@@ -70,24 +70,23 @@ for k in range(10):
 
 
 ```
-from CytOpT import Cytopt
+from CytOpT import CytOpt
 
-CytOpt(X_source, X_target, Lab_source, Lab_target=None, cell_type=None,
-                              method="comparison_opt", theta_true=theta_true, eps=1e-04, n_iter=4000, power=0.99,
+CytOpt.CytOpT(X_source, X_target, Lab_source, Lab_target=None, cell_type=None,
+                              method="both", theta_true=theta_true, eps=1e-04, n_iter=4000, power=0.99,
                               step_grad=50, step=5, lbd=1e-04, n_out=1000, n_stoc=10, n_0=10,
                               n_stop=1000, monitoring=False, minMaxScaler=True)
 ```
 
 ### CytOpT Minmax or Desasc 
 ```
-from CytOpT import cytopt_minmax, cytopt_desasc
+CytOpt.CytOpT(X_source, X_target, Lab_source, eps=0.0001, n_out=4000, n_stoc=10, step_grad=50, const=0.1,
+method='desasc')
 
-cytopt_desasc(X_source, X_target, Lab_source, eps=0.0001, n_out=4000, n_stoc=10, step_grad=50, const=0.1, theta_true=0)
-
-cytopt_minmax(X_source, X_target, Lab_source,eps=0.0001, lbd=0.0001, n_iter=4000,
-                  step=5, power=0.99, theta_true=0, monitoring=False)
+CytOpt.CytOpT(X_source, X_target, Lab_source,
+              method = 'minmax', eps=0.0001, lbd=0.0001, n_iter=4000,
+              step=5, power=0.99, monitoring=False)
                   
-/// Or use CytOpt function with specified method parameter
 ```
 
 ## Urls
