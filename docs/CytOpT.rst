@@ -4,7 +4,7 @@ CytOpT package
 CytOpT.CytOpt module
 --------------------
 
-.. automodule:: CytOpT.CytOpt
+.. automodule:: CytOpT.CytOpT
    :members:
    :undoc-members:
    :show-inheritance:
@@ -13,16 +13,16 @@ CytOpT.CytOpt module
 CytOpT.CytOpt\_Descent\_Ascent module
 -------------------------------------
 
-.. automodule:: CytOpT.CytOpt_Descent_Ascent
+.. automodule:: CytOpT.descentAscent
    :members:
    :undoc-members:
    :show-inheritance:
-   :exclude-members: diff_simplex, gammatrix
+   :exclude-members: diffSimplex, gammatrix
 
 CytOpT.CytOpt\_MinMax\_Swapping module
 --------------------------------------
 
-.. automodule:: CytOpT.CytOpt_MinMax_Swapping
+.. automodule:: CytOpT.minMaxSwapping
    :members:
    :undoc-members:
    :show-inheritance:
@@ -31,7 +31,7 @@ CytOpT.CytOpt\_MinMax\_Swapping module
 CytOpT.Label\_Prop\_sto module
 ------------------------------
 
-.. automodule:: CytOpT.Label_Prop_sto
+.. automodule:: CytOpT.labelPropSto
    :members:
    :undoc-members:
    :show-inheritance:
@@ -39,7 +39,7 @@ CytOpT.Label\_Prop\_sto module
 CytOpT.CytOpt\_plot module
 --------------------------
 
-.. automodule:: CytOpT.CytOpt_plot
+.. automodule:: CytOpT.plots
    :members:
    :undoc-members:
    :show-inheritance:

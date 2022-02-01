@@ -9,9 +9,9 @@ import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 
 # __all__ = ['CytOpT']
-from CytOpT.CytOpt_plot import result_plot
-from CytOpT.CytOpt_Descent_Ascent import cytopt_desasc
-from CytOpT.CytOpt_MinMax_Swapping import cytopt_minmax
+from CytOpT.plots import result_plot
+from CytOpT.descentAscent import cytopt_desasc
+from CytOpT.MinMaxSwapping import cytopt_minmax
 
 
 def stop_running():
@@ -44,7 +44,7 @@ def CytOpT(X_s, X_t, Lab_source, Lab_target=None, theta_true=None,
         of this Cytometry data set must be provided with the Lab_source parameters.
     :param X_t: np.array of shape (n_samples_target, n_biomarkers). The target cytometry data set.
         A cytometry dataframe. The columns correspond to the different biological markers tracked.
-        One line corresponds to the cytometry measurements performed on one cell. The CytOpt algorithm
+        One line corresponds to the cytometry measurements performed on one cell. The CytOpT algorithm
         targets the cell type proportion in this Cytometry data set
     :param Lab_source: np.array of shape (n_samples_source,). The classification of the source data set.
     :param Lab_target: np.array of shape (n_samples_target,), ``default=None``. The classification of the target data set.

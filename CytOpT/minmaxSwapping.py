@@ -5,7 +5,7 @@
 import numpy as np
 import pandas as pd
 from scipy.special import logsumexp
-from CytOpT.Label_Prop_sto import cost
+from CytOpT.labelPropSto import cost
 # __all__ = ['cytopt_minmax']
 
 

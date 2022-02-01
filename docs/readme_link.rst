@@ -29,7 +29,7 @@ Example
 _______
  Packages::
 
-        from CytOpT import CytOpt
+        from CytOpT import CytOpT
         import pandas as pd
 
 Preparing data::

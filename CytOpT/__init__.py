@@ -1,10 +1,10 @@
 
 try:
-    from CytOpT.CytOpt import CytOpT
-    from CytOpT.CytOpt_Descent_Ascent import cytopt_desasc
-    from CytOpT.CytOpt_MinMax_Swapping import cytopt_minmax
-    from CytOpT.Label_Prop_sto import Robbins_Wass, c_transform, h_function, cost
-    from CytOpT.CytOpt_plot import *
+    from CytOpT.CytOpT import CytOpT
+    from CytOpT.descentAscent import cytopt_desasc
+    from CytOpT.minMaxSwapping import cytopt_minmax
+    from CytOpT.labelPropSto import robbinsWass, c_transform, h_function, cost
+    from CytOpT.plots import *
 
 except ImportError:
     import sys
@@ -20,8 +20,8 @@ __all__ = ("cytopt_desasc",
            "cost",
            "h_function",
            "c_transform",
-           "Robbins_Wass",
-           "Label_Prop_sto",
+           "robbinsWass",
+           "labelPropSto",
            "CytOpT",
            "Bland_Altman",
            "bar_plot",

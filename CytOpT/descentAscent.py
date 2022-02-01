@@ -5,13 +5,13 @@
 
 import numpy as np
 import pandas as pd
-from CytOpT.Label_Prop_sto import Robbins_Wass
+from CytOpT.labelPropSto import robbinsWass
 
 
-# __all__ = ['cytopt_desasc', 'Label_Prop_sto']
+# __all__ = ['cytopt_desasc', 'labelPropSto']
 
 
-def diff_simplex(h):
+def diffSimplex(h):
     """
     Computation of the Jacobian matrix of the softmax function.
 
@@ -108,9 +108,9 @@ def cytopt_desasc(X_s, X_t, Lab_source,
         for i in range(n_it_grad):
             prop_classes = np.exp(h)
             prop_classes = prop_classes / np.sum(prop_classes)
-            Dif = diff_simplex(h)
+            Dif = diffSimplex(h)
             alpha_mod = D.dot(prop_classes)
-            f_star_hat = Robbins_Wass(X_s, X_t, alpha_mod, beta, eps=eps, n_iter=n_it_sto)[0]
+            f_star_hat = robbinsWass(X_s, X_t, alpha_mod, beta, eps=eps, n_iter=n_it_sto)[0]
             h = h - step_grad * (D.dot(Dif)).T.dot(f_star_hat)
             prop_classes_new = np.exp(h)
             prop_classes_new = prop_classes_new / np.sum(prop_classes_new)
@@ -128,9 +128,9 @@ def cytopt_desasc(X_s, X_t, Lab_source,
         for i in range(n_it_grad):
             prop_classes = np.exp(h)
             prop_classes = prop_classes / np.sum(prop_classes)
-            Dif = diff_simplex(h)
+            Dif = diffSimplex(h)
             alpha_mod = D.dot(prop_classes)
-            f_star_hat = Robbins_Wass(X_s, X_t, alpha_mod, beta, eps=eps, n_iter=n_it_sto)[0]
+            f_star_hat = robbinsWass(X_s, X_t, alpha_mod, beta, eps=eps, n_iter=n_it_sto)[0]
             h = h - step_grad * (D.dot(Dif)).T.dot(f_star_hat)
             prop_classes_new = np.exp(h)
             prop_classes_new = prop_classes_new / np.sum(prop_classes_new)
