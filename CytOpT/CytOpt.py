@@ -9,16 +9,16 @@ import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 
 # __all__ = ['CytOpT']
-from CytOpT.plots import result_plot
-from CytOpT.descentAscent import cytopt_desasc
-from CytOpT.MinMaxSwapping import cytopt_minmax
 
+from CytOpT.descentAscent import cytoptDesasc
+from CytOpT.minmaxSwapping import cytoptMinmax
+from CytOpT.plots import resultPlot
 
-def stop_running():
+def stopRunning():
     warnings.warn("deprecated", DeprecationWarning)
 
 
-def get_length_unique_numbers(values):
+def getLengthUniqueNumbers(values):
     list_of_unique_value = []
     unique_values = set(values)
     for number in unique_values:
@@ -27,50 +27,47 @@ def get_length_unique_numbers(values):
 
 
 # CytOpT
-def CytOpT(X_s, X_t, Lab_source, Lab_target=None, theta_true=None,
-           method=None, eps=1e-04, n_iter=4000, power=0.99,
-           step_grad=10, step=5, lbd=1e-04, n_it_grad=10000, n_it_sto=10,
+def CytOpT(xSource, xTarget, labSource, labTarget=None, thetaTrue=None,
+           method=None, eps=1e-04, nIter=4000, power=0.99,
+           stepGrad=10, step=5, lbd=1e-04, nItGrad=10000, nItSto=10,
            cont=True, monitoring=False, minMaxScaler=True, thresholding=True):
-    
     """ CytOpT algorithm. This methods is designed to estimate the proportions of cells in an unclassified Cytometry
-    data set denoted X_t. CytOpT is a supervised method that levarge the classification denoted Lab_source associated
-    to the flow cytometry data set X_s. The estimation relies on the resolution of an optimization problem.
+    data set denoted xTarget. CytOpT is a supervised method that levarge the classification denoted labSource associated
+    to the flow cytometry data set xSource. The estimation relies on the resolution of an optimization problem.
     two procedures are provided "minmax" and "desasc". We recommend to use the default method that is
     ``minmax``.
 
-    :param X_s: np.array of shape (n_samples_source, n_biomarkers). The source cytometry data set.
+    :param xSource: np.array of shape (n_samples_source, n_biomarkers). The source cytometry data set.
         A cytometry dataframe. The columns correspond to the different biological markers tracked.
         One line corresponds to the cytometry measurements performed on one cell. The classification
-        of this Cytometry data set must be provided with the Lab_source parameters.
-    :param X_t: np.array of shape (n_samples_target, n_biomarkers). The target cytometry data set.
+        of this Cytometry data set must be provided with the labSource parameters.
+    :param xTarget: np.array of shape (n_samples_target, n_biomarkers). The target cytometry data set.
         A cytometry dataframe. The columns correspond to the different biological markers tracked.
         One line corresponds to the cytometry measurements performed on one cell. The CytOpT algorithm
         targets the cell type proportion in this Cytometry data set
-    :param Lab_source: np.array of shape (n_samples_source,). The classification of the source data set.
-    :param Lab_target: np.array of shape (n_samples_target,), ``default=None``. The classification of the target data set.
-    :param theta_true: np.array of shape (K,), ``default=None``. This array stores the true proportions of the K type of
+    :param labSource: np.array of shape (n_samples_source,). The classification of the source data set.
+    :param labTarget: np.array of shape (n_samples_target,), ``default=None``. The classification of the target data set.
+    :param thetaTrue: np.array of shape (K,), ``default=None``. This array stores the true proportions of the K type of
         cells estimated in the target data set. This parameter is required if the user enables the monitoring option.
     :param method: {"minmax", "desasc", "both"}, ``default="minmax"``. Method chosen to
         to solve the optimization problem involved in CytOpT. It is advised to rely on the default choice that is
         "minmax".
     :param eps: float, ``default=0.0001``. Regularization parameter of the Wasserstein distance. This parameter must be
         positive.
-    :param n_iter: int, ``default=10000``. Number of iterations of the stochastic gradient ascent for the Minmax swapping
+    :param nIter: int, ``default=10000``. Number of iterations of the stochastic gradient ascent for the Minmax swapping
         optimization method.
     :param power: float, ``default=0.99``. Decreasing rate for the step-size policy of the stochastic gradient ascent
         for the Minmax swapping optimization method. The step-size decreases at a rate of 1/n^power.
-    :param step_grad: float, ``default=10``. Constant step_size policy for the gradient descent of the descent-ascent
+    :param stepGrad: float, ``default=10``. Constant step_size policy for the gradient descent of the descent-ascent
         optimization strategy.
     :param step: float, ``default=5``. Multiplication factor of the stochastic gradient ascent step-size policy for
         the minmax optimization method.
     :param lbd: float, ``default=0.0001``. Additionnal regularization parameter of the Minmax swapping optimization method.
         This parameter lbd should be greater or equal to eps.
-    :param n_it_grad: int, ``default=10000``. Number of iterations of the outer loop of the descent-ascent optimization method.
+    :param nItGrad: int, ``default=10000``. Number of iterations of the outer loop of the descent-ascent optimization method.
         This loop corresponds to the descent part of descent-ascent strategy.
-    :param n_it_sto: int, ``default = 10``. Number of iterations of the inner loop of the descent-ascent optimization method.
+    :param nItSto: int, ``default = 10``. Number of iterations of the inner loop of the descent-ascent optimization method.
         This loop corresponds to the stochastic ascent part of this optimization procedure.
-    :param const: float, ``default=0.1``. Constant involved in the stochastic algorithm when the regularization parameter
-        is set to eps=0.
     :param cont: bool, ``default=True``. When set to true, the progress is displayed.
     :param monitoring: bool, ``default=False``. When set to true, the evolution of the Kullback-Leibler between the
         estimated proportions and the benchmark proportions is tracked and stored.
@@ -82,9 +79,9 @@ def CytOpT(X_s, X_t, Lab_source, Lab_target=None, theta_true=None,
 
     :return:
         - hat_theta : np.array of shape (K,), where K is the number of different type of cell populations in the source data set.
-        
-        - KL_monitoring: np.array of shape (n_out, ) or (n_iter,) depending on the choice of the optimization method. This array stores the evolution of the Kullback-Leibler divergence between the estimate and benchmark proportions, if monitoring==True.
-        
+
+        - KL_monitoring: np.array of shape (n_out, ) or (nIter,) depending on the choice of the optimization method. This array stores the evolution of the Kullback-Leibler divergence between the estimate and benchmark proportions, if monitoring==True.
+
     Reference:
      Paul Freulon, Jérémie Bigot,and Boris P. Hejblum CytOpT: Optimal Transport with Domain Adaptation for Interpreting Flow Cytometry data,
      arXiv:2006.09003 [stat.AP].
@@ -100,51 +97,51 @@ def CytOpT(X_s, X_t, Lab_source, Lab_target=None, theta_true=None,
         warnings.warn('"choose method in list : \"minmax or","desasc or", "both\""')
         method = "minmax"
 
-    if theta_true is None:
-        if Lab_target is None and Lab_source is None:
+    if thetaTrue is None:
+        if labTarget is None and labSource is None:
             with warnings.catch_warnings():
-                warnings.simplefilter("Lab_target and theta can not be null at the same time\n"
+                warnings.simplefilter("labTarget and theta can not be null at the same time\n"
                                       "Initialize at least one of the two parameters")
-                stop_running()
-        elif Lab_target is not None:
-            labTargetInfo = get_length_unique_numbers(Lab_target)
-            theta_true = np.zeros(labTargetInfo['length'])
+                stopRunning()
+        elif labTarget is not None:
+            labTargetInfo = getLengthUniqueNumbers(labTarget)
+            thetaTrue = np.zeros(labTargetInfo['length'])
             for index in range(labTargetInfo['length']):
-                theta_true[index] = sum(Lab_target == index + 1) / len(Lab_target)
+                thetaTrue[index] = sum(labTarget == index + 1) / len(labTarget)
         else:
-            labSourceInfo = get_length_unique_numbers(Lab_source)
-            theta_true = np.zeros(labSourceInfo['length'])
+            labSourceInfo = getLengthUniqueNumbers(labSource)
+            thetaTrue = np.zeros(labSourceInfo['length'])
             for index in range(labSourceInfo['length']):
-                theta_true[index] = sum(Lab_source == index + 1) / len(Lab_source)
+                thetaTrue[index] = sum(labSource == index + 1) / len(labSource)
 
-    if X_s is None or X_t is None:
+    if xSource is None or xTarget is None:
         with warnings.catch_warnings():
-            warnings.simplefilter("X_s and X_t can not be null\n"
+            warnings.simplefilter("xSource and xTarget can not be null\n"
                                   "Initialize at two parameters")
-            stop_running()
+            stopRunning()
     else:
-        X_s = np.asarray(X_s)
-        X_t = np.asarray(X_t)
+        xSource = np.asarray(xSource)
+        xTarget = np.asarray(xTarget)
 
     if thresholding:
-        X_s = X_s * (X_s > 0)
-        X_t = X_t * (X_t > 0)
+        xSource = xSource * (xSource > 0)
+        xTarget = xTarget * (xTarget > 0)
 
     if minMaxScaler:
         Scaler = MinMaxScaler()
-        X_s = Scaler.fit_transform(X_s)
-        X_t = Scaler.fit_transform(X_t)
+        xSource = Scaler.fit_transform(xSource)
+        xTarget = Scaler.fit_transform(xTarget)
 
     h_res = {}
     monitoring_res = {}
 
-    h_res["Gold_standard"] = theta_true
+    h_res["GoldStandard"] = thetaTrue
     if method in ["minmax", "both"]:
         t0 = time.time()
-        results = cytopt_minmax(X_s, X_t, Lab_source,
-                                eps=eps, lbd=lbd, n_iter=n_iter,
-                                step=step, power=power, theta_true=theta_true,
-                                monitoring=monitoring)
+        results = cytoptMinmax(xSource, xTarget, labSource,
+                               eps=eps, lbd=lbd, nIter=nIter,
+                               step=step, power=power, thetaTrue=thetaTrue,
+                               monitoring=monitoring)
         elapsed_time = time.time() - t0
         print("Done (", elapsed_time, 's)\n')
         h_res['minmax'] = results[0]
@@ -153,10 +150,10 @@ def CytOpT(X_s, X_t, Lab_source, Lab_target=None, theta_true=None,
 
     if method in ["desasc", "both"]:
         t0 = time.time()
-        results = cytopt_desasc(X_s, X_t, Lab_source,
-                                eps=eps, n_it_grad=n_it_grad, n_it_sto=n_it_sto,
-                                step_grad=step_grad, cont=cont, theta_true=theta_true,
-                                monitoring=monitoring)
+        results = cytoptDesasc(xSource, xTarget, labSource,
+                               eps=eps, nItGrad=nItGrad, nItSto=nItSto,
+                               stepGrad=stepGrad, cont=cont, thetaTrue=thetaTrue,
+                               monitoring=monitoring)
         elapsed_time = time.time() - t0
         print("Done (", elapsed_time, 's)\n')
         h_res['desasc'] = results[0]
@@ -183,20 +180,22 @@ if __name__ == '__main__':
     Stanford3A_clust = pd.read_csv('./tests/data/W2_7_clust.csv',
                                    usecols=[1])
 
-    X_source = np.asarray(Stanford1A_values)
-    X_target = np.asarray(Stanford3A_values)
-    Lab_source = np.asarray(Stanford1A_clust['x'])
-    Lab_target = np.asarray(Stanford3A_clust['x'])
-    theta_true = np.zeros(10)
+    xSource = np.asarray(Stanford1A_values)
+    xTarget = np.asarray(Stanford3A_values)
+    labSource = np.asarray(Stanford1A_clust['x'])
+    labTarget = np.asarray(Stanford3A_clust['x'])
+    thetaTrue = np.zeros(10)
     for k in range(10):
-        theta_true[k] = np.sum(Lab_target == k + 1) / len(Lab_target)
+        thetaTrue[k] = np.sum(labTarget == k + 1) / len(labTarget)
 
-    n_it_grad = 1000
-    n_it_sto = 10
+    nItGrad = 5000
+    nIter = 5000
+    nItSto = 10
     pas_grad = 10
     eps = 0.0005
-    monitoring = False
-    h_hat1 = CytOpT(X_source, X_target, Lab_source,
-                    method="desasc", n_it_grad=n_it_grad, n_it_sto=n_it_sto, step_grad=pas_grad, eps=eps,
+    monitoring = True
+    h_hat1 = CytOpT(xSource, xTarget, labSource, thetaTrue=thetaTrue,
+                    method="both", nItGrad=nItGrad, nItSto=nItSto, stepGrad=pas_grad, eps=eps, nIter=nIter,
                     monitoring=monitoring)
-    result_plot(h_hat1, n_0=10, n_stop=1000)
+
+    resultPlot(h_hat1, n0=10, nStop=4000)

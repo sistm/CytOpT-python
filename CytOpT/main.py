@@ -9,7 +9,8 @@ from os import path
 import numpy as np
 import pandas as pd
 
-from CytOpT.CytOpt import CytOpT
+from CytOpT import CytOpT
+
 
 def main():
     Stanford1A_values = pd.read_csv('./tests/data/W2_1_values.csv',

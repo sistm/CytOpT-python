@@ -1,9 +1,8 @@
-
 try:
-    from CytOpT.CytOpT import CytOpT
-    from CytOpT.descentAscent import cytopt_desasc
-    from CytOpT.minMaxSwapping import cytopt_minmax
-    from CytOpT.labelPropSto import robbinsWass, c_transform, h_function, cost
+    from CytOpT.CytOpt import CytOpT
+    from CytOpT.descentAscent import cytoptDesasc
+    from CytOpT.labelPropSto import cost, hFunction, robbinsWass, cTransform
+    from CytOpT.minmaxSwapping import cytoptMinmax
     from CytOpT.plots import *
 
 except ImportError:
@@ -15,15 +14,15 @@ except ImportError:
     stderr.write('''\
     Try installing and importing CytOpT. Error is :''' % e)
 
-__all__ = ("cytopt_desasc",
-           "cytopt_minmax",
+__all__ = ("CytOpT",
+           "cytoptDesasc",
+           "cytoptMinmax",
            "cost",
-           "h_function",
-           "c_transform",
+           "hFunction",
+           "cTransform",
            "robbinsWass",
            "labelPropSto",
-           "CytOpT",
-           "Bland_Altman",
-           "bar_plot",
-           "KL_plot",
-           "result_plot")
+           "BlandAltman",
+           "barPlot",
+           "KLPlot",
+           "resultPlot")

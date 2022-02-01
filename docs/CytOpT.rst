@@ -8,7 +8,7 @@ CytOpT.CytOpt module
    :members:
    :undoc-members:
    :show-inheritance:
-   :exclude-members: stop_running, get_length_unique_numbers
+   :exclude-members: stopRunning, getLengthUniqueNumbers
 
 CytOpT.CytOpt\_Descent\_Ascent module
 -------------------------------------
@@ -26,7 +26,7 @@ CytOpT.CytOpt\_MinMax\_Swapping module
    :members:
    :undoc-members:
    :show-inheritance:
-   :exclude-members: func_f, grad_f, Gam_mat, stomax
+   :exclude-members: funcF, gradF, GamMat, stomax
 
 CytOpT.Label\_Prop\_sto module
 ------------------------------

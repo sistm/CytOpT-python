@@ -10,7 +10,7 @@ import seaborn as sns
 
 
 # Bland_Altman
-def Bland_Altman(proportions, Class=None):
+def BlandAltman(proportions, Class=None):
     """ Function to display a bland plot in order to visually assess the agreement between CytOpt estimation
     of the class proportions and the estimate of the class proportions provided through manual gating.
 
@@ -67,7 +67,7 @@ def Bland_Altman(proportions, Class=None):
     plt.show()
 
 
-def bar_plot(proportions, Class=None, title='CytOpt estimation and Manual estimation'):
+def barPlot(proportions, Class=None, title='CytOpt estimation and Manual estimation'):
     """ Function to display a bland plot in order to visually assess the agreement between CytOpt estimation
     of the class proportions and the estimate of the class proportions provided through manual gating.
 
@@ -97,20 +97,20 @@ def bar_plot(proportions, Class=None, title='CytOpt estimation and Manual estima
     plt.show()
 
 
-def KL_plot(monitoring, n_0=10, n_stop=10000, title="Kullback-Liebler divergence trace"):
+def KLPlot(monitoring, n0=10, nStop=10000, title="Kullback-Liebler divergence trace"):
     """ Function to display a bland plot in order to visually assess the agreement between CytOpt estimation
     of the class proportions and the estimate of the class proportions provided through manual gating.
 
     :param monitoring: list of monitoring estimates from ``CytOpt()`` output.
-    :param n_0: first iteration to plot. Default is ``10``.
-    :param n_stop: last iteration to plot. Default is ``1000``.
+    :param n0: first iteration to plot. Default is ``10``.
+    :param nStop: last iteration to plot. Default is ``1000``.
     :param title: plot title. Default is ``Kullback-Liebler divergence trace``.
     :return:
     """
-    n_0 = int(n_0)
-    n_stop = int(n_stop)
+    n0 = int(n0)
+    nStop = int(nStop)
 
-    index = np.arange(n_0, n_stop)
+    index = np.arange(n0, nStop)
     Monitoring = monitoring.loc[index, :]
 
     plotData = {'index': np.tile(index, len(Monitoring.columns)),
@@ -132,23 +132,22 @@ def KL_plot(monitoring, n_0=10, n_stop=10000, title="Kullback-Liebler divergence
     plt.show()
 
 
-def result_plot(results, Class=None, n_0=10, n_stop=1000):
-    """ Fonction permettant d'afficher un graphique afin d'évaluer visuellement la concordance entre
-    l'estimation par CytOpt des proportions de classe et l'estimation des proportions de classe fournie
-    par le biais de la sélection manuelle et d'évaluer visuellement la concordance entre l'estimation par
-    CytOpt du suivi et l'estimation du suivi fournie par le biais de la sélection manuelle.
+def resultPlot(results, Class=None, n0=10, nStop=1000):
+    """ Function to display a graph to visually assess the agreement between the CytOpt estimate of class proportions;
+    the estimate of class proportions provided by manual selection and to visually assess the agreement between the
+    CytOpt estimate of follow-up and the estimate of follow-up provided by manual selection.
 
     :param results: a list of ``data.frame`` of true and proportion estimates from ``CytOpt()`` and ``dataframe ``of monitoring estimates from ``CytOpt()`` output.
     :param Class: Population classes
-    :param n_0: first iteration to plot. Default is ``10``.
-    :param n_stop: last iteration to plot. Default is ``1000``.
+    :param n0: first iteration to plot. Default is ``10``.
+    :param nStop: last iteration to plot. Default is ``1000``.
     """
     for item, value in results.items():
         if item == 'proportions':
             Proportion = results['proportions']
-            bar_plot(Proportion, Class=Class, title="")
+            barPlot(Proportion, Class=Class, title="")
         elif item == 'monitoring':
             monitoring = results['monitoring']
-            KL_plot(monitoring, n_0=n_0, n_stop=n_stop)
+            KLPlot(monitoring, n0=n0, nStop=nStop)
         else:
             warnings.warn("WARNING: Not items in [proportions,monitoring]")
