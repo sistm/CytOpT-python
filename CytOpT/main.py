@@ -4,8 +4,6 @@
 # !/usr/bin/env python
 # coding: utf-8
 
-import sys
-from os import path
 import numpy as np
 import pandas as pd
 
@@ -32,8 +30,8 @@ def main():
     for k in range(10):
         theta_true[k] = np.sum(Lab_target == k + 1) / len(Lab_target)
 
-    CytOpT(X_source, X_target, Lab_source, Lab_target=None,
-           method="both", theta_true=theta_true,n_iter=1000, n_it_grad=1000)
+    CytOpT(X_source, X_target, Lab_source, labTarget=None,
+           method="both", thetaTrue=theta_true, nIter=1000, nItGrad=1000)
 
 
 if __name__ == '__main__':
