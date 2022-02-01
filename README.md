@@ -38,7 +38,8 @@ pip install CytOpT # pip3 install CytOpT
 ```
 import numpy as np
 import pandas as pd
-from CytOpT import CytOpt as cytopt
+from CytOpT.CytOpt import CytOpT
+from CytOpT.plots import resultPlot
 ```
 
 
@@ -87,15 +88,15 @@ eps = 0.0005
 monitoring = True
 
 # Run Minmax and Desasc
-res = cytopt.CytOpT(xSource, xTarget, labSource,thetaTrue=thetaTrue, 
+res = CytOpT(xSource, xTarget, labSource,thetaTrue=thetaTrue, 
                     method="both", nItGrad=nItGrad, nIter=nIter, nItSto=nItSto, 
                     stepGrad=pas_grad, eps=eps, monitoring=monitoring)
     
 # CytOpT Minmax with default params               
-cytopt.CytOpT(xSource, xTarget, labSource, thetaTrue=thetaTrue, method='desasc')
+CytOpT(xSource, xTarget, labSource, thetaTrue=thetaTrue, method='desasc')
 
 # CytOpT Desasc with default params   
-cytopt.CytOpT(xSource, xTarget, labSource, thetaTrue=thetaTrue, method = 'minmax')
+CytOpT(xSource, xTarget, labSource, thetaTrue=thetaTrue, method = 'minmax')
 ```
 #### Plot all results
  - KLPlot: Display a bland plot in order to visually assess the agreement between CytOpt estimation
