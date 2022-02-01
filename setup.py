@@ -62,11 +62,10 @@ classifiers = [
 
 about = {}  # type: ignore
 here = os.path.abspath(os.path.dirname(__file__))
-with open(os.path.join(here, 'CytOpT', 'cytopt_version.py')) as f:
+with open(os.path.join(here, 'CytOpT', 'cytoptVersion.py')) as f:
     exec(f.read(), about)
 
 install_requires = open('./requirements.txt').read().strip().split('\n')
-tests_require = open('./requirements.txt').read().strip().split('\n')
 packages = setuptools.find_packages()
 setuptools.setup(
     name=about['__title__'],
@@ -85,10 +84,9 @@ setuptools.setup(
     package_dir=package_dir,
     package_data=package_data,
     install_requires=install_requires,
-    tests_require=tests_require,
     project_urls={
         'Article': 'https://arxiv.org/abs/2006.09003',
-        'CytOpT pypi': 'https://github.com/sistm/CytOpT-python',
+        'CytOpT pypi': 'https://github.com/sistm/CytOpt-python',
     },
     entry_points={
         'console_scripts': [
