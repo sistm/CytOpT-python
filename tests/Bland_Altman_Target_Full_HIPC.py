@@ -5,35 +5,25 @@
 import numpy as np
 import pandas as pd
 
-from CytOpT import Bland_Altman
+from CytOpT.plots import BlandAltman
 
 
-class Bland_Altman_Full_HIPC:
+class BlandAltmanFullHIPC:
 
-    def __init__(self, data):
+    def __init__(self, inputs):
         """
         2D projection using two markers.
         The data are divided into two classes: the CD4 cells where the CD4 marker is present and the CD8 cells where the CD8 marker is present.
         """
-        self.data = data
-
-    def get_length_unique_numbers(self, values):
-        list_of_unique_value = []
-
-        unique_values = set(values)
-
-        for number in unique_values:
-            list_of_unique_value.append(number)
-
-        return {'list_of_unique_value': list_of_unique_value, 'length': len(list_of_unique_value)}
+        self.inputs = inputs
 
     def plotBlandAltman(self):
-        self.data['True_Prop'] = self.data['True_Prop'].drop(['Baylor1A'])
-        self.data['Estimate_Prop'] = self.data['Estimate_Prop'] .drop(['Baylor1A'])
-        self.data['Estimate_Prop'] = np.asarray(self.data['Estimate_Prop'])
-        self.data['True_Prop'] = np.asarray(self.data['True_Prop'])
-        Diff_prop = self.data['True_Prop'].ravel() - self.data['Estimate_Prop'].ravel()
-        Mean_prop = (self.data['True_Prop'].ravel() + self.data['Estimate_Prop'].ravel()) / 2
+        self.inputs['True_Prop'] = self.inputs['True_Prop'].drop(['Baylor1A'])
+        self.inputs['Estimate_Prop'] = self.inputs['Estimate_Prop'] .drop(['Baylor1A'])
+        self.inputs['Estimate_Prop'] = np.asarray(self.inputs['Estimate_Prop'])
+        self.inputs['True_Prop'] = np.asarray(self.inputs['True_Prop'])
+        Diff_prop = self.inputs['True_Prop'].ravel() - self.inputs['Estimate_Prop'].ravel()
+        Mean_prop = (self.inputs['True_Prop'].ravel() + self.inputs['Estimate_Prop'].ravel()) / 2
 
         Classes = np.tile(np.arange(1, 11), 61)
         Centre_1 = np.repeat(['Yale', 'UCLA', 'NHLBI', 'CIMR', 'Miami'], 10)
@@ -50,7 +40,7 @@ class Bland_Altman_Full_HIPC:
                              Patient1, Patient2, Patient3,
                              Patient1, Patient2, Patient3))
 
-        Dico_res = {'h_true': self.data['True_Prop'].ravel(), 'h_hat': self.data['Estimate_Prop'].ravel(),
+        Dico_res = {'h_true': self.inputs['True_Prop'].ravel(), 'h_hat': self.inputs['Estimate_Prop'].ravel(),
                     'Diff': Diff_prop, 'Mean': Mean_prop, 'Classe': Classes,
                     'Center': Centre, 'Patient': Patient}
         df_res_Cytopt = pd.DataFrame(Dico_res)
@@ -59,12 +49,11 @@ class Bland_Altman_Full_HIPC:
 
 
 if __name__ == '__main__':
-    import seaborn as sns
     data = {'Estimate_Prop': pd.read_csv('data/Res_Estimation_Stan1A.txt', index_col=0),
             'True_Prop': pd.read_csv('data/True_proportion_Stan1A.txt', index_col=0)}
 
-    test2 = Bland_Altman_Full_HIPC(data)
+    test2 = BlandAltmanFullHIPC(data)
     prop = test2.plotBlandAltman()
     proportions = prop[["h_true", "h_hat"]]
     proportions.columns = ["Gold_standard", "desasc"]
-    Bland_Altman(proportions, list(prop["Classe"]))
+    BlandAltman(proportions, list(prop["Classe"]))
