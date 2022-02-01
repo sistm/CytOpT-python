@@ -98,8 +98,9 @@
 <span class="c1"># CytOpT</span>
 <div class="viewcode-block" id="CytOpT"><a class="viewcode-back" href="../../CytOpT.html#CytOpT.CytOpt.CytOpT">[docs]</a><span class="k">def</span> <span class="nf">CytOpT</span><span class="p">(</span><span class="n">X_s</span><span class="p">,</span> <span class="n">X_t</span><span class="p">,</span> <span class="n">Lab_source</span><span class="p">,</span> <span class="n">Lab_target</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">theta_true</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
            <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e-04</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">4000</span><span class="p">,</span> <span class="n">power</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span>
-           <span class="n">step_grad</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">lbd</span><span class="o">=</span><span class="mf">1e-04</span><span class="p">,</span> <span class="n">n_it_grad</span><span class="o">=</span><span class="mi">4000</span><span class="p">,</span> <span class="n">n_it_sto</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-           <span class="n">cont</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">monitoring</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">minMaxScaler</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">thresholding</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+           <span class="n">step_grad</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">lbd</span><span class="o">=</span><span class="mf">1e-04</span><span class="p">,</span> <span class="n">n_it_grad</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">n_it_sto</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+           <span class="n">cont</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">monitoring</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">minMaxScaler</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">thresholding</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    
     <span class="sd">&quot;&quot;&quot; CytOpT algorithm. This methods is designed to estimate the proportions of cells in an unclassified Cytometry</span>
 <span class="sd">    data set denoted X_t. CytOpT is a supervised method that levarge the classification denoted Lab_source associated</span>
 <span class="sd">    to the flow cytometry data set X_s. The estimation relies on the resolution of an optimization problem.</span>
@@ -137,7 +138,7 @@
 <span class="sd">        This loop corresponds to the descent part of descent-ascent strategy.</span>
 <span class="sd">    :param n_it_sto: int, ``default = 10``. Number of iterations of the inner loop of the descent-ascent optimization method.</span>
 <span class="sd">        This loop corresponds to the stochastic ascent part of this optimization procedure.</span>
-<span class="sd">    :param const: : float, ``default=0.1``. Constant involved in the stochastic algorithm when the regularization parameter</span>
+<span class="sd">    :param const: float, ``default=0.1``. Constant involved in the stochastic algorithm when the regularization parameter</span>
 <span class="sd">        is set to eps=0.</span>
 <span class="sd">    :param cont: bool, ``default=True``. When set to true, the progress is displayed.</span>
 <span class="sd">    :param monitoring: bool, ``default=False``. When set to true, the evolution of the Kullback-Leibler between the</span>
@@ -149,9 +150,10 @@
 <span class="sd">        the cytometer can induce convtrived negative values.</span>
 
 <span class="sd">    :return:</span>
-<span class="sd">        - proportions - a ``data.frame`` with the (optionally true and)  estimated proportions for each ``method``</span>
-<span class="sd">        - monitoring - a ``data.frame`` of estimates over the optimization iterations for each ``method`` (listed within).</span>
-
+<span class="sd">        - hat_theta : np.array of shape (K,), where K is the number of different type of cell populations in the source data set.</span>
+<span class="sd">        </span>
+<span class="sd">        - KL_monitoring: np.array of shape (n_out, ) or (n_iter,) depending on the choice of the optimization method. This array stores the evolution of the Kullback-Leibler divergence between the estimate and benchmark proportions, if monitoring==True.</span>
+<span class="sd">        </span>
 <span class="sd">    Reference:</span>
 <span class="sd">     Paul Freulon, Jérémie Bigot,and Boris P. Hejblum CytOpT: Optimal Transport with Domain Adaptation for Interpreting Flow Cytometry data,</span>
 <span class="sd">     arXiv:2006.09003 [stat.AP].</span>
