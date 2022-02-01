@@ -1,5 +1,5 @@
 # CytOpT
-Doc generated with sphinx: [![Inline docs](http://inch-ci.org/github/dwyl/hapi-auth-jwt2.svg?branch=master)](https://sistm.github.io/CytOpt-python/_build/html/index.html)
+Doc generated with sphinx: [![Inline docs](http://inch-ci.org/github/dwyl/hapi-auth-jwt2.svg?branch=master)](https://sistm.github.io/CytOpT-python/_build/html/index.html)
 
 ## Description
 `CytOpT` uses regularized optimal transport to directly estimate the different cell population proportions from a biological sample characterized with flow cytometry measurements.
@@ -75,13 +75,6 @@ for k in range(10):
  - Approximation of the optimal dual vector u. In order to compute an approximation of the optimal transportation plan, we need to approximate  𝑃𝜀 .
    - Class proportions estimation with  𝙲𝚢𝚝𝙾𝚙𝚝 Descent-Ascent procedure Setting of the parameters
    - Minmax swapping procedure. Setting of the parameters
-###### Plot all results
- - KLPlot: Display a bland plot in order to visually assess the agreement between CytOpt estimation
-    of the class proportions and the estimate of the class proportions provided through manual gating.
- - barPlot: Display a bland plot in order to visually assess the agreement between CytOpt estimation
-    of the class proportions and the estimate of the class proportions provided through manual gating
- 
-
 
 ```
 # Initialization of parameters
@@ -104,7 +97,12 @@ cytopt.CytOpT(xSource, xTarget, labSource, thetaTrue=thetaTrue, method='desasc')
 # CytOpT Desasc with default params   
 cytopt.CytOpT(xSource, xTarget, labSource, thetaTrue=thetaTrue, method = 'minmax')
 ```
-
+#### Plot all results
+ - KLPlot: Display a bland plot in order to visually assess the agreement between CytOpt estimation
+    of the class proportions and the estimate of the class proportions provided through manual gating.
+ - barPlot: Display a bland plot in order to visually assess the agreement between CytOpt estimation
+    of the class proportions and the estimate of the class proportions provided through manual gating
+ 
 ```
 resultPlot(res, n0=10, nStop=4000)
 ```
