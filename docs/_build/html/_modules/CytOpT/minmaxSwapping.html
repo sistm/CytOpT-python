@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CytOpT.minmaxSwapping &mdash; CytOpT 0.0.2 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> CytOpT
+          </a>
+              <div class="version">
+                0.0.2
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">CytOpT_Codes</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">CytOpT</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>CytOpT.minmaxSwapping</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for CytOpT.minmaxSwapping</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright (C) 2022, Kalidou BA, Paul Freulon &lt;paul.freulon@math.u-bordeaux.fr&gt;=</span>
+<span class="c1">#</span>
+<span class="c1"># License: MIT (see COPYING file)</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">logsumexp</span>
+<span class="kn">from</span> <span class="nn">CytOpT.labelPropSto</span> <span class="kn">import</span> <span class="n">cost</span>
+<span class="c1"># __all__ = [&#39;cytopt_minmax&#39;]</span>
+
+
+<span class="k">def</span> <span class="nf">funcF</span><span class="p">(</span><span class="n">xSource</span><span class="p">,</span> <span class="n">xTarget</span><span class="p">,</span> <span class="n">lbd</span><span class="p">,</span> <span class="n">eps</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">G</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the function f inside the expectation at the point (y_j, u).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">arg1</span> <span class="o">=</span> <span class="p">(</span><span class="n">u</span> <span class="o">-</span> <span class="n">cost</span><span class="p">(</span><span class="n">xSource</span><span class="p">,</span> <span class="n">xTarget</span><span class="p">[</span><span class="n">j</span><span class="p">]))</span> <span class="o">/</span> <span class="n">eps</span>
+    <span class="n">t1</span> <span class="o">=</span> <span class="n">logsumexp</span><span class="p">(</span><span class="n">arg1</span><span class="p">)</span>
+
+    <span class="n">arg2</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="o">/</span> <span class="n">lbd</span>
+    <span class="n">t2</span> <span class="o">=</span> <span class="n">logsumexp</span><span class="p">(</span><span class="n">arg2</span><span class="p">)</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="o">-</span><span class="n">eps</span> <span class="o">*</span> <span class="n">t1</span> <span class="o">-</span> <span class="n">lbd</span> <span class="o">*</span> <span class="n">t2</span>
+
+    <span class="k">return</span> <span class="n">result</span>
+
+
+<span class="k">def</span> <span class="nf">gradF</span><span class="p">(</span><span class="n">xSource</span><span class="p">,</span> <span class="n">xTarget</span><span class="p">,</span> <span class="n">lbd</span><span class="p">,</span> <span class="n">eps</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">G</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the gradient with respect to u of the function f inside the expectation</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">arg1</span> <span class="o">=</span> <span class="p">(</span><span class="n">u</span> <span class="o">-</span> <span class="n">cost</span><span class="p">(</span><span class="n">xSource</span><span class="p">,</span> <span class="n">xTarget</span><span class="p">[</span><span class="n">j</span><span class="p">]))</span> <span class="o">/</span> <span class="n">eps</span>
+    <span class="n">cor1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">arg1</span><span class="p">)</span>
+    <span class="n">vec1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">arg1</span> <span class="o">-</span> <span class="n">cor1</span><span class="p">)</span>
+    <span class="n">t1</span> <span class="o">=</span> <span class="o">-</span> <span class="n">vec1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">vec1</span><span class="p">)</span>
+
+    <span class="n">arg2</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="o">/</span> <span class="n">lbd</span>
+    <span class="n">cor2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">arg2</span><span class="p">)</span>
+    <span class="n">vec2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">arg2</span> <span class="o">-</span> <span class="n">cor2</span><span class="p">)</span>
+    <span class="n">t2</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">vec2</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">vec2</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">t1</span> <span class="o">+</span> <span class="n">t2</span>
+
+
+<span class="k">def</span> <span class="nf">GamMat</span><span class="p">(</span><span class="n">labSource</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the Gamma matrix that allows to pass from the class proportions to the weight vector</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">labSource</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">K</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">labSource</span><span class="o">.</span><span class="n">max</span><span class="p">())</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">I</span> <span class="o">=</span> <span class="n">labSource</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">Gamma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">I</span><span class="p">,</span> <span class="n">K</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">K</span><span class="p">):</span>
+            <span class="n">Gamma</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">labSource</span> <span class="o">==</span> <span class="n">k</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">labSource</span> <span class="o">==</span> <span class="n">k</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">K</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">labSource</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+        <span class="n">I</span> <span class="o">=</span> <span class="n">labSource</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">Gamma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">I</span><span class="p">,</span> <span class="n">K</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">K</span><span class="p">):</span>
+            <span class="n">Gamma</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">labSource</span> <span class="o">==</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">labSource</span> <span class="o">==</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Gamma</span>
+
+
+<span class="k">def</span> <span class="nf">stomax</span><span class="p">(</span><span class="n">xSource</span><span class="p">,</span> <span class="n">xTarget</span><span class="p">,</span> <span class="n">G</span><span class="p">,</span> <span class="n">lbd</span><span class="p">,</span> <span class="n">eps</span><span class="p">,</span> <span class="n">nIter</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Robbins-Monro algorithm to compute an approximate of the vector u^* solution of the maximization problem</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">I</span> <span class="o">=</span> <span class="n">xSource</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">U</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
+
+    <span class="c1"># Step size policy</span>
+    <span class="n">gamma</span> <span class="o">=</span> <span class="n">I</span> <span class="o">*</span> <span class="n">eps</span> <span class="o">/</span> <span class="mf">1.9</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="mf">0.51</span>
+
+    <span class="n">sample</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">I</span><span class="p">,</span> <span class="n">nIter</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nIter</span><span class="p">):</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">sample</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+        <span class="n">grd</span> <span class="o">=</span> <span class="n">gradF</span><span class="p">(</span><span class="n">xSource</span><span class="p">,</span> <span class="n">xTarget</span><span class="p">,</span> <span class="n">lbd</span><span class="p">,</span> <span class="n">eps</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">G</span><span class="p">)</span>
+
+        <span class="n">U</span> <span class="o">=</span> <span class="n">U</span> <span class="o">+</span> <span class="n">gamma</span> <span class="o">/</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="n">c</span> <span class="o">*</span> <span class="n">grd</span>
+
+    <span class="k">return</span> <span class="n">U</span>
+
+
+<span class="c1"># cytopt</span>
+<div class="viewcode-block" id="cytoptMinmax"><a class="viewcode-back" href="../../CytOpT.html#CytOpT.minmaxSwapping.cytoptMinmax">[docs]</a><span class="k">def</span> <span class="nf">cytoptMinmax</span><span class="p">(</span><span class="n">xSource</span><span class="p">,</span> <span class="n">xTarget</span><span class="p">,</span> <span class="n">labSource</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">lbd</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">nIter</span><span class="o">=</span><span class="mi">4000</span><span class="p">,</span>
+                  <span class="n">step</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">power</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span> <span class="n">thetaTrue</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">monitoring</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; CytOpT algorithm. This methods is designed to estimate the proportions of cells in an unclassified Cytometry</span>
+<span class="sd">    data set denoted xTarget. CytOpT is a supervised method that leverage the classification denoted labSource associated</span>
+<span class="sd">    to the flow cytometry data set xSource. The estimation relies on the resolution of an optimization problem.</span>
+<span class="sd">    The optimization problem of this function involves an additional regularization term lambda. This regularization</span>
+<span class="sd">    allows the application of a simple stochastic gradient-ascent to solve the optimization problem. We advocate the</span>
+<span class="sd">    use of this method as it is faster than &#39;cytopt_desasc&#39;.</span>
+
+<span class="sd">    :param xSource: np.array of shape (n_samples_source, n_biomarkers). The source cytometry data set.</span>
+<span class="sd">    :param xTarget: np.array of shape (n_samples_target, n_biomarkers). The target cytometry data set.</span>
+<span class="sd">    :param labSource: np.array of shape (n_samples_source,). The classification of the source data set.</span>
+<span class="sd">    :param eps: float, ``default=0.0001``. Regularization parameter of the Wasserstein distance. This parameter must be positive.</span>
+<span class="sd">    :param lbd: float, ``default=0.0001``. Additionnal regularization parameter of the Minmax swapping optimization method.</span>
+<span class="sd">        This parameter lbd should be greater or equal to eps.</span>
+<span class="sd">    :param nIter: int, ``default=10000``. Number of iterations of the stochastic gradient ascent.</span>
+<span class="sd">    :param step: float, ``default=5``. Multiplication factor of the stochastic gradient ascent step-size policy for</span>
+<span class="sd">        the minmax optimization method.</span>
+<span class="sd">    :param power: float, ``default=0.99``. Decreasing rate for the step-size policy of the stochastic gradient ascent for</span>
+<span class="sd">        the Minmax swapping optimization method. The step-size decreases at a rate of 1/n^power.</span>
+<span class="sd">    :param thetaTrue: np.array of shape (K,), ``default=None``. This array stores the true proportions of the K type of</span>
+<span class="sd">        cells estimated in the target data set. This parameter is required if the user enables the monitoring option.</span>
+<span class="sd">    :param monitoring: bool, ``default=False``. When set to true, the evolution of the Kullback-Leibler between the</span>
+<span class="sd">        estimated proportions and the benchmark proportions is tracked and stored.</span>
+
+<span class="sd">    :return:</span>
+<span class="sd">            - hat_theta - np.array of shape (K,), where K is the number of different type of cell populations in the source data set.</span>
+<span class="sd">            - KL_storage - np.array of shape (nIter,) This array stores the evolution of the Kullback-Leibler divergence between the estimate and benchmark proportions, if monitoring==True and the thetaTrue variable is completed.</span>
+
+<span class="sd">    Reference:</span>
+<span class="sd">     Paul Freulon, Jérémie Bigot,and Boris P. Hejblum CytOpT: Optimal Transport with Domain Adaptation for Interpreting Flow Cytometry data,</span>
+<span class="sd">     arXiv:2006.09003 [stat.AP].</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">I</span><span class="p">,</span> <span class="n">J</span> <span class="o">=</span> <span class="n">xSource</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xTarget</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">U</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
+    <span class="n">D</span> <span class="o">=</span> <span class="n">GamMat</span><span class="p">(</span><span class="n">labSource</span><span class="p">)</span>
+    <span class="n">thetaHat</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># Step size policy</span>
+    <span class="k">if</span> <span class="n">step</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">gamma</span> <span class="o">=</span> <span class="n">I</span> <span class="o">*</span> <span class="n">eps</span> <span class="o">/</span> <span class="mf">1.9</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">gamma</span> <span class="o">=</span> <span class="n">step</span>
+
+    <span class="k">if</span> <span class="n">power</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="mf">0.51</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">power</span>
+
+    <span class="n">sample</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">nIter</span><span class="p">)</span>
+
+    <span class="c1"># Storage of the KL divergence between thetaHat and thetaTrue</span>
+    <span class="n">KL_storage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nIter</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">monitoring</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">nIter</span><span class="p">):</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="n">sample</span><span class="p">[</span><span class="n">it</span><span class="p">]</span>
+            <span class="n">grd</span> <span class="o">=</span> <span class="n">gradF</span><span class="p">(</span><span class="n">xSource</span><span class="p">,</span> <span class="n">xTarget</span><span class="p">,</span> <span class="n">lbd</span><span class="p">,</span> <span class="n">eps</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">D</span><span class="p">)</span>
+            <span class="n">U</span> <span class="o">=</span> <span class="n">U</span> <span class="o">+</span> <span class="n">gamma</span> <span class="o">/</span> <span class="p">(</span><span class="n">it</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="n">c</span> <span class="o">*</span> <span class="n">grd</span>
+
+            <span class="c1"># Computation of the estimate h_hat</span>
+            <span class="n">arg</span> <span class="o">=</span> <span class="o">-</span><span class="n">D</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">U</span><span class="p">)</span> <span class="o">/</span> <span class="n">lbd</span>
+            <span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
+
+            <span class="n">thetaHat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">arg</span> <span class="o">-</span> <span class="n">M</span><span class="p">)</span>
+            <span class="n">thetaHat</span> <span class="o">=</span> <span class="n">thetaHat</span> <span class="o">/</span> <span class="n">thetaHat</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+            <span class="n">KL_current</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">thetaHat</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">thetaHat</span> <span class="o">/</span> <span class="n">thetaTrue</span><span class="p">))</span>
+            <span class="n">KL_storage</span><span class="p">[</span><span class="n">it</span><span class="p">]</span> <span class="o">=</span> <span class="n">KL_current</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">thetaHat</span><span class="p">,</span> <span class="n">KL_storage</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">G</span> <span class="o">=</span> <span class="n">GamMat</span><span class="p">(</span><span class="n">labSource</span><span class="p">)</span>
+        <span class="n">uHat</span> <span class="o">=</span> <span class="n">stomax</span><span class="p">(</span><span class="n">xSource</span><span class="p">,</span> <span class="n">xTarget</span><span class="p">,</span> <span class="n">G</span><span class="p">,</span> <span class="n">lbd</span><span class="p">,</span> <span class="n">eps</span><span class="p">,</span> <span class="n">nIter</span><span class="p">)</span>
+
+        <span class="c1"># computation of the estimate of the class proportions</span>
+        <span class="n">thetaHat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">uHat</span><span class="p">)</span> <span class="o">/</span> <span class="n">lbd</span><span class="p">)</span>
+        <span class="n">thetaHat</span> <span class="o">=</span> <span class="n">thetaHat</span> <span class="o">/</span> <span class="n">thetaHat</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">thetaHat</span><span class="p">]</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="c1"># Source Data</span>
+    <span class="n">Stanford1A_values</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../tests/data/W2_1_values.csv&#39;</span><span class="p">,</span>
+                                    <span class="n">usecols</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+    <span class="n">Stanford1A_clust</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../tests/data/W2_1_clust.csv&#39;</span><span class="p">,</span>
+                                   <span class="n">usecols</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="c1"># Target Data</span>
+    <span class="n">Stanford3A_values</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../tests/data/W2_7_values.csv&#39;</span><span class="p">,</span>
+                                    <span class="n">usecols</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+    <span class="n">Stanford3A_clust</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../tests/data/W2_7_clust.csv&#39;</span><span class="p">,</span>
+                                   <span class="n">usecols</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">xSource</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Stanford1A_values</span><span class="p">)</span>
+    <span class="n">xTarget</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Stanford3A_values</span><span class="p">)</span>
+    <span class="n">labSource</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Stanford1A_clust</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">])</span>
+    <span class="n">LabTarget</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Stanford3A_clust</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">])</span>
+    <span class="n">hTarget</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+        <span class="n">hTarget</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">LabTarget</span> <span class="o">==</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">LabTarget</span><span class="p">)</span>
+
+    <span class="n">res</span> <span class="o">=</span> <span class="n">cytoptMinmax</span><span class="p">(</span><span class="n">xSource</span><span class="p">,</span> <span class="n">xTarget</span><span class="p">,</span> <span class="n">labSource</span><span class="p">,</span> <span class="n">thetaTrue</span><span class="o">=</span><span class="n">hTarget</span><span class="p">,</span> <span class="n">monitoring</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Boris Hejblum, Kalidou BA, Paul Freulon.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
