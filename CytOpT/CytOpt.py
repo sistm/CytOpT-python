@@ -69,7 +69,7 @@ def CytOpT(X_s, X_t, Lab_source, Lab_target=None, theta_true=None,
         This loop corresponds to the descent part of descent-ascent strategy.
     :param n_it_sto: int, ``default = 10``. Number of iterations of the inner loop of the descent-ascent optimization method.
         This loop corresponds to the stochastic ascent part of this optimization procedure.
-    :param const: : float, ``default=0.1``. Constant involved in the stochastic algorithm when the regularization parameter
+    :param const: float, ``default=0.1``. Constant involved in the stochastic algorithm when the regularization parameter
         is set to eps=0.
     :param cont: bool, ``default=True``. When set to true, the progress is displayed.
     :param monitoring: bool, ``default=False``. When set to true, the evolution of the Kullback-Leibler between the
@@ -81,11 +81,10 @@ def CytOpT(X_s, X_t, Lab_source, Lab_target=None, theta_true=None,
         the cytometer can induce convtrived negative values.
 
     :return:
-        - hat_theta : np.array of shape (K,), where K is the number of different type of cell populations in the source
-            data set.
-        - KL_monitoring: np.array of shape (n_out, ) or (n_iter,) depending on the choice of the optimization method. This
-            array stores the evolution of the Kullback-Leibler divergence between the estimate and benchmark proportions, if
-            monitoring==True.
+        - hat_theta : np.array of shape (K,), where K is the number of different type of cell populations in the source data set.
+        
+        - KL_monitoring: np.array of shape (n_out, ) or (n_iter,) depending on the choice of the optimization method. This array stores the evolution of the Kullback-Leibler divergence between the estimate and benchmark proportions, if monitoring==True.
+        
     Reference:
      Paul Freulon, Jérémie Bigot,and Boris P. Hejblum CytOpT: Optimal Transport with Domain Adaptation for Interpreting Flow Cytometry data,
      arXiv:2006.09003 [stat.AP].
