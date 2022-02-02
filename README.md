@@ -109,3 +109,29 @@ resultPlot(res, n0=10, nStop=4000)
 ```
 <img src="./tests/Figures/barplot.png" width="100%" />
 <img src="./tests/Figures/KL.png" width="100%" />
+
+#### Bland Altman
+
+```
+# CytOpt estimation
+Estimate_Prop = pd.read_csv('./tests/data/Res_Estimation_Stan1A.txt',
+                                index_col=0)
+# Benchmark estimation
+True_Prop = pd.read_csv('./tests/data/True_proportion_Stan1A.txt',
+                            index_col=0)
+True_Prop = True_Prop.drop(['Baylor1A'])
+Estimate_Prop = Estimate_Prop.drop(['Baylor1A'])
+Estimate_Prop = np.asarray(Estimate_Prop)
+True_Prop = np.asarray(True_Prop)
+Classes = np.tile(np.arange(1, 11), 61)
+Centre_1 = np.repeat(['Yale', 'UCLA', 'NHLBI', 'CIMR', 'Miami'], 10)
+Centre_2 = np.repeat(['Standford', 'Yale', 'UCLA', 'NHLBI', 'CIMR', 'Baylor', 'Miami'], 10)
+Centre = np.hstack((Centre_1, Centre_2, Centre_2, Centre_2,
+                        Centre_2, Centre_2, Centre_2, Centre_2, Centre_2))
+
+props = pd.DataFrame({'GoldStandard': True_Prop.ravel(), 'minmax': Estimate_Prop.ravel()})
+
+BlandAltman(props, Class=Classes, Center=Centre)
+
+```
+<img src="./tests/Figures/BA.png" width="100%" />
