@@ -100,11 +100,11 @@ CytOpT(xSource, xTarget, labSource, thetaTrue=thetaTrue, method='desasc')
 CytOpT(xSource, xTarget, labSource, thetaTrue=thetaTrue, method = 'minmax')
 ```
 #### Plot all results
- - KLPlot: Display a bland plot in order to visually assess the agreement between CytOpt estimation
+ - ***KLPlot***: Display a bland plot in order to visually assess the agreement between CytOpt estimation
     of the class proportions and the estimate of the class proportions provided through manual gating.
- - barPlot: Display a bland plot in order to visually assess the agreement between CytOpt estimation
+ - ***barPlot***: Display a bland plot in order to visually assess the agreement between CytOpt estimation
     of the class proportions and the estimate of the class proportions provided through manual gating.
- - BlandAltman: Display a bland plot in order to visually assess the agreement between CytOpt estimation
+ - ***BlandAltman***: Display a bland plot in order to visually assess the agreement between CytOpt estimation
     of the class proportions and the estimate of the class proportions provided through manual gating.
  
 ```
