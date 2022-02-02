@@ -74,8 +74,9 @@ for k in range(10):
  - Classification using optimal transport with reweighted proportions. 
  - The target measure  𝛽  is reweighted in order to match the weight vector  ℎ̂   estimated with  𝙲𝚢𝚝𝙾𝚙𝚝.
  - Approximation of the optimal dual vector u. In order to compute an approximation of the optimal transportation plan, we need to approximate  𝑃𝜀 .
-   - Class proportions estimation with  𝙲𝚢𝚝𝙾𝚙𝚝 Descent-Ascent procedure Setting of the parameters
-   - Minmax swapping procedure. Setting of the parameters
+ - Class proportions estimation with  𝙲𝚢𝚝𝙾pT() 
+   - Descent-Ascent procedure (`method="desasc"`)
+   - Minmax swapping procedure (`method="minmax"`)
 
 ```
 # Initialization of parameters
@@ -102,7 +103,9 @@ CytOpT(xSource, xTarget, labSource, thetaTrue=thetaTrue, method = 'minmax')
  - KLPlot: Display a bland plot in order to visually assess the agreement between CytOpt estimation
     of the class proportions and the estimate of the class proportions provided through manual gating.
  - barPlot: Display a bland plot in order to visually assess the agreement between CytOpt estimation
-    of the class proportions and the estimate of the class proportions provided through manual gating
+    of the class proportions and the estimate of the class proportions provided through manual gating.
+ - BlandAltman: Display a bland plot in order to visually assess the agreement between CytOpt estimation
+    of the class proportions and the estimate of the class proportions provided through manual gating.
  
 ```
 resultPlot(res, n0=10, nStop=4000)
@@ -110,7 +113,6 @@ resultPlot(res, n0=10, nStop=4000)
 <img src="./tests/Figures/barplot.png" width="100%" />
 <img src="./tests/Figures/KL.png" width="100%" />
 
-- Bland Altman:
 ```
 BlandAltman(results['proportions'])
 ```
