@@ -10,60 +10,66 @@ import seaborn as sns
 
 
 # Bland_Altman
-def BlandAltman(proportions, Class=None):
+def BlandAltman(proportions, Class=None, Center=None):
     """ Function to display a bland plot in order to visually assess the agreement between CytOpt estimation
     of the class proportions and the estimate of the class proportions provided through manual gating.
 
     :param proportions: proportions ``data.frame`` of true and proportion estimates from ``CytOpt()``
     :param Class: Population classes
+    :param Center: Center of class population
     """
+    Proportions = proportions
     if Class is None:
-        proportions.insert(0, "Populations", proportions.index.values, True)
+        Proportions["Populations"] = Proportions.index.values
     else:
-        proportions.insert(0, "Populations", Class, True)
+        Proportions["Populations"] = Class
 
-    plotData = pd.melt(proportions, id_vars=["Gold_standard", "Populations"],
+    plotData = pd.melt(Proportions, id_vars=["GoldStandard", "Populations"],
                        var_name='Method', value_name='Estimate')
 
-    plotData['Diff'] = plotData['Gold_standard'].ravel() - plotData['Estimate'].ravel()
-    plotData['Mean'] = (plotData['Gold_standard'].ravel() + plotData['Estimate'].ravel()) / 2
+    plotData['Diff'] = plotData['GoldStandard'].ravel() - plotData['Estimate'].ravel()
+    plotData['Mean'] = (plotData['GoldStandard'].ravel() + plotData['Estimate'].ravel()) / 2
     plotData['Method'] = plotData['Method'].replace(["minmax", "desasc"],
                                                     ["MinMax swapping", "Descent-Ascent"])
+    if Center is not None:
+        if len(Center) == plotData.shape[0]:
+            plotData['Center'] = Center
 
     sd_diff = np.std(plotData['Diff'])
     uniqueValues = set(plotData['Method'])
-
     BA = sns.relplot(
         data=plotData, x="Mean", y="Diff",
         col="Method", hue="Populations",
-        kind="scatter", palette="deep"
-    )
-
+        palette="dark", style=Center)
     fig = BA.fig
-    fig.subplots_adjust(top=.85)
     fig.suptitle("Bland-Altman concordance plot", size=16)
     fig.supylabel(r'$(p_i - \hat{p}_i)$', size=16)
     fig.supxlabel(r'$(p_i + \hat{p}_i)/2$', size=16)
-
+    labelLines = ['+1.96 SD', '-1.96 SD', 'Mean']
+    noLabelLines = np.repeat('_legend_', 3)
+    labels = noLabelLines
     for idx, item in enumerate(uniqueValues):
-        ptlData = plotData[plotData['Method'] == item]
+        if idx == len(uniqueValues) - 1:
+            labels = labelLines
+        pltData = plotData[plotData['Method'] == item]
         fig.axes[idx].set_title(item, fontweight="bold")
-        fig.axes[idx].axhline(sd_diff + (1.96 * np.std(ptlData['Diff'])), xmin=0,
-                              linestyle='dashed', label='+1.96 SD')
-        fig.axes[idx].text(max(plotData['Mean']), sd_diff + (1.96 * np.std(ptlData['Diff'])),
+        fig.axes[idx].axhline(sd_diff + (1.96 * np.std(pltData['Diff'])), xmin=0,
+                              linestyle='dashed', label=labels[0])
+        fig.axes[idx].text(max(plotData['Mean']), sd_diff + (1.96 * np.std(pltData['Diff'])),
                            '+1.96 SD', fontsize=10)
 
-        fig.axes[idx].axhline(np.mean(np.std(ptlData['Diff'])) - (1.96 * np.std(ptlData['Diff'])),
-                              xmin=0, linestyle='dashed', label='-1.96 SD')
-        fig.axes[idx].text(max(plotData['Mean']), np.mean(np.std(ptlData['Diff'])) - (1.96 * np.std(ptlData['Diff'])),
-                           '+1.96 SD', fontsize=10)
+        fig.axes[idx].axhline(np.mean(np.std(pltData['Diff'])) - (1.96 * np.std(pltData['Diff'])),
+                              xmin=0, linestyle='dashed', label=labels[1])
+        fig.axes[idx].text(max(plotData['Mean']), np.mean(np.std(pltData['Diff'])) - (1.96 * np.std(pltData['Diff'])),
+                           '-1.96 SD', fontsize=10)
 
-        fig.axes[idx].axhline(np.mean(np.std(ptlData['Diff'])), xmin=0, label='Mean')
+        fig.axes[idx].axhline(np.mean(np.std(pltData['Diff'])), xmin=0, label=labels[2])
         fig.axes[idx].get_xaxis().set_visible(False)
         fig.axes[idx].get_yaxis().set_visible(False)
 
     BA.legend.remove()
-    fig.legend(fontsize=10, markerscale=2, loc=7)
+    plt.tight_layout()
+    fig.legend(markerscale=2, loc=7)
     plt.show()
 
 
@@ -76,9 +82,9 @@ def barPlot(proportions, Class=None, title='CytOpt estimation and Manual estimat
     :param title: plot title. Default is ``CytOpt estimation and Manual estimation``, i.e. no title.
     """
     if Class is None:
-        proportions["Populations"] = proportions.index.values
+        proportions.insert(0, "Populations", proportions.index.values, True)
     else:
-        proportions["Populations"] = Class
+        proportions.insert(0, "Populations", Class, True)
 
     plotData = pd.melt(proportions, id_vars="Populations",
                        var_name='Method', value_name='Proportion')
@@ -142,12 +148,13 @@ def resultPlot(results, Class=None, n0=10, nStop=1000):
     :param n0: first iteration to plot. Default is ``10``.
     :param nStop: last iteration to plot. Default is ``1000``.
     """
-    for item, value in results.items():
+    resultsPlot = results
+    for item, value in resultsPlot.items():
         if item == 'proportions':
-            Proportion = results['proportions']
-            barPlot(Proportion, Class=Class, title="")
+            Proportion = resultsPlot[item]
+            barPlot(Proportion, Class=Class)
         elif item == 'monitoring':
-            monitoring = results['monitoring']
+            monitoring = resultsPlot[item]
             KLPlot(monitoring, n0=n0, nStop=nStop)
         else:
             warnings.warn("WARNING: Not items in [proportions,monitoring]")
