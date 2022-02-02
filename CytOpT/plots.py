@@ -64,8 +64,8 @@ def BlandAltman(proportions, Class=None, Center=None):
                            '-1.96 SD', fontsize=10)
 
         fig.axes[idx].axhline(np.mean(np.std(pltData['Diff'])), xmin=0, label=labels[2])
-        fig.axes[idx].get_xaxis().set_visible(False)
-        fig.axes[idx].get_yaxis().set_visible(False)
+        fig.axes[idx].set_xlabel('')
+        fig.axes[idx].set_ylabel('')
 
     BA.legend.remove()
     plt.tight_layout()
