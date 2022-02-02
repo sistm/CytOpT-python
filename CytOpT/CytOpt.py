@@ -12,7 +12,8 @@ from sklearn.preprocessing import MinMaxScaler
 
 from CytOpT.descentAscent import cytoptDesasc
 from CytOpT.minmaxSwapping import cytoptMinmax
-from CytOpT.plots import resultPlot
+from CytOpT.plots import resultPlot, BlandAltman
+
 
 def stopRunning():
     warnings.warn("deprecated", DeprecationWarning)
@@ -188,14 +189,15 @@ if __name__ == '__main__':
     for k in range(10):
         thetaTrue[k] = np.sum(labTarget == k + 1) / len(labTarget)
 
-    nItGrad = 5000
-    nIter = 5000
+    nItGrad = 1000
+    nIter = 1000
     nItSto = 10
     pas_grad = 10
     eps = 0.0005
     monitoring = True
-    h_hat1 = CytOpT(xSource, xTarget, labSource, thetaTrue=thetaTrue,
-                    method="both", nItGrad=nItGrad, nItSto=nItSto, stepGrad=pas_grad, eps=eps, nIter=nIter,
-                    monitoring=monitoring)
+    results = CytOpT(xSource, xTarget, labSource, thetaTrue=thetaTrue,
+                     method="both", nItGrad=nItGrad, nItSto=nItSto, stepGrad=pas_grad, eps=eps, nIter=nIter,
+                     monitoring=monitoring)
 
-    resultPlot(h_hat1, n0=10, nStop=4000)
+    resultPlot(results, n0=10, nStop=1000)
+    BlandAltman(results['proportions'])
