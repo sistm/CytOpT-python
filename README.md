@@ -110,7 +110,14 @@ resultPlot(res, n0=10, nStop=4000)
 <img src="./tests/Figures/barplot.png" width="100%" />
 <img src="./tests/Figures/KL.png" width="100%" />
 
-#### Bland Altman
+- Bland Altman:
+```
+BlandAltman(results['proportions'])
+```
+<img src="./tests/Figures/BA_results.png" width="100%" />
+
+
+#### Bland Altman with Class and Center
 
 ```
 # CytOpt estimation
