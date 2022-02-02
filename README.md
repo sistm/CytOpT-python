@@ -74,7 +74,7 @@ for k in range(10):
  - Classification using optimal transport with reweighted proportions. 
  - The target measure  𝛽  is reweighted in order to match the weight vector  ℎ̂   estimated with  𝙲𝚢𝚝𝙾𝚙𝚝.
  - Approximation of the optimal dual vector u. In order to compute an approximation of the optimal transportation plan, we need to approximate  𝑃𝜀 .
- - Class proportions estimation with  𝙲𝚢𝚝𝙾pT() 
+ - Class proportions estimation with `𝙲𝚢𝚝𝙾pT()` 
    - Descent-Ascent procedure (`method="desasc"`)
    - Minmax swapping procedure (`method="minmax"`)
 
