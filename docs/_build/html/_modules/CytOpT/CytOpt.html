@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CytOpT.CytOpt &mdash; CytOpT 0.0.3 documentation</title>
+  <title>CytOpT.CytOpt &mdash; CytOpT 2.0.0 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -27,7 +27,7 @@
             <a href="../../index.html" class="icon icon-home"> CytOpT
           </a>
               <div class="version">
-                0.0.3
+                2.0.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -81,7 +81,8 @@
 
 <span class="kn">from</span> <span class="nn">CytOpT.descentAscent</span> <span class="kn">import</span> <span class="n">cytoptDesasc</span>
 <span class="kn">from</span> <span class="nn">CytOpT.minmaxSwapping</span> <span class="kn">import</span> <span class="n">cytoptMinmax</span>
-<span class="kn">from</span> <span class="nn">CytOpT.plots</span> <span class="kn">import</span> <span class="n">resultPlot</span>
+<span class="kn">from</span> <span class="nn">CytOpT.plots</span> <span class="kn">import</span> <span class="n">resultPlot</span><span class="p">,</span> <span class="n">BlandAltman</span>
+
 
 <span class="k">def</span> <span class="nf">stopRunning</span><span class="p">():</span>
     <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;deprecated&quot;</span><span class="p">,</span> <span class="ne">DeprecationWarning</span><span class="p">)</span>
@@ -257,17 +258,18 @@
     <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
         <span class="n">thetaTrue</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">labTarget</span> <span class="o">==</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">labTarget</span><span class="p">)</span>
 
-    <span class="n">nItGrad</span> <span class="o">=</span> <span class="mi">5000</span>
-    <span class="n">nIter</span> <span class="o">=</span> <span class="mi">5000</span>
+    <span class="n">nItGrad</span> <span class="o">=</span> <span class="mi">1000</span>
+    <span class="n">nIter</span> <span class="o">=</span> <span class="mi">1000</span>
     <span class="n">nItSto</span> <span class="o">=</span> <span class="mi">10</span>
     <span class="n">pas_grad</span> <span class="o">=</span> <span class="mi">10</span>
     <span class="n">eps</span> <span class="o">=</span> <span class="mf">0.0005</span>
     <span class="n">monitoring</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="n">h_hat1</span> <span class="o">=</span> <span class="n">CytOpT</span><span class="p">(</span><span class="n">xSource</span><span class="p">,</span> <span class="n">xTarget</span><span class="p">,</span> <span class="n">labSource</span><span class="p">,</span> <span class="n">thetaTrue</span><span class="o">=</span><span class="n">thetaTrue</span><span class="p">,</span>
-                    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span> <span class="n">nItGrad</span><span class="o">=</span><span class="n">nItGrad</span><span class="p">,</span> <span class="n">nItSto</span><span class="o">=</span><span class="n">nItSto</span><span class="p">,</span> <span class="n">stepGrad</span><span class="o">=</span><span class="n">pas_grad</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="n">eps</span><span class="p">,</span> <span class="n">nIter</span><span class="o">=</span><span class="n">nIter</span><span class="p">,</span>
-                    <span class="n">monitoring</span><span class="o">=</span><span class="n">monitoring</span><span class="p">)</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">CytOpT</span><span class="p">(</span><span class="n">xSource</span><span class="p">,</span> <span class="n">xTarget</span><span class="p">,</span> <span class="n">labSource</span><span class="p">,</span> <span class="n">thetaTrue</span><span class="o">=</span><span class="n">thetaTrue</span><span class="p">,</span>
+                     <span class="n">method</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span> <span class="n">nItGrad</span><span class="o">=</span><span class="n">nItGrad</span><span class="p">,</span> <span class="n">nItSto</span><span class="o">=</span><span class="n">nItSto</span><span class="p">,</span> <span class="n">stepGrad</span><span class="o">=</span><span class="n">pas_grad</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="n">eps</span><span class="p">,</span> <span class="n">nIter</span><span class="o">=</span><span class="n">nIter</span><span class="p">,</span>
+                     <span class="n">monitoring</span><span class="o">=</span><span class="n">monitoring</span><span class="p">)</span>
 
-    <span class="n">resultPlot</span><span class="p">(</span><span class="n">h_hat1</span><span class="p">,</span> <span class="n">n0</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">nStop</span><span class="o">=</span><span class="mi">4000</span><span class="p">)</span>
+    <span class="n">resultPlot</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">n0</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">nStop</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+    <span class="n">BlandAltman</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;proportions&#39;</span><span class="p">])</span>
 </pre></div>
 
            </div>
