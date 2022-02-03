@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CytOpT.labelPropSto &mdash; CytOpT 0.0.2 documentation</title>
+  <title>CytOpT.labelPropSto &mdash; CytOpT 2.0.0 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -27,7 +27,7 @@
             <a href="../../index.html" class="icon icon-home"> CytOpT
           </a>
               <div class="version">
-                0.0.2
+                2.0.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -70,9 +70,12 @@
 <span></span><span class="c1"># Copyright (C) 2021, Kalidou BA, Paul Freulon &lt;paul.freulon@math.u-bordeaux.fr&gt;=</span>
 <span class="c1">#</span>
 <span class="c1"># License: MIT (see COPYING file)</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">logsumexp</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">MinMaxScaler</span>
 
 
 <div class="viewcode-block" id="cost"><a class="viewcode-back" href="../../CytOpT.html#CytOpT.labelPropSto.cost">[docs]</a><span class="k">def</span> <span class="nf">cost</span><span class="p">(</span><span class="n">xSource</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
@@ -226,11 +229,10 @@
         <span class="c1"># Update of the estimator of the asymptotic variance</span>
         <span class="n">hEpsSquare</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span> <span class="o">/</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">hEpsSquare</span><span class="p">[</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">hEpsStorage</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span>
         <span class="n">sigmaHatStorage</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">hEpsSquare</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">-</span> <span class="n">wHatStorage</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span>
-
     <span class="k">return</span> <span class="p">[</span><span class="n">f</span><span class="p">,</span> <span class="n">wHatStorage</span><span class="p">,</span> <span class="n">sigmaHatStorage</span><span class="p">]</span></div>
 
 
-<div class="viewcode-block" id="labelPropSto"><a class="viewcode-back" href="../../CytOpT.html#CytOpT.labelPropSto.labelPropSto">[docs]</a><span class="k">def</span> <span class="nf">labelPropSto</span><span class="p">(</span><span class="n">labSource</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">):</span>
+<div class="viewcode-block" id="labelPropSto"><a class="viewcode-back" href="../../CytOpT.html#CytOpT.labelPropSto.labelPropSto">[docs]</a><span class="k">def</span> <span class="nf">labelPropSto</span><span class="p">(</span><span class="n">labSource</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">cont</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;     Function that calculates a classification of the target data with an optimal-transport based soft assignment.</span>
 <span class="sd">    For optimal result, the source distribution must be re-weighted thanks to the estimation of the class proportions</span>
 <span class="sd">    in the target data set.  This estimation can be produced with the Cytopt function. To compute an optimal dual</span>
@@ -246,31 +248,86 @@
 <span class="sd">    :param alpha: np.array of shape (n_obs_source,). The weights of the source distribution.</span>
 <span class="sd">    :param beta: np.array of shape (n_obs_target,). The weights of the target distribution.</span>
 <span class="sd">    :param eps: float, ``default=0.0001``. The regularization parameter of the Wasserstein distance.</span>
+<span class="sd">    :param cont: bool, ``default=True``. When set to true, the progress is displayed.</span>
 
 <span class="sd">    :return:</span>
 <span class="sd">        - labTarget - np.array of shape (K,n_obs_target), where K is the number of different type of cell populations in the source data set. The coefficient labTarget[k,j] corresponds to the probability that the observation xTarget[j] belongs to the class k.</span>
 <span class="sd">        - clustarget - np.array of shape (n_obs_target,). This array stores the optimal transport based classification of the target data set.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
     <span class="n">J</span> <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">N_cl</span> <span class="o">=</span> <span class="n">labSource</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="c1"># Computation of the c-transform on the target distribution support.</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Running Computation of cTransform...&quot;</span><span class="p">)</span>
     <span class="n">fCeY</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">J</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">J</span><span class="p">):</span>
         <span class="n">fCeY</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">cTransform</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">eps</span><span class="p">)</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Computation of ctransform done.&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Computation of cTransform done.&#39;</span><span class="p">)</span>
 
     <span class="n">labTarget</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N_cl</span><span class="p">,</span> <span class="n">J</span><span class="p">))</span>
-
     <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">J</span><span class="p">):</span>
         <span class="n">costY</span> <span class="o">=</span> <span class="n">cost</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
         <span class="n">arg</span> <span class="o">=</span> <span class="p">(</span><span class="n">f</span> <span class="o">+</span> <span class="n">fCeY</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">costY</span><span class="p">)</span> <span class="o">/</span> <span class="n">eps</span>
         <span class="n">pCol</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
         <span class="n">labTarget</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">labSource</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">pCol</span><span class="p">)</span>
 
-    <span class="n">clustarget</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">labTarget</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
-    <span class="k">return</span> <span class="p">[</span><span class="n">labTarget</span><span class="p">,</span> <span class="n">clustarget</span><span class="p">]</span></div>
+    <span class="n">clustTarget</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">labTarget</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">labTarget</span><span class="p">,</span> <span class="n">clustTarget</span><span class="p">]</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="c1"># Source Data</span>
+    <span class="n">Stanford1A_values</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../tests/data/W2_1_values.csv&#39;</span><span class="p">,</span>
+                                    <span class="n">usecols</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+    <span class="n">Stanford1A_clust</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../tests/data/W2_1_clust.csv&#39;</span><span class="p">,</span>
+                                   <span class="n">usecols</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="c1"># Target Data</span>
+    <span class="n">Stanford3A_values</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../tests/data/W2_7_values.csv&#39;</span><span class="p">,</span>
+                                    <span class="n">usecols</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+    <span class="n">Stanford3A_clust</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../tests/data/W2_7_clust.csv&#39;</span><span class="p">,</span>
+                                   <span class="n">usecols</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">xSource</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Stanford1A_values</span><span class="p">[[</span><span class="s1">&#39;CD4&#39;</span><span class="p">,</span> <span class="s1">&#39;CD8&#39;</span><span class="p">]])</span>
+    <span class="n">xTarget</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Stanford3A_values</span><span class="p">[[</span><span class="s1">&#39;CD4&#39;</span><span class="p">,</span> <span class="s1">&#39;CD8&#39;</span><span class="p">]])</span>
+    <span class="n">labSource</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Stanford1A_clust</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">6</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">labTarget</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Stanford3A_clust</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">6</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">h_true</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
+        <span class="n">h_true</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">labTarget</span> <span class="o">==</span> <span class="n">k</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">labTarget</span><span class="p">)</span>
+    <span class="c1"># Preprocessing of the data</span>
+
+    <span class="n">xSource</span> <span class="o">=</span> <span class="n">xSource</span> <span class="o">*</span> <span class="p">(</span><span class="n">xSource</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">xTarget</span> <span class="o">=</span> <span class="n">xTarget</span> <span class="o">*</span> <span class="p">(</span><span class="n">xTarget</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">scaler</span> <span class="o">=</span> <span class="n">MinMaxScaler</span><span class="p">()</span>
+    <span class="n">xSource</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">xSource</span><span class="p">)</span>
+    <span class="n">xTarget</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">xTarget</span><span class="p">)</span>
+
+    <span class="n">I</span> <span class="o">=</span> <span class="n">xSource</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">J</span> <span class="o">=</span> <span class="n">xTarget</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">alpha</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">I</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
+    <span class="n">beta</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">J</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">J</span><span class="p">)</span>
+
+    <span class="n">eps</span> <span class="o">=</span> <span class="mf">0.02</span>
+    <span class="n">n_iter</span> <span class="o">=</span> <span class="mi">1000</span>
+
+    <span class="n">Res_RM</span> <span class="o">=</span> <span class="n">robbinsWass</span><span class="p">(</span><span class="n">xSource</span><span class="p">,</span> <span class="n">xTarget</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="n">eps</span><span class="p">,</span> <span class="n">nIter</span><span class="o">=</span><span class="n">n_iter</span><span class="p">)</span>
+
+    <span class="n">u_last</span> <span class="o">=</span> <span class="n">Res_RM</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">W_hat</span> <span class="o">=</span> <span class="n">Res_RM</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">Sig_hat</span> <span class="o">=</span> <span class="n">Res_RM</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+    <span class="n">L_source</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="n">I</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
+        <span class="n">L_source</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">labSource</span> <span class="o">==</span> <span class="n">k</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+
+    <span class="n">Result_LP</span> <span class="o">=</span> <span class="n">labelPropSto</span><span class="p">(</span><span class="n">L_source</span><span class="p">,</span> <span class="n">u_last</span><span class="p">,</span> <span class="n">xSource</span><span class="p">,</span> <span class="n">xTarget</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">eps</span><span class="p">)</span>
+    <span class="n">Lab_target_hat_one</span> <span class="o">=</span> <span class="n">Result_LP</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
 </pre></div>
 
            </div>

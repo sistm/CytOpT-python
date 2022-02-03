@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CytOpT.minmaxSwapping &mdash; CytOpT 0.0.2 documentation</title>
+  <title>CytOpT.minmaxSwapping &mdash; CytOpT 2.0.0 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -27,7 +27,7 @@
             <a href="../../index.html" class="icon icon-home"> CytOpT
           </a>
               <div class="version">
-                0.0.2
+                2.0.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -70,6 +70,7 @@
 <span></span><span class="c1"># Copyright (C) 2022, Kalidou BA, Paul Freulon &lt;paul.freulon@math.u-bordeaux.fr&gt;=</span>
 <span class="c1">#</span>
 <span class="c1"># License: MIT (see COPYING file)</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -160,7 +161,7 @@
 
 
 <span class="c1"># cytopt</span>
-<div class="viewcode-block" id="cytoptMinmax"><a class="viewcode-back" href="../../CytOpT.html#CytOpT.minmaxSwapping.cytoptMinmax">[docs]</a><span class="k">def</span> <span class="nf">cytoptMinmax</span><span class="p">(</span><span class="n">xSource</span><span class="p">,</span> <span class="n">xTarget</span><span class="p">,</span> <span class="n">labSource</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">lbd</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">nIter</span><span class="o">=</span><span class="mi">4000</span><span class="p">,</span>
+<div class="viewcode-block" id="cytoptMinmax"><a class="viewcode-back" href="../../CytOpT.html#CytOpT.minmaxSwapping.cytoptMinmax">[docs]</a><span class="k">def</span> <span class="nf">cytoptMinmax</span><span class="p">(</span><span class="n">xSource</span><span class="p">,</span> <span class="n">xTarget</span><span class="p">,</span> <span class="n">labSource</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">lbd</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">nIter</span><span class="o">=</span><span class="mi">4000</span><span class="p">,</span> <span class="n">cont</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                   <span class="n">step</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">power</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span> <span class="n">thetaTrue</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">monitoring</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; CytOpT algorithm. This methods is designed to estimate the proportions of cells in an unclassified Cytometry</span>
 <span class="sd">    data set denoted xTarget. CytOpT is a supervised method that leverage the classification denoted labSource associated</span>
@@ -176,6 +177,7 @@
 <span class="sd">    :param lbd: float, ``default=0.0001``. Additionnal regularization parameter of the Minmax swapping optimization method.</span>
 <span class="sd">        This parameter lbd should be greater or equal to eps.</span>
 <span class="sd">    :param nIter: int, ``default=10000``. Number of iterations of the stochastic gradient ascent.</span>
+<span class="sd">    :param cont: bool, ``default=True``. When set to true, the progress is displayed.</span>
 <span class="sd">    :param step: float, ``default=5``. Multiplication factor of the stochastic gradient ascent step-size policy for</span>
 <span class="sd">        the minmax optimization method.</span>
 <span class="sd">    :param power: float, ``default=0.99``. Decreasing rate for the step-size policy of the stochastic gradient ascent for</span>
@@ -214,6 +216,8 @@
 
     <span class="c1"># Storage of the KL divergence between thetaHat and thetaTrue</span>
     <span class="n">KL_storage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nIter</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Running MinMax optimization...&quot;</span><span class="p">)</span>
+    <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">monitoring</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">nIter</span><span class="p">):</span>
             <span class="n">idx</span> <span class="o">=</span> <span class="n">sample</span><span class="p">[</span><span class="n">it</span><span class="p">]</span>
@@ -226,9 +230,15 @@
 
             <span class="n">thetaHat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">arg</span> <span class="o">-</span> <span class="n">M</span><span class="p">)</span>
             <span class="n">thetaHat</span> <span class="o">=</span> <span class="n">thetaHat</span> <span class="o">/</span> <span class="n">thetaHat</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">it</span> <span class="o">%</span> <span class="mi">1000</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">cont</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Iteration &#39;</span><span class="p">,</span> <span class="n">it</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Current h_hat&#39;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">thetaHat</span><span class="p">)</span>
             <span class="n">KL_current</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">thetaHat</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">thetaHat</span> <span class="o">/</span> <span class="n">thetaTrue</span><span class="p">))</span>
             <span class="n">KL_storage</span><span class="p">[</span><span class="n">it</span><span class="p">]</span> <span class="o">=</span> <span class="n">KL_current</span>
-
+        <span class="n">elapsed_time_minmax</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Done (&quot;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">elapsed_time_minmax</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="s2">&quot;s)&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">thetaHat</span><span class="p">,</span> <span class="n">KL_storage</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">G</span> <span class="o">=</span> <span class="n">GamMat</span><span class="p">(</span><span class="n">labSource</span><span class="p">)</span>
@@ -237,6 +247,8 @@
         <span class="c1"># computation of the estimate of the class proportions</span>
         <span class="n">thetaHat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">uHat</span><span class="p">)</span> <span class="o">/</span> <span class="n">lbd</span><span class="p">)</span>
         <span class="n">thetaHat</span> <span class="o">=</span> <span class="n">thetaHat</span> <span class="o">/</span> <span class="n">thetaHat</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="n">elapsed_time_minmax</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Done (&quot;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">elapsed_time_minmax</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="s2">&quot;s)&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">thetaHat</span><span class="p">]</span></div>
 
 

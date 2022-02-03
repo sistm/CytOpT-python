@@ -22,9 +22,9 @@ copyright = '2022, Boris Hejblum, Kalidou BA, Paul Freulon'
 author = 'Boris Hejblum, Kalidou BA, Paul Freulon'
 
 # The short X.Y version.
-version = '2.0.0'
+version = '0.0.4'
 # The full version, including alpha/beta/rc tags
-release = '2.0.0'
+release = '0.0.4'
 
 
 # Add any Sphinx extension module names here, as strings. They can be

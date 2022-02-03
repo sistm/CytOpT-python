@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CytOpT.descentAscent &mdash; CytOpT 0.0.2 documentation</title>
+  <title>CytOpT.descentAscent &mdash; CytOpT 2.0.0 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -27,7 +27,7 @@
             <a href="../../index.html" class="icon icon-home"> CytOpT
           </a>
               <div class="version">
-                0.0.2
+                2.0.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -70,10 +70,12 @@
 <span></span><span class="c1"># Copyright (C) 2022, Kalidou BA, Paul Freulon &lt;paul.freulon@math.u-bordeaux.fr&gt;=</span>
 <span class="c1">#</span>
 <span class="c1"># License: MIT (see COPYING file)</span>
-
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">MinMaxScaler</span>
+
 <span class="kn">from</span> <span class="nn">CytOpT.labelPropSto</span> <span class="kn">import</span> <span class="n">robbinsWass</span>
 
 
@@ -89,11 +91,11 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">h</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
     <span class="n">K</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
-    <span class="n">Diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">K</span><span class="p">,</span> <span class="n">K</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">Diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">K</span><span class="p">,</span> <span class="n">K</span><span class="p">))</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">K</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">K</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">j</span><span class="p">:</span>
@@ -132,8 +134,8 @@
 
 <span class="c1"># cytopt_desasc</span>
 <div class="viewcode-block" id="cytoptDesasc"><a class="viewcode-back" href="../../CytOpT.html#CytOpT.descentAscent.cytoptDesasc">[docs]</a><span class="k">def</span> <span class="nf">cytoptDesasc</span><span class="p">(</span><span class="n">xSource</span><span class="p">,</span> <span class="n">xTarget</span><span class="p">,</span> <span class="n">labSource</span><span class="p">,</span>
-                 <span class="n">eps</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">nItGrad</span><span class="o">=</span><span class="mi">4000</span><span class="p">,</span> <span class="n">nItSto</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-                 <span class="n">stepGrad</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">cont</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">thetaTrue</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">monitoring</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+                 <span class="n">eps</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">nItGrad</span><span class="o">=</span><span class="mi">4000</span><span class="p">,</span> <span class="n">nItSto</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                 <span class="n">stepGrad</span><span class="o">=</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">cont</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">thetaTrue</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">monitoring</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; CytOpT algorithm. This methods is designed to estimate the proportions of cells in an unclassified Cytometry</span>
 <span class="sd">    data set denoted xTarget. CytOpT is a supervised method that leverage the classification denoted labSource associated</span>
 <span class="sd">    to the flow cytometry data set xSource. The estimation relies on the resolution of an optimization problem.</span>
@@ -159,8 +161,6 @@
 <span class="sd">        - hat_theta - np.array of shape (K,), where K is the number of different type of cell populations in the source data set.</span>
 <span class="sd">        - KLStorage - np.array of shape (n_out, ). This array stores the evolution of the Kullback-Leibler divergence between the estimate and benchmark proportions, if monitoring==True.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1"> Epsilon: &#39;</span><span class="p">,</span> <span class="n">eps</span><span class="p">)</span>
     <span class="n">I</span><span class="p">,</span> <span class="n">J</span><span class="p">,</span> <span class="n">propClassesNew</span> <span class="o">=</span> <span class="n">xSource</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xTarget</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span>
 
     <span class="c1"># Definition of the operator D that maps the class proportions with the weights.</span>
@@ -173,6 +173,8 @@
     <span class="n">KLStorage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nItGrad</span><span class="p">)</span>
 
     <span class="c1"># Descent-Ascent procedure</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Running Desent-ascent optimization...&quot;</span><span class="p">)</span>
+    <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">monitoring</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nItGrad</span><span class="p">):</span>
             <span class="n">propClasses</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
@@ -180,17 +182,18 @@
             <span class="n">Dif</span> <span class="o">=</span> <span class="n">diffSimplex</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
             <span class="n">alphaMod</span> <span class="o">=</span> <span class="n">D</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">propClasses</span><span class="p">)</span>
             <span class="n">fStarHat</span> <span class="o">=</span> <span class="n">robbinsWass</span><span class="p">(</span><span class="n">xSource</span><span class="p">,</span> <span class="n">xTarget</span><span class="p">,</span> <span class="n">alphaMod</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="n">eps</span><span class="p">,</span> <span class="n">nIter</span><span class="o">=</span><span class="n">nItSto</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">h</span> <span class="o">=</span> <span class="n">h</span> <span class="o">-</span> <span class="n">stepGrad</span> <span class="o">*</span> <span class="p">(</span><span class="n">D</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Dif</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">fStarHat</span><span class="p">)</span>
+            <span class="n">h</span> <span class="o">=</span> <span class="n">h</span> <span class="o">-</span> <span class="n">stepGrad</span> <span class="o">*</span> <span class="p">((</span><span class="n">D</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Dif</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">fStarHat</span><span class="p">)</span>
             <span class="n">propClassesNew</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
             <span class="n">propClassesNew</span> <span class="o">=</span> <span class="n">propClassesNew</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">propClassesNew</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">1000</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">cont</span><span class="p">:</span>
                     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Iteration &#39;</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
                     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Current h_hat&#39;</span><span class="p">)</span>
                     <span class="nb">print</span><span class="p">(</span><span class="n">propClassesNew</span><span class="p">)</span>
             <span class="n">KLCurrent</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">propClassesNew</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">propClassesNew</span> <span class="o">/</span> <span class="n">thetaTrue</span><span class="p">))</span>
             <span class="n">KLStorage</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">KLCurrent</span>
-
+        <span class="n">elapsed_time_desac</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Done (&quot;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">elapsed_time_desac</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="s2">&quot;s)&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">propClassesNew</span><span class="p">,</span> <span class="n">KLStorage</span><span class="p">]</span>
 
     <span class="k">else</span><span class="p">:</span>
@@ -200,14 +203,16 @@
             <span class="n">Dif</span> <span class="o">=</span> <span class="n">diffSimplex</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
             <span class="n">alphaMod</span> <span class="o">=</span> <span class="n">D</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">propClasses</span><span class="p">)</span>
             <span class="n">fStarHat</span> <span class="o">=</span> <span class="n">robbinsWass</span><span class="p">(</span><span class="n">xSource</span><span class="p">,</span> <span class="n">xTarget</span><span class="p">,</span> <span class="n">alphaMod</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="n">eps</span><span class="p">,</span> <span class="n">nIter</span><span class="o">=</span><span class="n">nItSto</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">h</span> <span class="o">=</span> <span class="n">h</span> <span class="o">-</span> <span class="n">stepGrad</span> <span class="o">*</span> <span class="p">(</span><span class="n">D</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Dif</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">fStarHat</span><span class="p">)</span>
+            <span class="n">h</span> <span class="o">=</span> <span class="n">h</span> <span class="o">-</span> <span class="n">stepGrad</span> <span class="o">*</span> <span class="p">((</span><span class="n">D</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Dif</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">fStarHat</span><span class="p">)</span>
             <span class="n">propClassesNew</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
             <span class="n">propClassesNew</span> <span class="o">=</span> <span class="n">propClassesNew</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">propClassesNew</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">1000</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">cont</span><span class="p">:</span>
                     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Iteration &#39;</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
                     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Current h_hat&#39;</span><span class="p">)</span>
                     <span class="nb">print</span><span class="p">(</span><span class="n">propClassesNew</span><span class="p">)</span>
+        <span class="n">elapsed_time_desac</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Done (&quot;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">elapsed_time_desac</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="s2">&quot;s)&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">propClassesNew</span><span class="p">]</span></div>
 
 
@@ -224,17 +229,22 @@
     <span class="n">Stanford3A_clust</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../tests/data/W2_7_clust.csv&#39;</span><span class="p">,</span>
                                    <span class="n">usecols</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 
-    <span class="n">xSource</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Stanford1A_values</span><span class="p">)</span>
-    <span class="n">xTarget</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Stanford3A_values</span><span class="p">)</span>
-    <span class="n">labSource</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Stanford1A_clust</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">])</span>
-    <span class="n">LabTarget</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Stanford3A_clust</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">])</span>
-    <span class="n">hTarget</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
-        <span class="n">hTarget</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">LabTarget</span> <span class="o">==</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">LabTarget</span><span class="p">)</span>
+    <span class="n">xSource</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Stanford1A_values</span><span class="p">[[</span><span class="s1">&#39;CD4&#39;</span><span class="p">,</span> <span class="s1">&#39;CD8&#39;</span><span class="p">]])</span>
+    <span class="n">xTarget</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Stanford3A_values</span><span class="p">[[</span><span class="s1">&#39;CD4&#39;</span><span class="p">,</span> <span class="s1">&#39;CD8&#39;</span><span class="p">]])</span>
+    <span class="n">labSource</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Stanford1A_clust</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">6</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">labTarget</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Stanford3A_clust</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">6</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+
+    <span class="n">xSource</span> <span class="o">=</span> <span class="n">xSource</span> <span class="o">*</span> <span class="p">(</span><span class="n">xSource</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">xTarget</span> <span class="o">=</span> <span class="n">xTarget</span> <span class="o">*</span> <span class="p">(</span><span class="n">xTarget</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">scaler</span> <span class="o">=</span> <span class="n">MinMaxScaler</span><span class="p">()</span>
+    <span class="n">xSource</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">xSource</span><span class="p">)</span>
+    <span class="n">xTarget</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">xTarget</span><span class="p">)</span>
 
     <span class="n">res</span> <span class="o">=</span> <span class="n">cytoptDesasc</span><span class="p">(</span><span class="n">xSource</span><span class="p">,</span> <span class="n">xTarget</span><span class="p">,</span> <span class="n">labSource</span><span class="p">,</span>
-                       <span class="n">eps</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">nItGrad</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">nItSto</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-                       <span class="n">stepGrad</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">thetaTrue</span><span class="o">=</span><span class="n">hTarget</span><span class="p">,</span> <span class="n">monitoring</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                       <span class="n">eps</span><span class="o">=</span><span class="mf">0.0005</span><span class="p">,</span> <span class="n">nItGrad</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">nItSto</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                       <span class="n">stepGrad</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">monitoring</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
 </pre></div>
 
            </div>
