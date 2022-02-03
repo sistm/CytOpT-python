@@ -1,6 +1,7 @@
 # CytOpT
 Doc generated with sphinx: [![Inline docs](http://inch-ci.org/github/dwyl/hapi-auth-jwt2.svg?branch=master)](https://sistm.github.io/CytOpT-python/_build/html/index.html)
 
+
 ## Description
 `CytOpT` uses regularized optimal transport to directly estimate the different cell population proportions from a biological sample characterized with flow cytometry measurements.
 
@@ -38,8 +39,8 @@ pip install CytOpT # pip3 install CytOpT
 ```
 import numpy as np
 import pandas as pd
-from CytOpT.CytOpt import CytOpT
-from CytOpT.plots import resultPlot
+import CytOpT.CytOpt as cytopt
+import CytOpT.plots cplt
 ```
 
 
@@ -89,15 +90,15 @@ eps = 0.0005
 monitoring = True
 
 # Run Minmax and Desasc
-res = CytOpT(xSource, xTarget, labSource,thetaTrue=thetaTrue, 
+res = cytopt.CytOpT(xSource, xTarget, labSource,thetaTrue=thetaTrue, 
                     method="both", nItGrad=nItGrad, nIter=nIter, nItSto=nItSto, 
                     stepGrad=pas_grad, eps=eps, monitoring=monitoring)
     
 # CytOpT Minmax with default params               
-CytOpT(xSource, xTarget, labSource, thetaTrue=thetaTrue, method='desasc')
+cytopt.CytOpT(xSource, xTarget, labSource, thetaTrue=thetaTrue, method='desasc')
 
 # CytOpT Desasc with default params   
-CytOpT(xSource, xTarget, labSource, thetaTrue=thetaTrue, method = 'minmax')
+cytopt.CytOpT(xSource, xTarget, labSource, thetaTrue=thetaTrue, method = 'minmax')
 ```
 #### Plot all results
  - ***KLPlot***: Display a bland plot in order to visually assess the agreement between CytOpt estimation
@@ -108,13 +109,13 @@ CytOpT(xSource, xTarget, labSource, thetaTrue=thetaTrue, method = 'minmax')
     of the class proportions and the estimate of the class proportions provided through manual gating.
  
 ```
-resultPlot(res, n0=10, nStop=4000)
+cplt.resultPlot(res, n0=10, nStop=4000)
 ```
 <img src="./tests/Figures/barplot.png" width="100%" />
 <img src="./tests/Figures/KL.png" width="100%" />
 
 ```
-BlandAltman(results['proportions'])
+cplt.BlandAltman(results['proportions'])
 ```
 <img src="./tests/Figures/BA_results.png" width="100%" />
 
@@ -140,7 +141,10 @@ Centre = np.hstack((Centre_1, Centre_2, Centre_2, Centre_2,
 
 props = pd.DataFrame({'GoldStandard': True_Prop.ravel(), 'minmax': Estimate_Prop.ravel()})
 
-BlandAltman(props, Class=Classes, Center=Centre)
+cplt.BlandAltman(props, Class=Classes, Center=Centre)
 
 ```
 <img src="./tests/Figures/BA.png" width="100%" />
+
+
+#### [You can also look at some other examples with notebooks.](./tests/notebooks/Scripts)
