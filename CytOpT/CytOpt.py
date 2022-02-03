@@ -141,7 +141,7 @@ def CytOpT(xSource, xTarget, labSource, labTarget=None, thetaTrue=None,
         t0 = time.time()
         results = cytoptMinmax(xSource, xTarget, labSource,
                                eps=eps, lbd=lbd, nIter=nIter,
-                               step=step, power=power, thetaTrue=thetaTrue,
+                               step=step, cont=cont, power=power, thetaTrue=thetaTrue,
                                monitoring=monitoring)
         elapsed_time = time.time() - t0
         print("Done (", elapsed_time, 's)\n')
@@ -189,8 +189,8 @@ if __name__ == '__main__':
     for k in range(10):
         thetaTrue[k] = np.sum(labTarget == k + 1) / len(labTarget)
 
-    nItGrad = 1000
-    nIter = 1000
+    nItGrad = 10000
+    nIter = 10000
     nItSto = 10
     pas_grad = 10
     eps = 0.0005
@@ -199,5 +199,5 @@ if __name__ == '__main__':
                      method="both", nItGrad=nItGrad, nItSto=nItSto, stepGrad=pas_grad, eps=eps, nIter=nIter,
                      monitoring=monitoring)
 
-    resultPlot(results, n0=10, nStop=1000)
+    resultPlot(results, n0=10, nStop=8000)
     BlandAltman(results['proportions'])

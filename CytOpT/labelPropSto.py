@@ -1,9 +1,12 @@
 # Copyright (C) 2021, Kalidou BA, Paul Freulon <paul.freulon@math.u-bordeaux.fr>=
 #
 # License: MIT (see COPYING file)
+from time import time
 
 import numpy as np
+import pandas as pd
 from scipy.special import logsumexp
+from sklearn.preprocessing import MinMaxScaler
 
 
 def cost(xSource, y):
@@ -157,11 +160,10 @@ def robbinsWass(xSource, xTarget, alpha, beta, eps=0.1, nIter=10000):
         # Update of the estimator of the asymptotic variance
         hEpsSquare[k] = k / (k + 1) * hEpsSquare[k - 1] + 1 / (k + 1) * hEpsStorage[k] ** 2
         sigmaHatStorage[k] = hEpsSquare[k] - wHatStorage[k] ** 2
-
     return [f, wHatStorage, sigmaHatStorage]
 
 
-def labelPropSto(labSource, f, X, Y, alpha, beta, eps=0.0001):
+def labelPropSto(labSource, f, X, Y, alpha, beta, eps=0.0001, cont=True):
     """     Function that calculates a classification of the target data with an optimal-transport based soft assignment.
     For optimal result, the source distribution must be re-weighted thanks to the estimation of the class proportions
     in the target data set.  This estimation can be produced with the Cytopt function. To compute an optimal dual
@@ -177,28 +179,83 @@ def labelPropSto(labSource, f, X, Y, alpha, beta, eps=0.0001):
     :param alpha: np.array of shape (n_obs_source,). The weights of the source distribution.
     :param beta: np.array of shape (n_obs_target,). The weights of the target distribution.
     :param eps: float, ``default=0.0001``. The regularization parameter of the Wasserstein distance.
+    :param cont: bool, ``default=True``. When set to true, the progress is displayed.
 
     :return:
         - labTarget - np.array of shape (K,n_obs_target), where K is the number of different type of cell populations in the source data set. The coefficient labTarget[k,j] corresponds to the probability that the observation xTarget[j] belongs to the class k.
         - clustarget - np.array of shape (n_obs_target,). This array stores the optimal transport based classification of the target data set.
     """
+    print(alpha)
     J = Y.shape[0]
     N_cl = labSource.shape[0]
 
     # Computation of the c-transform on the target distribution support.
+    print("Running Computation of cTransform...")
     fCeY = np.zeros(J)
     for j in range(J):
         fCeY[j] = cTransform(f, X, Y, j, beta, eps)
 
-    print('Computation of ctransform done.')
+    print('Computation of cTransform done.')
 
     labTarget = np.zeros((N_cl, J))
-
     for j in range(J):
         costY = cost(X, Y[j])
         arg = (f + fCeY[j] - costY) / eps
         pCol = np.exp(arg)
         labTarget[:, j] = labSource.dot(pCol)
 
-    clustarget = np.argmax(labTarget, axis=0) + 1
-    return [labTarget, clustarget]
+    clustTarget = np.argmax(labTarget, axis=0) + 1
+    return [labTarget, clustTarget]
+
+
+if __name__ == '__main__':
+    # Source Data
+    Stanford1A_values = pd.read_csv('../tests/data/W2_1_values.csv',
+                                    usecols=np.arange(1, 8))
+    Stanford1A_clust = pd.read_csv('../tests/data/W2_1_clust.csv',
+                                   usecols=[1])
+
+    # Target Data
+    Stanford3A_values = pd.read_csv('../tests/data/W2_7_values.csv',
+                                    usecols=np.arange(1, 8))
+    Stanford3A_clust = pd.read_csv('../tests/data/W2_7_clust.csv',
+                                   usecols=[1])
+
+    xSource = np.asarray(Stanford1A_values[['CD4', 'CD8']])
+    xTarget = np.asarray(Stanford3A_values[['CD4', 'CD8']])
+    labSource = np.asarray(Stanford1A_clust['x'] >= 6, dtype=int)
+    labTarget = np.asarray(Stanford3A_clust['x'] >= 6, dtype=int)
+    h_true = np.zeros(2)
+    for k in range(2):
+        h_true[k] = np.sum(labTarget == k) / len(labTarget)
+    # Preprocessing of the data
+
+    xSource = xSource * (xSource > 0)
+    xTarget = xTarget * (xTarget > 0)
+
+    scaler = MinMaxScaler()
+    xSource = scaler.fit_transform(xSource)
+    xTarget = scaler.fit_transform(xTarget)
+
+    I = xSource.shape[0]
+    J = xTarget.shape[0]
+
+    alpha = 1 / I * np.ones(I)
+    beta = 1 / J * np.ones(J)
+
+    eps = 0.02
+    n_iter = 1000
+
+    Res_RM = robbinsWass(xSource, xTarget, alpha, beta, eps=eps, nIter=n_iter)
+
+    u_last = Res_RM[0]
+    W_hat = Res_RM[1]
+    Sig_hat = Res_RM[2]
+
+    L_source = np.zeros((2, I))
+    for k in range(2):
+        L_source[k] = np.asarray(labSource == k, dtype=int)
+
+    Result_LP = labelPropSto(L_source, u_last, xSource, xTarget, alpha, beta, eps)
+    Lab_target_hat_one = Result_LP[1]
+

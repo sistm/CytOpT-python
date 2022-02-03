@@ -1,10 +1,12 @@
 # Copyright (C) 2022, Kalidou BA, Paul Freulon <paul.freulon@math.u-bordeaux.fr>=
 #
 # License: MIT (see COPYING file)
-
+from time import time
 
 import numpy as np
 import pandas as pd
+from sklearn.preprocessing import MinMaxScaler
+
 from CytOpT.labelPropSto import robbinsWass
 
 
@@ -20,11 +22,11 @@ def diffSimplex(h):
     """
 
     try:
-        h = np.array(h, np.float)
+        h = np.array(h)
     except Exception as e:
         print(e)
     K = len(h)
-    Diff = np.zeros((K, K), dtype=float)
+    Diff = np.zeros((K, K))
     for i in range(K):
         for j in range(K):
             if i == j:
@@ -63,8 +65,8 @@ def gammatrix(xSource, labSource):
 
 # cytopt_desasc
 def cytoptDesasc(xSource, xTarget, labSource,
-                 eps=0.0001, nItGrad=4000, nItSto=10,
-                 stepGrad=50, cont=True, thetaTrue=None, monitoring=True):
+                 eps=1, nItGrad=4000, nItSto=10,
+                 stepGrad=1 / 1000, cont=True, thetaTrue=None, monitoring=True):
     """ CytOpT algorithm. This methods is designed to estimate the proportions of cells in an unclassified Cytometry
     data set denoted xTarget. CytOpT is a supervised method that leverage the classification denoted labSource associated
     to the flow cytometry data set xSource. The estimation relies on the resolution of an optimization problem.
@@ -90,8 +92,6 @@ def cytoptDesasc(xSource, xTarget, labSource,
         - hat_theta - np.array of shape (K,), where K is the number of different type of cell populations in the source data set.
         - KLStorage - np.array of shape (n_out, ). This array stores the evolution of the Kullback-Leibler divergence between the estimate and benchmark proportions, if monitoring==True.
     """
-
-    print('\n Epsilon: ', eps)
     I, J, propClassesNew = xSource.shape[0], xTarget.shape[0], 0
 
     # Definition of the operator D that maps the class proportions with the weights.
@@ -104,6 +104,8 @@ def cytoptDesasc(xSource, xTarget, labSource,
     KLStorage = np.zeros(nItGrad)
 
     # Descent-Ascent procedure
+    print("Running Desent-ascent optimization...")
+    t0 = time()
     if monitoring:
         for i in range(nItGrad):
             propClasses = np.exp(h)
@@ -111,17 +113,18 @@ def cytoptDesasc(xSource, xTarget, labSource,
             Dif = diffSimplex(h)
             alphaMod = D.dot(propClasses)
             fStarHat = robbinsWass(xSource, xTarget, alphaMod, beta, eps=eps, nIter=nItSto)[0]
-            h = h - stepGrad * (D.dot(Dif)).T.dot(fStarHat)
+            h = h - stepGrad * ((D.dot(Dif)).T).dot(fStarHat)
             propClassesNew = np.exp(h)
             propClassesNew = propClassesNew / np.sum(propClassesNew)
-            if i % 100 == 0:
+            if i % 1000 == 0:
                 if cont:
                     print('Iteration ', i)
                     print('Current h_hat')
                     print(propClassesNew)
             KLCurrent = np.sum(propClassesNew * np.log(propClassesNew / thetaTrue))
             KLStorage[i] = KLCurrent
-
+        elapsed_time_desac = time() - t0
+        print("Done (", round(elapsed_time_desac, 3), "s)")
         return [propClassesNew, KLStorage]
 
     else:
@@ -131,14 +134,16 @@ def cytoptDesasc(xSource, xTarget, labSource,
             Dif = diffSimplex(h)
             alphaMod = D.dot(propClasses)
             fStarHat = robbinsWass(xSource, xTarget, alphaMod, beta, eps=eps, nIter=nItSto)[0]
-            h = h - stepGrad * (D.dot(Dif)).T.dot(fStarHat)
+            h = h - stepGrad * ((D.dot(Dif)).T).dot(fStarHat)
             propClassesNew = np.exp(h)
             propClassesNew = propClassesNew / np.sum(propClassesNew)
-            if i % 100 == 0:
+            if i % 1000 == 0:
                 if cont:
                     print('Iteration ', i)
                     print('Current h_hat')
                     print(propClassesNew)
+        elapsed_time_desac = time() - t0
+        print("Done (", round(elapsed_time_desac, 3), "s)")
         return [propClassesNew]
 
 
@@ -155,14 +160,19 @@ if __name__ == '__main__':
     Stanford3A_clust = pd.read_csv('../tests/data/W2_7_clust.csv',
                                    usecols=[1])
 
-    xSource = np.asarray(Stanford1A_values)
-    xTarget = np.asarray(Stanford3A_values)
-    labSource = np.asarray(Stanford1A_clust['x'])
-    LabTarget = np.asarray(Stanford3A_clust['x'])
-    hTarget = np.zeros(10)
-    for k in range(10):
-        hTarget[k] = np.sum(LabTarget == k + 1) / len(LabTarget)
+    xSource = np.asarray(Stanford1A_values[['CD4', 'CD8']])
+    xTarget = np.asarray(Stanford3A_values[['CD4', 'CD8']])
+    labSource = np.asarray(Stanford1A_clust['x'] >= 6, dtype=int)
+    labTarget = np.asarray(Stanford3A_clust['x'] >= 6, dtype=int)
+
+    xSource = xSource * (xSource > 0)
+    xTarget = xTarget * (xTarget > 0)
+
+    scaler = MinMaxScaler()
+    xSource = scaler.fit_transform(xSource)
+    xTarget = scaler.fit_transform(xTarget)
 
     res = cytoptDesasc(xSource, xTarget, labSource,
-                       eps=0.0001, nItGrad=1000, nItSto=10,
-                       stepGrad=50, thetaTrue=hTarget, monitoring=False)
+                       eps=0.0005, nItGrad=1000, nItSto=10,
+                       stepGrad=1, monitoring=False)
+    print(res)

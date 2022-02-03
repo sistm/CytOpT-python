@@ -1,6 +1,7 @@
 # Copyright (C) 2022, Kalidou BA, Paul Freulon <paul.freulon@math.u-bordeaux.fr>=
 #
 # License: MIT (see COPYING file)
+from time import time
 
 import numpy as np
 import pandas as pd
@@ -91,7 +92,7 @@ def stomax(xSource, xTarget, G, lbd, eps, nIter):
 
 
 # cytopt
-def cytoptMinmax(xSource, xTarget, labSource, eps=0.0001, lbd=0.0001, nIter=4000,
+def cytoptMinmax(xSource, xTarget, labSource, eps=0.0001, lbd=0.0001, nIter=4000, cont=True,
                   step=5, power=0.99, thetaTrue=None, monitoring=False):
     """ CytOpT algorithm. This methods is designed to estimate the proportions of cells in an unclassified Cytometry
     data set denoted xTarget. CytOpT is a supervised method that leverage the classification denoted labSource associated
@@ -107,6 +108,7 @@ def cytoptMinmax(xSource, xTarget, labSource, eps=0.0001, lbd=0.0001, nIter=4000
     :param lbd: float, ``default=0.0001``. Additionnal regularization parameter of the Minmax swapping optimization method.
         This parameter lbd should be greater or equal to eps.
     :param nIter: int, ``default=10000``. Number of iterations of the stochastic gradient ascent.
+    :param cont: bool, ``default=True``. When set to true, the progress is displayed.
     :param step: float, ``default=5``. Multiplication factor of the stochastic gradient ascent step-size policy for
         the minmax optimization method.
     :param power: float, ``default=0.99``. Decreasing rate for the step-size policy of the stochastic gradient ascent for
@@ -145,6 +147,8 @@ def cytoptMinmax(xSource, xTarget, labSource, eps=0.0001, lbd=0.0001, nIter=4000
 
     # Storage of the KL divergence between thetaHat and thetaTrue
     KL_storage = np.zeros(nIter)
+    print("Running MinMax optimization...")
+    t0 = time()
     if monitoring:
         for it in range(1, nIter):
             idx = sample[it]
@@ -157,9 +161,15 @@ def cytoptMinmax(xSource, xTarget, labSource, eps=0.0001, lbd=0.0001, nIter=4000
 
             thetaHat = np.exp(arg - M)
             thetaHat = thetaHat / thetaHat.sum()
+            if it % 1000 == 0:
+                if cont:
+                    print('Iteration ', it)
+                    print('Current h_hat')
+                    print(thetaHat)
             KL_current = np.sum(thetaHat * np.log(thetaHat / thetaTrue))
             KL_storage[it] = KL_current
-
+        elapsed_time_minmax = time() - t0
+        print("Done (", round(elapsed_time_minmax, 3), "s)")
         return [thetaHat, KL_storage]
     else:
         G = GamMat(labSource)
@@ -168,6 +178,8 @@ def cytoptMinmax(xSource, xTarget, labSource, eps=0.0001, lbd=0.0001, nIter=4000
         # computation of the estimate of the class proportions
         thetaHat = np.exp(-(G.T).dot(uHat) / lbd)
         thetaHat = thetaHat / thetaHat.sum()
+        elapsed_time_minmax = time() - t0
+        print("Done (", round(elapsed_time_minmax, 3), "s)")
         return [thetaHat]
 
 
