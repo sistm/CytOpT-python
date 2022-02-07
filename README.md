@@ -1,4 +1,4 @@
-# `CytOpT` 
+# `CytOpT` <a><img src='./tests/Figures/logo.png' align="right" height="139" /></a>
 [![Inline docs](http://inch-ci.org/github/dwyl/hapi-auth-jwt2.svg?branch=master)](https://sistm.github.io/CytOpT-python/_build/html/index.html)
 
 `CytOpT` uses regularized optimal transport to directly estimate the different cell population proportions from a biological sample characterized with flow cytometry measurements.
@@ -109,10 +109,13 @@ cytopt.CytOpT(xSource, xTarget, labSource, thetaTrue=thetaTrue, method = 'minmax
 ```
 cplt.resultPlot(res, n0=10, nStop=4000)
 ```
+<img src="./tests/Figures/barplot.png" width="100%" />
+<img src="./tests/Figures/KL.png" width="100%" />
 
 ```
 cplt.BlandAltman(res['proportions'])
 ```
+<img src="./tests/Figures/BA_results.png" width="100%" />
 
 
 #### Bland Altman with Class and Center
@@ -139,3 +142,7 @@ props = pd.DataFrame({'GoldStandard': True_Prop.ravel(), 'minmax': Estimate_Prop
 cplt.BlandAltman(props, Class=Classes, Center=Centre)
 
 ```
+<img src="./tests/Figures/BA.png" width="100%" />
+
+
+#### [You can also look at some other examples with notebooks.](./tests/notebooks/Scripts)
