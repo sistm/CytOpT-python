@@ -51,17 +51,17 @@ def BlandAltman(proportions, Class=None, Center=None):
             labels = labelLines
         pltData = plotData[plotData['Method'] == item]
         fig.axes[idx].set_title(item, fontweight="bold")
-        fig.axes[idx].axhline(sd_diff + (1.96 * np.std(pltData['Diff'])), xmin=0,
+        fig.axes[idx].axhline(np.mean(pltData['Diff']) + (1.96 * np.std(pltData['Diff'])), xmin=0,
                               linestyle='dashed', label=labels[0])
         fig.axes[idx].text(max(plotData['Mean']), sd_diff + (1.96 * np.std(pltData['Diff'])),
                            '+1.96 SD', fontsize=10)
 
-        fig.axes[idx].axhline(np.mean(np.std(pltData['Diff'])) - (1.96 * np.std(pltData['Diff'])),
+        fig.axes[idx].axhline(np.mean(pltData['Diff']) - (1.96 * np.std(pltData['Diff'])),
                               xmin=0, linestyle='dashed', label=labels[1])
         fig.axes[idx].text(max(plotData['Mean']), np.mean(np.std(pltData['Diff'])) - (1.96 * np.std(pltData['Diff'])),
                            '-1.96 SD', fontsize=10)
 
-        fig.axes[idx].axhline(np.mean(np.std(pltData['Diff'])), xmin=0, label=labels[2])
+        fig.axes[idx].axhline(np.mean(pltData['Diff']), xmin=0, label=labels[2])
         fig.axes[idx].set_xlabel('')
         fig.axes[idx].set_ylabel('')
 
