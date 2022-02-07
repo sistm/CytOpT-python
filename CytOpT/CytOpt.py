@@ -3,7 +3,6 @@
 # License: MIT (see COPYING file)
 
 import warnings
-import time
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
@@ -138,25 +137,19 @@ def CytOpT(xSource, xTarget, labSource, labTarget=None, thetaTrue=None,
 
     h_res["GoldStandard"] = thetaTrue
     if method in ["minmax", "both"]:
-        t0 = time.time()
         results = cytoptMinmax(xSource, xTarget, labSource,
                                eps=eps, lbd=lbd, nIter=nIter,
                                step=step, cont=cont, power=power, thetaTrue=thetaTrue,
                                monitoring=monitoring)
-        elapsed_time = time.time() - t0
-        print("Done (", elapsed_time, 's)\n')
         h_res['minmax'] = results[0]
         if monitoring:
             monitoring_res["minmax"] = results[1]
 
     if method in ["desasc", "both"]:
-        t0 = time.time()
         results = cytoptDesasc(xSource, xTarget, labSource,
                                eps=eps, nItGrad=nItGrad, nItSto=nItSto,
                                stepGrad=stepGrad, cont=cont, thetaTrue=thetaTrue,
                                monitoring=monitoring)
-        elapsed_time = time.time() - t0
-        print("Done (", elapsed_time, 's)\n')
         h_res['desasc'] = results[0]
         if monitoring:
             monitoring_res["desasc"] = results[1]
