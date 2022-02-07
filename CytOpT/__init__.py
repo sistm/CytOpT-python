@@ -1,7 +1,7 @@
 try:
     from CytOpT.CytOpt import CytOpT
     from CytOpT.descentAscent import cytoptDesasc
-    from CytOpT.labelPropSto import cost, hFunction, robbinsWass, cTransform
+    from CytOpT.labelPropSto import labelPropSto, cost, hFunction, robbinsWass, cTransform
     from CytOpT.minmaxSwapping import cytoptMinmax
     from CytOpT.plots import *
 
