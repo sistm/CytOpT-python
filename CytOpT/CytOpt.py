@@ -123,15 +123,6 @@ def CytOpT(xSource, xTarget, labSource, labTarget=None, thetaTrue=None,
         xSource = np.asarray(xSource)
         xTarget = np.asarray(xTarget)
 
-    if thresholding:
-        xSource = xSource * (xSource > 0)
-        xTarget = xTarget * (xTarget > 0)
-
-    if minMaxScaler:
-        Scaler = MinMaxScaler()
-        xSource = Scaler.fit_transform(xSource)
-        xTarget = Scaler.fit_transform(xTarget)
-
     h_res = {}
     monitoring_res = {}
 
@@ -140,7 +131,7 @@ def CytOpT(xSource, xTarget, labSource, labTarget=None, thetaTrue=None,
         results = cytoptMinmax(xSource, xTarget, labSource,
                                eps=eps, lbd=lbd, nIter=nIter,
                                step=step, cont=cont, power=power, thetaTrue=thetaTrue,
-                               monitoring=monitoring)
+                               monitoring=monitoring, thresholding=thresholding, minMaxScaler=minMaxScaler)
         h_res['minmax'] = results[0]
         if monitoring:
             monitoring_res["minmax"] = results[1][:min(nIter, nItGrad)]
@@ -149,7 +140,7 @@ def CytOpT(xSource, xTarget, labSource, labTarget=None, thetaTrue=None,
         results = cytoptDesasc(xSource, xTarget, labSource,
                                eps=eps, nItGrad=nItGrad, nItSto=nItSto,
                                stepGrad=stepGrad, cont=cont, thetaTrue=thetaTrue,
-                               monitoring=monitoring)
+                               monitoring=monitoring, thresholding=thresholding, minMaxScaler=minMaxScaler)
         h_res['desasc'] = results[0]
         if monitoring:
             monitoring_res["desasc"] = results[1][:min(nIter, nItGrad)]

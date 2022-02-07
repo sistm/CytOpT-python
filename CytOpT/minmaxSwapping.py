@@ -6,6 +6,8 @@ from time import time
 import numpy as np
 import pandas as pd
 from scipy.special import logsumexp
+from sklearn.preprocessing import MinMaxScaler
+
 from CytOpT.labelPropSto import cost
 # __all__ = ['cytopt_minmax']
 
@@ -93,7 +95,8 @@ def stomax(xSource, xTarget, G, lbd, eps, nIter):
 
 # cytopt
 def cytoptMinmax(xSource, xTarget, labSource, eps=0.0001, lbd=0.0001, nIter=4000, cont=True,
-                  step=5, power=0.99, thetaTrue=None, monitoring=False):
+                 step=5, power=0.99, thetaTrue=None,
+                 monitoring=False, thresholding=True, minMaxScaler=True):
     """ CytOpT algorithm. This methods is designed to estimate the proportions of cells in an unclassified Cytometry
     data set denoted xTarget. CytOpT is a supervised method that leverage the classification denoted labSource associated
     to the flow cytometry data set xSource. The estimation relies on the resolution of an optimization problem.
@@ -117,6 +120,11 @@ def cytoptMinmax(xSource, xTarget, labSource, eps=0.0001, lbd=0.0001, nIter=4000
         cells estimated in the target data set. This parameter is required if the user enables the monitoring option.
     :param monitoring: bool, ``default=False``. When set to true, the evolution of the Kullback-Leibler between the
         estimated proportions and the benchmark proportions is tracked and stored.
+    :param minMaxScaler: bool, ``default = True``. When set to True, the source and target data sets are scaled in [0,1]^d,
+        where d is the  number of biomarkers monitored.
+    :param thresholding: bool, ``default = True``. When set to True, all the coefficients of the source and target data sets
+        are replaced by their positive part. This preprocessing is relevant for Cytometry Data as the signal acquisition of
+        the cytometer can induce convtrived negative values.
 
     :return:
             - hat_theta - np.array of shape (K,), where K is the number of different type of cell populations in the source data set.
@@ -126,6 +134,14 @@ def cytoptMinmax(xSource, xTarget, labSource, eps=0.0001, lbd=0.0001, nIter=4000
      Paul Freulon, Jérémie Bigot,and Boris P. Hejblum CytOpT: Optimal Transport with Domain Adaptation for Interpreting Flow Cytometry data,
      arXiv:2006.09003 [stat.AP].
     """
+    if thresholding:
+        xSource = xSource * (xSource > 0)
+        xTarget = xTarget * (xTarget > 0)
+
+    if minMaxScaler:
+        Scaler = MinMaxScaler()
+        xSource = Scaler.fit_transform(xSource)
+        xTarget = Scaler.fit_transform(xTarget)
 
     I, J = xSource.shape[0], xTarget.shape[0]
     U = np.zeros(I)

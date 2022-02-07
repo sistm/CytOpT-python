@@ -6,13 +6,10 @@ from time import time
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
-
 from CytOpT.labelPropSto import robbinsWass
 
 
 # __all__ = ['cytoptDesasc']
-
-
 def diffSimplex(h):
     """
     Computation of the Jacobian matrix of the softmax function.
@@ -66,7 +63,8 @@ def gammatrix(xSource, labSource):
 # cytopt_desasc
 def cytoptDesasc(xSource, xTarget, labSource,
                  eps=1, nItGrad=4000, nItSto=10,
-                 stepGrad=1 / 1000, cont=True, thetaTrue=None, monitoring=True):
+                 stepGrad=1 / 1000, cont=True, thetaTrue=None,
+                 monitoring=True, thresholding=True, minMaxScaler=True):
     """ CytOpT algorithm. This methods is designed to estimate the proportions of cells in an unclassified Cytometry
     data set denoted xTarget. CytOpT is a supervised method that leverage the classification denoted labSource associated
     to the flow cytometry data set xSource. The estimation relies on the resolution of an optimization problem.
@@ -87,11 +85,25 @@ def cytoptDesasc(xSource, xTarget, labSource,
         cells estimated in the target data set. This parameter is required if the user enables the monitoring option.
     :param monitoring: bool, ``default=False``. When set to true, the evolution of the Kullback-Leibler between the
         estimated proportions and the benchmark proportions is tracked and stored.
+    :param minMaxScaler: bool, ``default = True``. When set to True, the source and target data sets are scaled in [0,1]^d,
+        where d is the  number of biomarkers monitored.
+    :param thresholding: bool, ``default = True``. When set to True, all the coefficients of the source and target data sets
+        are replaced by their positive part. This preprocessing is relevant for Cytometry Data as the signal acquisition of
+        the cytometer can induce convtrived negative values.
 
     :return:
         - hat_theta - np.array of shape (K,), where K is the number of different type of cell populations in the source data set.
         - KLStorage - np.array of shape (n_out, ). This array stores the evolution of the Kullback-Leibler divergence between the estimate and benchmark proportions, if monitoring==True.
     """
+    if thresholding:
+        xSource = xSource * (xSource > 0)
+        xTarget = xTarget * (xTarget > 0)
+
+    if minMaxScaler:
+        Scaler = MinMaxScaler()
+        xSource = Scaler.fit_transform(xSource)
+        xTarget = Scaler.fit_transform(xTarget)
+
     I, J, propClassesNew = xSource.shape[0], xTarget.shape[0], 0
 
     # Definition of the operator D that maps the class proportions with the weights.
