@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CytOpT.CytOpt &mdash; CytOpT 2.0.0 documentation</title>
+  <title>CytOpT.CytOpt &mdash; CytOpT 0.0.6 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -27,7 +27,7 @@
             <a href="../../index.html" class="icon icon-home"> CytOpT
           </a>
               <div class="version">
-                2.0.0
+                0.0.6
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -72,7 +72,6 @@
 <span class="c1"># License: MIT (see COPYING file)</span>
 
 <span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">MinMaxScaler</span>
@@ -207,25 +206,19 @@
 
     <span class="n">h_res</span><span class="p">[</span><span class="s2">&quot;GoldStandard&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">thetaTrue</span>
     <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;minmax&quot;</span><span class="p">,</span> <span class="s2">&quot;both&quot;</span><span class="p">]:</span>
-        <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
         <span class="n">results</span> <span class="o">=</span> <span class="n">cytoptMinmax</span><span class="p">(</span><span class="n">xSource</span><span class="p">,</span> <span class="n">xTarget</span><span class="p">,</span> <span class="n">labSource</span><span class="p">,</span>
                                <span class="n">eps</span><span class="o">=</span><span class="n">eps</span><span class="p">,</span> <span class="n">lbd</span><span class="o">=</span><span class="n">lbd</span><span class="p">,</span> <span class="n">nIter</span><span class="o">=</span><span class="n">nIter</span><span class="p">,</span>
                                <span class="n">step</span><span class="o">=</span><span class="n">step</span><span class="p">,</span> <span class="n">cont</span><span class="o">=</span><span class="n">cont</span><span class="p">,</span> <span class="n">power</span><span class="o">=</span><span class="n">power</span><span class="p">,</span> <span class="n">thetaTrue</span><span class="o">=</span><span class="n">thetaTrue</span><span class="p">,</span>
                                <span class="n">monitoring</span><span class="o">=</span><span class="n">monitoring</span><span class="p">)</span>
-        <span class="n">elapsed_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Done (&quot;</span><span class="p">,</span> <span class="n">elapsed_time</span><span class="p">,</span> <span class="s1">&#39;s)</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="n">h_res</span><span class="p">[</span><span class="s1">&#39;minmax&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">monitoring</span><span class="p">:</span>
             <span class="n">monitoring_res</span><span class="p">[</span><span class="s2">&quot;minmax&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;desasc&quot;</span><span class="p">,</span> <span class="s2">&quot;both&quot;</span><span class="p">]:</span>
-        <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
         <span class="n">results</span> <span class="o">=</span> <span class="n">cytoptDesasc</span><span class="p">(</span><span class="n">xSource</span><span class="p">,</span> <span class="n">xTarget</span><span class="p">,</span> <span class="n">labSource</span><span class="p">,</span>
                                <span class="n">eps</span><span class="o">=</span><span class="n">eps</span><span class="p">,</span> <span class="n">nItGrad</span><span class="o">=</span><span class="n">nItGrad</span><span class="p">,</span> <span class="n">nItSto</span><span class="o">=</span><span class="n">nItSto</span><span class="p">,</span>
                                <span class="n">stepGrad</span><span class="o">=</span><span class="n">stepGrad</span><span class="p">,</span> <span class="n">cont</span><span class="o">=</span><span class="n">cont</span><span class="p">,</span> <span class="n">thetaTrue</span><span class="o">=</span><span class="n">thetaTrue</span><span class="p">,</span>
                                <span class="n">monitoring</span><span class="o">=</span><span class="n">monitoring</span><span class="p">)</span>
-        <span class="n">elapsed_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Done (&quot;</span><span class="p">,</span> <span class="n">elapsed_time</span><span class="p">,</span> <span class="s1">&#39;s)</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="n">h_res</span><span class="p">[</span><span class="s1">&#39;desasc&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">monitoring</span><span class="p">:</span>
             <span class="n">monitoring_res</span><span class="p">[</span><span class="s2">&quot;desasc&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CytOpT.plots &mdash; CytOpT 2.0.0 documentation</title>
+  <title>CytOpT.plots &mdash; CytOpT 0.0.6 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -27,7 +27,7 @@
             <a href="../../index.html" class="icon icon-home"> CytOpT
           </a>
               <div class="version">
-                2.0.0
+                0.0.6
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -71,7 +71,6 @@
 <span class="c1">#</span>
 <span class="c1"># License: MIT (see COPYING file)</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
-
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -87,13 +86,12 @@
 <span class="sd">    :param Class: Population classes</span>
 <span class="sd">    :param Center: Center of class population</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">Proportions</span> <span class="o">=</span> <span class="n">proportions</span>
     <span class="k">if</span> <span class="n">Class</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">Proportions</span><span class="p">[</span><span class="s2">&quot;Populations&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Proportions</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">proportions</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Populations&quot;</span><span class="p">,</span> <span class="n">proportions</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">Proportions</span><span class="p">[</span><span class="s2">&quot;Populations&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Class</span>
+        <span class="n">proportions</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Populations&quot;</span><span class="p">,</span> <span class="n">Class</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 
-    <span class="n">plotData</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">melt</span><span class="p">(</span><span class="n">Proportions</span><span class="p">,</span> <span class="n">id_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GoldStandard&quot;</span><span class="p">,</span> <span class="s2">&quot;Populations&quot;</span><span class="p">],</span>
+    <span class="n">plotData</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">melt</span><span class="p">(</span><span class="n">proportions</span><span class="p">,</span> <span class="n">id_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GoldStandard&quot;</span><span class="p">,</span> <span class="s2">&quot;Populations&quot;</span><span class="p">],</span>
                        <span class="n">var_name</span><span class="o">=</span><span class="s1">&#39;Method&#39;</span><span class="p">,</span> <span class="n">value_name</span><span class="o">=</span><span class="s1">&#39;Estimate&#39;</span><span class="p">)</span>
 
     <span class="n">plotData</span><span class="p">[</span><span class="s1">&#39;Diff&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">plotData</span><span class="p">[</span><span class="s1">&#39;GoldStandard&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span> <span class="o">-</span> <span class="n">plotData</span><span class="p">[</span><span class="s1">&#39;Estimate&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
@@ -138,8 +136,9 @@
 
     <span class="n">BA</span><span class="o">.</span><span class="n">legend</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-    <span class="n">fig</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">markerscale</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+    <span class="n">fig</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">markerscale</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="n">proportions</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;Populations&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="barPlot"><a class="viewcode-back" href="../../CytOpT.html#CytOpT.plots.barPlot">[docs]</a><span class="k">def</span> <span class="nf">barPlot</span><span class="p">(</span><span class="n">proportions</span><span class="p">,</span> <span class="n">Class</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;CytOpt estimation and Manual estimation&#39;</span><span class="p">):</span>
@@ -169,7 +168,8 @@
     <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="n">proportions</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;Populations&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="KLPlot"><a class="viewcode-back" href="../../CytOpT.html#CytOpT.plots.KLPlot">[docs]</a><span class="k">def</span> <span class="nf">KLPlot</span><span class="p">(</span><span class="n">monitoring</span><span class="p">,</span> <span class="n">n0</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">nStop</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Kullback-Liebler divergence trace&quot;</span><span class="p">):</span>
@@ -227,6 +227,28 @@
             <span class="n">KLPlot</span><span class="p">(</span><span class="n">monitoring</span><span class="p">,</span> <span class="n">n0</span><span class="o">=</span><span class="n">n0</span><span class="p">,</span> <span class="n">nStop</span><span class="o">=</span><span class="n">nStop</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;WARNING: Not items in [proportions,monitoring]&quot;</span><span class="p">)</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="c1"># CytOpt estimation</span>
+    <span class="n">Estimate_Prop</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../tests/data/Res_Estimation_Stan1A.txt&#39;</span><span class="p">,</span>
+                                <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="c1"># Benchmark estimation</span>
+    <span class="n">True_Prop</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../tests/data/True_proportion_Stan1A.txt&#39;</span><span class="p">,</span>
+                            <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">True_Prop</span> <span class="o">=</span> <span class="n">True_Prop</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;Baylor1A&#39;</span><span class="p">])</span>
+    <span class="n">Estimate_Prop</span> <span class="o">=</span> <span class="n">Estimate_Prop</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;Baylor1A&#39;</span><span class="p">])</span>
+    <span class="n">Estimate_Prop</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Estimate_Prop</span><span class="p">)</span>
+    <span class="n">True_Prop</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">True_Prop</span><span class="p">)</span>
+    <span class="n">Classes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">),</span> <span class="mi">61</span><span class="p">)</span>
+    <span class="n">Centre_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">([</span><span class="s1">&#39;Yale&#39;</span><span class="p">,</span> <span class="s1">&#39;UCLA&#39;</span><span class="p">,</span> <span class="s1">&#39;NHLBI&#39;</span><span class="p">,</span> <span class="s1">&#39;CIMR&#39;</span><span class="p">,</span> <span class="s1">&#39;Miami&#39;</span><span class="p">],</span> <span class="mi">10</span><span class="p">)</span>
+    <span class="n">Centre_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">([</span><span class="s1">&#39;Standford&#39;</span><span class="p">,</span> <span class="s1">&#39;Yale&#39;</span><span class="p">,</span> <span class="s1">&#39;UCLA&#39;</span><span class="p">,</span> <span class="s1">&#39;NHLBI&#39;</span><span class="p">,</span> <span class="s1">&#39;CIMR&#39;</span><span class="p">,</span> <span class="s1">&#39;Baylor&#39;</span><span class="p">,</span> <span class="s1">&#39;Miami&#39;</span><span class="p">],</span> <span class="mi">10</span><span class="p">)</span>
+    <span class="n">Centre</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">Centre_1</span><span class="p">,</span> <span class="n">Centre_2</span><span class="p">,</span> <span class="n">Centre_2</span><span class="p">,</span> <span class="n">Centre_2</span><span class="p">,</span>
+                        <span class="n">Centre_2</span><span class="p">,</span> <span class="n">Centre_2</span><span class="p">,</span> <span class="n">Centre_2</span><span class="p">,</span> <span class="n">Centre_2</span><span class="p">,</span> <span class="n">Centre_2</span><span class="p">))</span>
+
+    <span class="n">props</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;GoldStandard&#39;</span><span class="p">:</span> <span class="n">True_Prop</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="s1">&#39;minmax&#39;</span><span class="p">:</span> <span class="n">Estimate_Prop</span><span class="o">.</span><span class="n">ravel</span><span class="p">()})</span>
+
+    <span class="n">BlandAltman</span><span class="p">(</span><span class="n">props</span><span class="p">,</span> <span class="n">Class</span><span class="o">=</span><span class="n">Classes</span><span class="p">,</span> <span class="n">Center</span><span class="o">=</span><span class="n">Centre</span><span class="p">)</span>
 </pre></div>
 
            </div>
