@@ -107,7 +107,7 @@ cytopt.CytOpT(xSource, xTarget, labSource, thetaTrue=thetaTrue, method = 'minmax
     of the class proportions and the estimate of the class proportions provided through manual gating.
  
 ```
-cplt.resultPlot(res, n0=10, nStop=4000)
+cplt.resultPlot(res, n0=10, nStop=min(nItGrad, nIter))
 ```
 <img src="./tests/Figures/barplot.png" width="100%" />
 <img src="./tests/Figures/KL.png" width="100%" />
