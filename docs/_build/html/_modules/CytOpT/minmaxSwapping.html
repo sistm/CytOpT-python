@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CytOpT.minmaxSwapping &mdash; CytOpT 2.0.0 documentation</title>
+  <title>CytOpT.minmaxSwapping &mdash; CytOpT 0.0.8 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -27,7 +27,7 @@
             <a href="../../index.html" class="icon icon-home"> CytOpT
           </a>
               <div class="version">
-                2.0.0
+                0.0.8
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -75,6 +75,8 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">logsumexp</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">MinMaxScaler</span>
+
 <span class="kn">from</span> <span class="nn">CytOpT.labelPropSto</span> <span class="kn">import</span> <span class="n">cost</span>
 <span class="c1"># __all__ = [&#39;cytopt_minmax&#39;]</span>
 
@@ -162,7 +164,8 @@
 
 <span class="c1"># cytopt</span>
 <div class="viewcode-block" id="cytoptMinmax"><a class="viewcode-back" href="../../CytOpT.html#CytOpT.minmaxSwapping.cytoptMinmax">[docs]</a><span class="k">def</span> <span class="nf">cytoptMinmax</span><span class="p">(</span><span class="n">xSource</span><span class="p">,</span> <span class="n">xTarget</span><span class="p">,</span> <span class="n">labSource</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">lbd</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">nIter</span><span class="o">=</span><span class="mi">4000</span><span class="p">,</span> <span class="n">cont</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                  <span class="n">step</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">power</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span> <span class="n">thetaTrue</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">monitoring</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                 <span class="n">step</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">power</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span> <span class="n">thetaTrue</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">monitoring</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">thresholding</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">minMaxScaler</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; CytOpT algorithm. This methods is designed to estimate the proportions of cells in an unclassified Cytometry</span>
 <span class="sd">    data set denoted xTarget. CytOpT is a supervised method that leverage the classification denoted labSource associated</span>
 <span class="sd">    to the flow cytometry data set xSource. The estimation relies on the resolution of an optimization problem.</span>
@@ -186,6 +189,11 @@
 <span class="sd">        cells estimated in the target data set. This parameter is required if the user enables the monitoring option.</span>
 <span class="sd">    :param monitoring: bool, ``default=False``. When set to true, the evolution of the Kullback-Leibler between the</span>
 <span class="sd">        estimated proportions and the benchmark proportions is tracked and stored.</span>
+<span class="sd">    :param minMaxScaler: bool, ``default = True``. When set to True, the source and target data sets are scaled in [0,1]^d,</span>
+<span class="sd">        where d is the  number of biomarkers monitored.</span>
+<span class="sd">    :param thresholding: bool, ``default = True``. When set to True, all the coefficients of the source and target data sets</span>
+<span class="sd">        are replaced by their positive part. This preprocessing is relevant for Cytometry Data as the signal acquisition of</span>
+<span class="sd">        the cytometer can induce convtrived negative values.</span>
 
 <span class="sd">    :return:</span>
 <span class="sd">            - hat_theta - np.array of shape (K,), where K is the number of different type of cell populations in the source data set.</span>
@@ -195,6 +203,14 @@
 <span class="sd">     Paul Freulon, Jérémie Bigot,and Boris P. Hejblum CytOpT: Optimal Transport with Domain Adaptation for Interpreting Flow Cytometry data,</span>
 <span class="sd">     arXiv:2006.09003 [stat.AP].</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">thresholding</span><span class="p">:</span>
+        <span class="n">xSource</span> <span class="o">=</span> <span class="n">xSource</span> <span class="o">*</span> <span class="p">(</span><span class="n">xSource</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">xTarget</span> <span class="o">=</span> <span class="n">xTarget</span> <span class="o">*</span> <span class="p">(</span><span class="n">xTarget</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">minMaxScaler</span><span class="p">:</span>
+        <span class="n">Scaler</span> <span class="o">=</span> <span class="n">MinMaxScaler</span><span class="p">()</span>
+        <span class="n">xSource</span> <span class="o">=</span> <span class="n">Scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">xSource</span><span class="p">)</span>
+        <span class="n">xTarget</span> <span class="o">=</span> <span class="n">Scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">xTarget</span><span class="p">)</span>
 
     <span class="n">I</span><span class="p">,</span> <span class="n">J</span> <span class="o">=</span> <span class="n">xSource</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xTarget</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">U</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
