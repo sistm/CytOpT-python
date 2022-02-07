@@ -2,7 +2,6 @@
 #
 # License: MIT (see COPYING file)
 import warnings
-
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -18,13 +17,12 @@ def BlandAltman(proportions, Class=None, Center=None):
     :param Class: Population classes
     :param Center: Center of class population
     """
-    Proportions = proportions
     if Class is None:
-        Proportions["Populations"] = Proportions.index.values
+        proportions.insert(0, "Populations", proportions.index.values, True)
     else:
-        Proportions["Populations"] = Class
+        proportions.insert(0, "Populations", Class, True)
 
-    plotData = pd.melt(Proportions, id_vars=["GoldStandard", "Populations"],
+    plotData = pd.melt(proportions, id_vars=["GoldStandard", "Populations"],
                        var_name='Method', value_name='Estimate')
 
     plotData['Diff'] = plotData['GoldStandard'].ravel() - plotData['Estimate'].ravel()
@@ -69,8 +67,9 @@ def BlandAltman(proportions, Class=None, Center=None):
 
     BA.legend.remove()
     plt.tight_layout()
-    fig.legend(markerscale=2, loc=7)
+    fig.legend(markerscale=1, loc=7)
     plt.show()
+    proportions.drop("Populations", axis=1, inplace=True)
 
 
 def barPlot(proportions, Class=None, title='CytOpt estimation and Manual estimation'):
@@ -101,6 +100,7 @@ def barPlot(proportions, Class=None, title='CytOpt estimation and Manual estimat
     plt.yticks(fontsize=14)
     plt.title(title, fontweight="bold", loc='left', size=16)
     plt.show()
+    proportions.drop("Populations", axis=1, inplace=True)
 
 
 def KLPlot(monitoring, n0=10, nStop=10000, title="Kullback-Liebler divergence trace"):
@@ -158,3 +158,25 @@ def resultPlot(results, Class=None, n0=10, nStop=1000):
             KLPlot(monitoring, n0=n0, nStop=nStop)
         else:
             warnings.warn("WARNING: Not items in [proportions,monitoring]")
+
+
+if __name__ == '__main__':
+    # CytOpt estimation
+    Estimate_Prop = pd.read_csv('../tests/data/Res_Estimation_Stan1A.txt',
+                                index_col=0)
+    # Benchmark estimation
+    True_Prop = pd.read_csv('../tests/data/True_proportion_Stan1A.txt',
+                            index_col=0)
+    True_Prop = True_Prop.drop(['Baylor1A'])
+    Estimate_Prop = Estimate_Prop.drop(['Baylor1A'])
+    Estimate_Prop = np.asarray(Estimate_Prop)
+    True_Prop = np.asarray(True_Prop)
+    Classes = np.tile(np.arange(1, 11), 61)
+    Centre_1 = np.repeat(['Yale', 'UCLA', 'NHLBI', 'CIMR', 'Miami'], 10)
+    Centre_2 = np.repeat(['Standford', 'Yale', 'UCLA', 'NHLBI', 'CIMR', 'Baylor', 'Miami'], 10)
+    Centre = np.hstack((Centre_1, Centre_2, Centre_2, Centre_2,
+                        Centre_2, Centre_2, Centre_2, Centre_2, Centre_2))
+
+    props = pd.DataFrame({'GoldStandard': True_Prop.ravel(), 'minmax': Estimate_Prop.ravel()})
+
+    BlandAltman(props, Class=Classes, Center=Centre)
