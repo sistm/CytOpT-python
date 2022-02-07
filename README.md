@@ -81,10 +81,10 @@ for k in range(10):
 # Initialization of parameters
 
 nItGrad = 5000
-nIter = 5000
+nIter = 10000
 nItSto = 10
 pas_grad = 10
-eps = 0.0005
+eps = 0.0001
 monitoring = True
 
 # Run Minmax and Desasc

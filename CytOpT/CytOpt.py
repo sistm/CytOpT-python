@@ -143,7 +143,7 @@ def CytOpT(xSource, xTarget, labSource, labTarget=None, thetaTrue=None,
                                monitoring=monitoring)
         h_res['minmax'] = results[0]
         if monitoring:
-            monitoring_res["minmax"] = results[1]
+            monitoring_res["minmax"] = results[1][:min(nIter, nItGrad)]
 
     if method in ["desasc", "both"]:
         results = cytoptDesasc(xSource, xTarget, labSource,
@@ -152,7 +152,7 @@ def CytOpT(xSource, xTarget, labSource, labTarget=None, thetaTrue=None,
                                monitoring=monitoring)
         h_res['desasc'] = results[0]
         if monitoring:
-            monitoring_res["desasc"] = results[1]
+            monitoring_res["desasc"] = results[1][:min(nIter, nItGrad)]
 
     if monitoring:
         return {"proportions": pd.DataFrame(h_res),
