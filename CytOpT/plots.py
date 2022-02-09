@@ -34,6 +34,7 @@ def BlandAltman(proportions, Class=None, Center=None):
             plotData['Center'] = Center
 
     sd_diff = np.std(plotData['Diff'])
+    mean_diff = np.mean(plotData['Diff'])
     uniqueValues = set(plotData['Method'])
     BA = sns.relplot(
         data=plotData, x="Mean", y="Diff",
@@ -43,7 +44,7 @@ def BlandAltman(proportions, Class=None, Center=None):
     fig.suptitle("Bland-Altman concordance plot", size=16)
     fig.supylabel(r'$(p_i - \hat{p}_i)$', size=16)
     fig.supxlabel(r'$(p_i + \hat{p}_i)/2$', size=16)
-    labelLines = ['+1.96 SD', '-1.96 SD', 'Mean']
+    labelLines = ['+1.96 SD', '-1.96 SD', 'Mean bias']
     noLabelLines = np.repeat('_legend_', 3)
     labels = noLabelLines
     for idx, item in enumerate(uniqueValues):
@@ -51,17 +52,17 @@ def BlandAltman(proportions, Class=None, Center=None):
             labels = labelLines
         pltData = plotData[plotData['Method'] == item]
         fig.axes[idx].set_title(item, fontweight="bold")
-        fig.axes[idx].axhline(np.mean(pltData['Diff']) + (1.96 * np.std(pltData['Diff'])), xmin=0,
+        fig.axes[idx].axhline(mean_diff + (1.96 * sd_diff), xmin=0,
                               linestyle='dashed', label=labels[0])
-        fig.axes[idx].text(max(plotData['Mean']), sd_diff + (1.96 * np.std(pltData['Diff'])),
+        fig.axes[idx].text(max(plotData['Mean']), sd_diff + (1.96 * sd_diff),
                            '+1.96 SD', fontsize=10)
 
-        fig.axes[idx].axhline(np.mean(pltData['Diff']) - (1.96 * np.std(pltData['Diff'])),
+        fig.axes[idx].axhline(mean_diff - (1.96 * sd_diff),
                               xmin=0, linestyle='dashed', label=labels[1])
-        fig.axes[idx].text(max(plotData['Mean']), np.mean(np.std(pltData['Diff'])) - (1.96 * np.std(pltData['Diff'])),
+        fig.axes[idx].text(max(plotData['Mean']), sd_diff - (1.96 * sd_diff),
                            '-1.96 SD', fontsize=10)
 
-        fig.axes[idx].axhline(np.mean(pltData['Diff']), xmin=0, label=labels[2])
+        fig.axes[idx].axhline(mean_diff, xmin=0, label=labels[2]) #Bias
         fig.axes[idx].set_xlabel('')
         fig.axes[idx].set_ylabel('')
 
