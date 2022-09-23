@@ -37,7 +37,6 @@ def gradF(xSource, xTarget, lbd, eps, j, u, G):
     cor1 = np.max(arg1)
     vec1 = np.exp(arg1 - cor1)
     t1 = - vec1 / np.sum(vec1)
-
     arg2 = -(G.T).dot(u) / lbd
     cor2 = np.max(arg2)
     vec2 = np.exp(arg2 - cor2)
@@ -76,13 +75,14 @@ def stomax(xSource, xTarget, G, lbd, eps, nIter):
     """
 
     I = xSource.shape[0]
+    J = xTarget.shape[0]
     U = np.zeros(I)
 
     # Step size policy
     gamma = I * eps / 1.9
     c = 0.51
 
-    sample = np.random.choice(I, nIter)
+    sample = np.random.choice(J, nIter)
 
     for n in range(nIter):
         idx = sample[n]
